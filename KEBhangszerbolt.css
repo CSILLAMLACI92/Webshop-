@@ -1,0 +1,206 @@
+/* Globális reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Carousel konténer */
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;    /* vagy tetszőleges max szélesség */
+  height: 300px;
+  margin: 10px auto 20px auto; /* kicsi margó fent és lent */
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  background-color: #fff;
+  padding-left: 15px; /* hogy ne legyen teljesen szélén a kép */
+}
+
+/* Képek flex konténerben */
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+  /* padding-left nincs itt, mert a .carousel-ban van */
+}
+
+/* A képek méretezése, hogy 3 férjen el szépen */
+.carousel-track img {
+  width: calc((100% / 3) - 15px);
+  height: 300px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Gombok - nyilak */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 3.5rem;
+  color: #2ec4b6;
+  cursor: pointer;
+  user-select: none;
+  text-shadow: 0 0 8px rgba(46, 196, 182, 0.7);
+  transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.carousel-btn:hover {
+  color: #158f81;
+  transform: translateY(-50%) scale(1.3);
+  text-shadow: 0 0 15px rgba(21, 143, 129, 0.9);
+}
+
+.carousel-btn.prev {
+  left: 15px;
+}
+
+.carousel-btn.next {
+  right: 15px;
+}
+
+/* "Isten hozott!" felirat */
+h1 {
+  width: 100%;
+  text-align: center;
+  margin: 5px auto 10px auto; /* minimális margó fent és lent */
+  padding: 0;
+  font-size: 2.5rem;
+  color: #333;
+  user-select: none;
+}
+
+/* Egyéb oldal stílusok (rövidítve) */
+html {
+  overflow-y: scroll;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0 10px; /* ha kell kis oldal margó */
+}
+
+/* Táblázat és egyéb elemek ha kell */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px auto;
+}
+
+th, td {
+  /* border: 1px solid black;  <-- ezt töröltem */
+  padding: 15px;
+  text-align: center;
+  background-color: cadetblue; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 8px;
+}
+
+
+button {
+  background-color: #2ec4b6;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* Keresősáv */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 500px;
+  background-color: cadetblue;
+  border-radius: 30px;
+  padding: 8px 16px;
+}
+
+.search-container input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  padding: 8px;
+  outline: none;
+  color: white;
+}
+
+.search-container button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Hover effektek táblázatra */
+th:hover, td:hover {
+  background-color: lightseagreen;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: white;
+  cursor: pointer;
+}
+
+/* Oldalpanel */
+#sidePanel {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: #2ec4b6;
+  box-shadow: -1px 0 5px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  padding: 20px;
+  color: white;
+  z-index: 9999;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+#sidePanel.active {
+  right: 0;
+}
+
+/* Header ikonok */
+.header-icons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.icon {
+  font-size: 1.8rem;
+  color: #333;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+  color: #0077cc;
+}
