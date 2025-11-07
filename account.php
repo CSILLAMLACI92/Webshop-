@@ -10,10 +10,12 @@ $password = "root";
 $dbname = "myshop";
 
 $conn = new mysqli($host, $user, $password, $dbname);
-mysqli_report(MYSQLI_REPORT_OFF);
 if ($conn->connect_error) {
     die("Kapcsolódási hiba: " . $conn->connect_error);
 }
+
+// Kikapcsoljuk a mysqli exception-okat, hogy saját hibakezelést tudjunk
+mysqli_report(MYSQLI_REPORT_OFF);
 
 // Logout
 if(isset($_GET['logout'])){
@@ -23,8 +25,12 @@ if(isset($_GET['logout'])){
     exit();
 }
 
-// Profilkép feltöltés
+// Változók
 $upload_msg = "";
+$login_msg = "";
+$register_msg = "";
+
+// Profilkép feltöltés
 if(isset($_POST['upload_pic']) && isset($_SESSION['username'])){
     if(isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] == 0){
         $target_dir = "uploads/";
@@ -32,7 +38,6 @@ if(isset($_POST['upload_pic']) && isset($_SESSION['username'])){
 
         $filename = time() . "_" . basename($_FILES['profile_pic']['name']);
         $target_file = $target_dir . $filename;
-
         $allowed_types = ['jpg','jpeg','png','gif'];
         $file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
@@ -41,7 +46,7 @@ if(isset($_POST['upload_pic']) && isset($_SESSION['username'])){
                 $stmt = $conn->prepare("UPDATE users SET profile_pic=? WHERE username=?");
                 $stmt->bind_param("ss", $target_file, $_SESSION['username']);
                 $stmt->execute();
-                $stmt->close(); 
+                $stmt->close();
                 $_SESSION['profile_pic'] = $target_file;
                 $upload_msg = "✅ Profilkép sikeresen feltöltve!";
             } else {
@@ -56,7 +61,6 @@ if(isset($_POST['upload_pic']) && isset($_SESSION['username'])){
 }
 
 // Regisztráció
-$register_msg = "";
 if(isset($_POST['action']) && $_POST['action'] === 'register'){
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
@@ -66,24 +70,25 @@ if(isset($_POST['action']) && $_POST['action'] === 'register'){
         $register_msg = "❌ Minden mező kitöltése kötelező!";
     } else {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        // Próbáljuk meg beszúrni
         $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash, profile_pic, created_at) VALUES (?, ?, ?, 'uploads/default_avatar.png', NOW())");
         $stmt->bind_param("sss", $username, $email, $password_hash);
-
         if($stmt->execute()){
             $register_msg = "✅ Sikeres regisztráció!";
         } else {
-            if(strpos($stmt->error, 'Duplicate') !== false){
-                $register_msg = "❌ Ez a felhasználó már létezik!";
+            // Ha duplikált a felhasználó/email
+            if($stmt->errno == 1062){ 
+                $register_msg = "❌ Ez a felhasználónév vagy email már foglalt!";
             } else {
-                $register_msg = "❌ Hiba történt!";
+                $register_msg = "❌ Hiba történt: " . $stmt->error;
             }
         }
         $stmt->close();
     }
 }
 
-// Bejelentkezés + Admin mód
-$login_msg = "";
+// Bejelentkezés + admin
 if(isset($_POST['action']) && $_POST['action'] === 'login'){
     $is_admin = isset($_POST['admin_login']);
 
@@ -126,9 +131,8 @@ if(isset($_POST['action']) && $_POST['action'] === 'login'){
     }
 }
 
-// Fiók törlése - ADMIN VÉDETT ✅
+// Fiók törlése - admin védett
 if(isset($_POST['delete_account']) && isset($_SESSION['user_id'])){
-
     if($_SESSION['username'] === "ADMIN" || $_SESSION['user_id'] == 0){
         header("Location: account.php?error=admin_cannot_be_deleted");
         exit();
@@ -153,52 +157,33 @@ if(isset($_POST['delete_account']) && isset($_SESSION['user_id'])){
 <title>Fiók</title>
 <style>
 /* Alap */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', sans-serif; background-color: #0b111f; color: #e0eaf5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-
-/* Konténer */
-.container { width: 100%; max-width: 460px; background-color: #121a2b; padding: 32px; border-radius: 14px; box-shadow: 0 0 24px rgba(0, 0, 0, 0.7); border: 1px solid #1f2a40; }
-
-/* Címek */
-h2 { text-align: center; color: #4da6ff; margin-bottom: 24px; font-size: 24px; font-weight: 600; }
-
-/* Formák */
-form { display: flex; flex-direction: column; gap: 12px; }
-input { padding: 12px 14px; border-radius: 8px; border: 1px solid #2c3e50; background-color: #0f172a; color: #e0eaf5; font-size: 15px; }
-input:focus { outline: none; border-color: #4da6ff; }
-input::placeholder { color: #7a8ca5; }
-
-/* Gombok */
-button { padding: 12px; border-radius: 8px; border: none; background-color: #4da6ff; color: #000; font-weight: bold; font-size: 15px; cursor: pointer; transition: background-color 0.3s ease; }
-button:hover { background-color: #3399ff; }
-
-/* Üzenetek */
-.msg { text-align: center; font-weight: bold; margin: 12px 0; font-size: 14px; }
-.error { color: #80aaff; }
-.success { color: #66ccff; }
-
-/* Profilkép */
-img.profile { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 20px auto; display: block; border: 2px solid #4da6ff; }
-
-/* Kijelentkezés */
-.logout { text-align: center; margin-top: 20px; }
-.logout a { text-decoration: none; color: #4da6ff; font-weight: bold; }
-.logout a:hover { color: #ffffff; }
-
-/* Fiók törlés */
-.delete-btn { background-color: #4da6ff; color: #000; }
-.delete-btn:hover { background-color: #3399ff; }
-
-/* Navigáció */
-.nav-btns { display: flex; justify-content: space-around; margin-bottom: 20px; }
-.nav-btns button { width: 30%; }
+* { box-sizing: border-box; margin:0; padding:0;}
+body { font-family:'Segoe UI',sans-serif; background:#0b111f; color:#e0eaf5; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:20px;}
+.container { width:100%; max-width:460px; background:#121a2b; padding:32px; border-radius:14px; box-shadow:0 0 24px rgba(0,0,0,0.7); border:1px solid #1f2a40;}
+h2 { text-align:center; color:#4da6ff; margin-bottom:24px; font-size:24px; font-weight:600;}
+form { display:flex; flex-direction:column; gap:12px;}
+input { padding:12px 14px; border-radius:8px; border:1px solid #2c3e50; background:#0f172a; color:#e0eaf5; font-size:15px;}
+input:focus { outline:none; border-color:#4da6ff;}
+input::placeholder { color:#7a8ca5;}
+button { padding:12px; border-radius:8px; border:none; background:#4da6ff; color:#000; font-weight:bold; font-size:15px; cursor:pointer; transition:0.3s;}
+button:hover { background:#3399ff;}
+.msg { text-align:center; font-weight:bold; margin:12px 0; font-size:14px;}
+.error { color:#ff6666;}
+.success { color:#66ff66;}
+img.profile { width:100px; height:100px; border-radius:50%; object-fit:cover; margin:20px auto; display:block; border:2px solid #4da6ff;}
+.logout { text-align:center; margin-top:20px;}
+.logout a { text-decoration:none; color:#4da6ff; font-weight:bold;}
+.logout a:hover { color:#ffffff;}
+.delete-btn { background:#ff6666; color:#000;}
+.delete-btn:hover { background:#cc0000;}
+.nav-btns { display:flex; justify-content:space-around; margin-bottom:20px;}
+.nav-btns button { width:30%;}
 </style>
 </head>
-
 <body>
 <div class="container">
 <div style="text-align:center;">
-    <a href="KEBhangszerek.html" class="home-btn">🏠 Főoldal</a>
+    <a href="KEBhangszerek.html">🏠 Főoldal</a>
 </div>
 
 <?php if(!isset($_SESSION['username'])): ?>
@@ -249,9 +234,8 @@ function showForm(id){
 </script>
 
 <?php else: ?>
-
-<h2>Üdv, <?=$_SESSION['username']?>!</h2>
-<img src="<?=$_SESSION['profile_pic']?>" class="profile" alt="Profilkép">
+<h2>Üdv, <?= ($_SESSION['username'] === "ADMIN") ? "Admin" : "Felhasználó" ?>!</h2>
+<img src="<?= $_SESSION['profile_pic'] ?>" class="profile" alt="Profilkép">
 
 <?php if($upload_msg) echo "<p class='msg success'>$upload_msg</p>"; ?>
 <?php if(isset($_GET['error']) && $_GET['error'] === 'admin_cannot_be_deleted') echo "<p class='msg error'>❌ Az admin fiók nem törölhető!</p>"; ?>
@@ -261,7 +245,7 @@ function showForm(id){
     <button type="submit" name="upload_pic">🖼️ Feltöltés</button>
 </form>
 
-<p><strong>Email:</strong> <?=$_SESSION['email']?></p>
+<p><strong>Email:</strong> <?= $_SESSION['email'] ?></p>
 
 <form method="POST" action="account.php" onsubmit="return confirm('Biztosan törölni szeretnéd a fiókodat? Ez a művelet nem visszavonható!');">
     <button type="submit" name="delete_account" class="delete-btn">🗑️ Fiók törlése</button>
@@ -270,7 +254,6 @@ function showForm(id){
 <div class="logout">
     <a href="account.php?logout=1">🚪 Kijelentkezés</a>
 </div>
-
 <?php endif; ?>
 </div>
 </body>
