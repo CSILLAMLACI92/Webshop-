@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Kosár - KEB hangszerbolt</title>
+  <link rel="stylesheet" href="KEBhangszerbolt.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0e0e0e;
+      color: white;
+      text-align: center;
+    }
+    h1 { margin-top: 30px; }
+    table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 80%;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    input[type="number"] {
+      width: 60px;
+      text-align: center;
+      border-radius: 8px;
+      border: none;
+      padding: 5px;
+    }
+    #osszeg {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    #uresites, #vissza {
+      background-color: #086ca2;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 15px 10px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    #uresites:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+    }
+    #vissza:hover {
+      background-color: #235b79;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Kosarad</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Termék</th>
+        <th>Ár (Ft)</th>
+        <th>Mennyiség</th>
+        <th>Összesen (Ft)</th>
+      </tr>
+    </thead>
+    <tbody id="kosarLista"></tbody>
+  </table>
+
+  <p id="osszeg"></p>
+
+  <div>
+    <button id="uresites">Kosár törlése</button>
+    <button id="vissza">Vissza a főoldalra</button>
+  </div>
+
+  <script>
+    // Kosár betöltése
+    function betoltKosar() {
+      const kosar = JSON.parse(localStorage.getItem("kosar")) || [];
+      const lista = document.getElementById("kosarLista");
+      lista.innerHTML = "";
+
+      let total = 0;
+
+      kosar.forEach((item, index) => {
+        const sor = document.createElement("tr");
+
+        const osszeg = item.ar * (item.db || 1);
+        total += osszeg;
+
+        sor.innerHTML = `
+          <td>${item.nev}</td>
+          <td>${item.ar.toLocaleString()}</td>
+          <td>
+            <input type="number" min="0" value="${item.db || 1}" onchange="mennyisegValtozas(${index}, this.value)">
+          </td>
+          <td>${osszeg.toLocaleString()}</td>
+        `;
+
+        lista.appendChild(sor);
+      });
+
+      document.getElementById("osszeg").textContent = "Összesen: " + total.toLocaleString() + " Ft";
+    }
+
+    // Mennyiség változtatás
+    function mennyisegValtozas(index, ujMennyiseg) {
+      let kosar = JSON.parse(localStorage.getItem("kosar")) || [];
+      ujMennyiseg = parseInt(ujMennyiseg);
+
+      if (ujMennyiseg <= 0) {
+        kosar.splice(index, 1); // törli a terméket
+      } else {
+        kosar[index].db = ujMennyiseg;
+      }
+
+      localStorage.setItem("kosar", JSON.stringify(kosar));
+      betoltKosar();
+    }
+
+    // Kosár törlése
+    document.getElementById("uresites").addEventListener("click", () => {
+      if (confirm("Biztosan törlöd a kosarat?")) {
+        localStorage.removeItem("kosar");
+        betoltKosar();
+      }
+    });
+
+    // Vissza a főoldalra
+    document.getElementById("vissza").addEventListener("click", () => {
+      window.location.href = "KEBhangszerek.html";
+    });
+
+    // Betöltéskor frissítsen
+    betoltKosar();
+  </script>
+</body>
+</html>

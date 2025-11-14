@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEB Gitárok</title>
+    <link rel="stylesheet" href="KEBhangszerbolt (1).css">
+</head>
+<body>
+    <style>
+        .header-icons2{
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 15px;
+            z-index: 9999;
+            background: none;
+        }
+    </style>
+    <div class="header-icons2">
+        <button id="vissza">Vissza a főoldalra</button>
+    </div>
+    <h1>Gitárok</h1>
+<div id="termekLista" class="termek-grid"></div>
+<div class="lapozo">
+  <button id="elozo">Előző</button>
+  <span id="oldalSzam"></span>
+  <button id="kovetkezo">Következő</button>
+</div>
+
+<script src="KEB-gitar.js"></script>
+
+<script>
+     // Vissza gomb működése
+    document.getElementById("vissza").addEventListener("click", () => {
+      window.location.href = "KEBhangszerek.html";
+    });
+</script>
+</body>
+</html>
