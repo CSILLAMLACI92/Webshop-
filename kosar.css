@@ -1,0 +1,12 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #e0e0e0;
+  background: linear-gradient(to bottom, #1c3464, #034569, #235b79, #086ca2, #3c9dd0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-bottom: 3px solid #086ca2;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+

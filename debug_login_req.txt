@@ -1,0 +1,26 @@
+LOGIN INPUT → login: admin | password: KEBDEV
+DB ADMIN USER:
+Array
+(
+    [id] => 11
+    [username] => admin
+    [email] => admin@example.com
+    [role] => admin
+    [password_hash] => $2y$10$GQ6QkGcjXswklHEYHO0zEepz.MiUZjn/SvhJWHYcNSXvi4m1Q53MG
+)
+
+
+AUTHENTICATING USER:
+Array
+(
+    [id] => 11
+    [username] => admin
+    [email] => admin@example.com
+    [password_hash] => $2y$10$GQ6QkGcjXswklHEYHO0zEepz.MiUZjn/SvhJWHYcNSXvi4m1Q53MG
+    [role] => admin
+)
+
+
+LOGIN SUCCESS → USER: admin
+TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NjMzNzMyNDksImV4cCI6MTc2MzM3Njg0OSwiZGF0YSI6eyJpZCI6MTEsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIn19.2QDtomYOLSh2raNn_IOMKEQg8upMEir-4FYZ1Sjkoew
+

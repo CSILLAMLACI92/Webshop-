@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KEB hangszerbolt</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Saját CSS külön fájlban -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Fejléc -->
+  <header class="mb-4">
+    KEB hangszerbolt
+  </header>
+
+  <!-- Ikonok jobb felső sarokban -->
+  <div class="header-icons">
+    <a href="KEB-Kosár.html" class="icon" title="Kosár">🛒</a>
+    <a href="account.php" class="icon" title="Fiók">👤</a>
+  </div>
+
+  <!-- Profil státusz -->
+  <div class="user-status">
+    <img src="Képek/profil.jpg" alt="Profilkép">
+    <span>Üdv, <a href="account.php">Botond</a></span>
+  </div>
+
+  <!-- Kereső -->
+  <div class="container my-4">
+    <div class="input-group search-container">
+      <input type="text" class="form-control" placeholder="Keresés">
+      <button class="btn btn-outline-light" type="submit">🔍</button>
+    </div>
+  </div>
+
+  <!-- Menü -->
+  <div class="container mb-4">
+    <div class="row g-2 text-center">
+      <div class="col"><a href="KEB-Gitár.html" class="btn btn-primary w-100">Gitár</a></div>
+      <div class="col"><a href="KEB-Basszus.html" class="btn btn-primary w-100">Basszus Gitár</a></div>
+      <div class="col"><a href="KEB-Dobszettek.html" class="btn btn-primary w-100">Dobszettek</a></div>
+      <div class="col"><a href="KEB-Billentyű.html" class="btn btn-primary w-100">Billentyű</a></div>
+      <div class="col"><a href="KEB-Mikrofon.html" class="btn btn-primary w-100">Mikrofon</a></div>
+      <div class="col"><a href="KEB-Tartozékok.html" class="btn btn-primary w-100">Tartozékok</a></div>
+      <div class="col"><a href="KEB-Hangfalak.html" class="btn btn-primary w-100">Hangfalak</a></div>
+    </div>
+  </div>
+
+  <!-- Carousel -->
+  <div id="kebCarousel" class="carousel slide container mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="Képek/Erik.jpg" class="d-block w-100" alt="Kép 1">
+      </div>
+      <div class="carousel-item">
+        <img src="Képek/boti.jpg" class="d-block w-100" alt="Kép 2">
+      </div>
+      <div class="carousel-item">
+        <img src="Képek/dobok.jpg" class="d-block w-100" alt="Kép 3">
+      </div>
+      <!-- További képek -->
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#kebCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#kebCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

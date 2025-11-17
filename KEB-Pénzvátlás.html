@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEB Pénzváltó</title>
+    <link rel="stylesheet" href="KEBhangszerbolt.css">
+</head>
+<body>
+    <h1>Pénzváltónk: </h1>
+    <input type="number" id="amount" placeholder="Összeg">
+    <select id="fromCurrency">
+        <option value="HUF">HUF</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+    </select>
+
+    <select id="toCurrency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="HUF">HUF</option>
+    </select>
+
+    <button onclick="convert()">Átváltás</button>
+    <p id="result"></p>
+    <script src="convert.js"></script>
+</body>
+</html>

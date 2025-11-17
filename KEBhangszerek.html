@@ -1,95 +1,92 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="KEBhangszerbolt.css" />
   <title>KEB hangszerbolt</title>
-  <link rel="stylesheet" href="KEBhangszerbolt.css">
 </head>
-<body>
+<body class="bg-dark text-light">
 
-  <button id="togglePanel">Menü</button>
-  <div class="header-icons">
+  <header class="text-center py-4 mb-4">KEB hangszerbolt</header>
+
+  <!-- Menü gomb világoskék outline-nal -->
+  <button id="togglePanelBtn" class="btn btn-outline-info position-fixed top-0 start-0 m-3 z-3">
+    ☰ Menü
+  </button>
+
+  <!-- Kosár és fiók ikon -->
+  <div class="header-icons position-fixed top-0 end-0 p-3 d-flex gap-3">
     <a href="KEB-Kosár.html" class="icon" title="Kosár">🛒</a>
-    <a href="Account.html" class="icon" title="Fiók">👤</a>
+    <a href="account.php" class="icon" title="Fiók">👤</a>
   </div>
 
-<div id="true-focus" class="focus-container"></div>
-
-
-  <div class="search-container">
-    <input type="text" placeholder="Keresés" />
-    <button type="submit">🔍</button>
+  <!-- Kereső -->
+  <div class="search-container container my-4">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Keresés" />
+      <button type="submit" class="btn btn-outline-info">🔍</button>
+    </div>
   </div>
 
-  <div id="sidePanel">
+  <!-- Oldalsó panel -->
+  <div id="sidePanel" class="p-4">
     <h2>Oldalsó Panel</h2>
-    <hr>
-    <button id="closePanel">Bezár</button>
-    <table>
+    <hr />
+    <table class="table table-borderless text-info">
       <tr>
-        <th> <a href="KEB-pénzvéltó.html" style="color: white;">Pénzváltó </a></th>
+        <th><a href="KEB-Pénzvátlás.html" style="color: rgb(54, 14, 163);">Pénzváltó</a></th>
       </tr>
       <tr>
-        <th><a href="Elérhetőség.html" style="color: white;">Elérhetőségünk </a></th>
+        <th><a href="Elérhetőségek.html" style="color: rgb(54, 14, 163);">Elérhetőségünk</a></th>
       </tr>
     </table>
   </div>
 
-  <table>
-    <tr>
-      <th><a href="KEB-Gitár.html" class="szin">Gitár</a></th>
-      <th><a href="KEB-Basszus.html" class="szin">Basszus Gitár</a></th>
-      <th><a href="KEB-Dobszettek.html" class="szin">Dobszettek</a></th>
-      <th><a href="KEB-Billentyű.html" class="szin">Billentyű</a></th>
-      <th><a href="KEB-Mikrofon.html" class="szin">Mikrofon</a></th>
-      <th><a href="KEB-Tartozékok.html" class="szin">Tartozékok</a></th>
-      <th><a href="KEB-Hangfalak.html" class="szin">Hangfalak</a></th>
-    </tr>
-  </table>
-  
+  <!-- Fő menü táblázat -->
+  <div class="container my-4">
+    <table class="table table-bordered text-center">
+      <tr>
+        <th><a href="KEB-Gitár.html" class="szin btn btn-primary w-100">Gitár</a></th>
+        <th><a href="KEB-Basszus.html" class="szin btn btn-primary w-100">Basszus Gitár</a></th>
+        <th><a href="KEB-Dobszettek.html" class="szin btn btn-primary w-100">Dobszettek</a></th>
+        <th><a href="KEB-Billentyű.html" class="szin btn btn-primary w-100">Billentyű</a></th>
+        <th><a href="KEB-Mikrofon.html" class="szin btn btn-primary w-100">Mikrofon</a></th>
+        <th><a href="KEB-Tartozékok.html" class="szin btn btn-primary w-100">Tartozékok</a></th>
+        <th><a href="KEB-Hangfalak.html" class="szin btn btn-primary w-100">Hangfalak</a></th>
+      </tr>
+    </table>
+  </div>
 
-  <!-- Thomann-szerű carousel -->
-  <div class="carousel">
-    <div class="carousel-track">
-      <img src="Képek/Erik.jpg" alt="Kép 1">
-      <img src="Képek/boti.jpg" alt="Kép 2">
-      <img src="Képek/dobok.jpg" alt="Kép 3">
-      <img src="Képek/mic.jpg" alt="Kép 4">
-        <img src="Képek/harph.jpeg" alt="Kép 4">
+  <!-- Carousel -->
+  <div class="carousel container my-5">
+    <div class="carousel-track d-flex overflow-auto">
+      <img src="Képek/Erik.jpg" alt="Kép 1" class="img-thumbnail me-2" />
+      <img src="Képek/boti.jpg" alt="Kép 2" class="img-thumbnail me-2" />
+      <img src="Képek/dobok.jpg" alt="Kép 3" class="img-thumbnail me-2" />
+      <img src="Képek/mic.jpg" alt="Kép 4" class="img-thumbnail me-2" />
+      <img src="Képek/harph.jpeg" alt="Kép 5" class="img-thumbnail me-2" />
+      <img src="Képek/dobocska.jpg" alt="Kép 6" class="img-thumbnail me-2" />
+      <img src="Képek/bass2.jpg" alt="Kép 7" class="img-thumbnail me-2" />
+      <img src="Képek/meno.jpg" alt="" class="img-thumbnail me-2" />
     </div>
-    <button class="carousel-btn prev">‹</button>
-    <button class="carousel-btn next">›</button>
   </div>
 
-<h2>Kategóriáink</h2>
-<div class="kategoriak">
-  <a href="gitarok.html">
-    <img src="" alt="Gitárok">
-    <span>Gitárok, basszusgitárok</span>
-  </a>
-  <a href="dobok.html">
-    <img src="" alt="Dobok">
-    <span>Dobok és ütőhangszerek</span>
-  </a>
-  <a href="">
-    <img src=" alt="Billentyűsök">
-    <span>Billentyűsök</span>
-  </a>
-  <a href="studio.html">
-    <img src="" alt="Stúdió">
-    <span>Stúdió és hangrögzítő berendezés</span>
-  </a>
-  <!-- ide jön a többi kategória -->
-</div>
+  <!-- JS -->
+  <script>
+    fetch('lekerProfil.php')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('profile-pic').src = 'Képek/' + data.profile_pic;
+      });
 
-<div class="scrolling-text-container">
-  <div class="scrolling-text" id="scrollingText">
-    Isten hozott!&nbsp;Latogasd meg a www.nemletezik.valami oldalunkat is!&nbsp;Isten hozott!&nbsp;Latogasd meg a www.nemletezik.valami oldalunkat is!&nbsp;Isten hozott!&nbsp;Latogasd meg a www.nemletezik.valami oldalunkat is!&nbsp;Isten hozott!&nbsp;
-  </div>
-  </div>
-</div>
+    const toggleBtn = document.getElementById('togglePanelBtn');
+    const sidePanel = document.getElementById('sidePanel');
 
-  <script src="KEB.js"></script>
+    toggleBtn.addEventListener('click', () => {
+      sidePanel.classList.toggle('active');
+    });
+  </script>
 </body>
 </html>

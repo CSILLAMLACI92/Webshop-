@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <title>Regisztráció</title>
+</head>
+<body>
+  <form id="registerForm">
+    <input type="text" name="username" placeholder="Felhasználónév" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Jelszó" required />
+    <button type="submit">Regisztráció</button>
+  </form>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch('register.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Sikeres regisztráció!');
+          window.location.href = 'index.html'; 
+        } else {
+          alert('Hiba: ' + data.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
