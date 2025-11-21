@@ -1,18 +1,8 @@
 <?php
-
+session_start();
 header("Content-Type: application/json");
 
-// ==== CONNECT.PHP BETÖLTÉSE FIX PATH-AL ====
 require_once __DIR__ . "/connect.php";
-
-// ==== CONNECT DEBUG ====
-file_put_contents("debug_conn.txt", "CONNECT.PHP INCLUDED\n", FILE_APPEND);
-file_put_contents("debug_conn.txt", "HOST: " . ($host ?? "NULL") . "\n", FILE_APPEND);
-file_put_contents("debug_conn.txt", "USER: " . ($user ?? "NULL") . "\n", FILE_APPEND);
-file_put_contents("debug_conn.txt", "DBNAME: " . ($dbname ?? "NULL") . "\n", FILE_APPEND);
-file_put_contents("debug_conn.txt", "PORT: " . ($port ?? "NULL") . "\n", FILE_APPEND);
-
-// ==== JWT BETÖLTÉSE ====
 require_once __DIR__ . "/jwt_helper.php";
 
 // ==== RAW JSON ====
@@ -30,7 +20,7 @@ if ($login === "" || $password === "") {
 
 // ==== USER LEKÉRDEZÉS ====
 $stmt = $conn->prepare("
-    SELECT id, username, email, password_hash, role
+    SELECT id, username, email, password_hash, role, profile_pic
     FROM users
     WHERE username = ? OR email = ?
 ");
@@ -46,26 +36,36 @@ if ($res->num_rows === 0) {
 
 $user = $res->fetch_assoc();
 
-// ==== PASSWORD CHECK ====
+// ==== PASSWORD ELLENŐRZÉS ====
 if (!password_verify($password, $user["password_hash"])) {
     http_response_code(401);
     echo json_encode(["error" => "Wrong password"]);
     exit;
 }
 
-// ==== JWT GENERÁLÁS ====
-$token = generate_jwt([
+// ==== JWT TOKEN GENERÁLÁS ====
+$payload = [
     "id"       => $user["id"],
     "username" => $user["username"],
     "email"    => $user["email"],
-    "role"     => $user["role"]
-]);
+    "role"     => $user["role"],
+    "exp"      => time() + 60 * 60 * 24 * 30 // 30 nap
+];
 
-// ==== VÁLASZ ====
+$token = generate_jwt($payload);
+
+// ==== TOKEN VISSZAKÜLDÉSE A FRONTENDNEK ====
 echo json_encode([
-    "message" => "Login OK",
-    "token"   => $token,
-    "role"    => $user["role"]
+    "success" => true,
+    "message" => "Login successful",
+    "token"   => $token,             // <--- EZ HIÁNYZOTT NÁLAD
+    "user"    => [
+        "id"         => $user["id"],
+        "username"   => $user["username"],
+        "email"      => $user["email"],
+        "role"       => $user["role"],
+        "profile_pic"=> $user["profile_pic"]
+    ]
 ]);
 
 exit;

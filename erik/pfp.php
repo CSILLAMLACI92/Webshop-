@@ -1,56 +1,66 @@
 <?php
 header("Content-Type: application/json");
+require "connect.php";
+require "jwt_helper.php";
 
-require_once "auth.php";
+// ==== JWT TOKEN CHECK ====
+$headers = getallheaders();
+$auth = $headers["Authorization"] ?? "";
 
-$user = require_user();
+if (!$auth) {
+    echo json_encode(["status" => "no_token"]);
+    exit;
+}
 
-if (!isset($_FILES["profile_pic"])) {
-    http_response_code(400);
-    echo json_encode(["message" => "No file uploaded"]);
+$token = str_replace("Bearer ", "", $auth);
+
+try {
+    $payload = verify_jwt($token);
+    $user_id = $payload->id;
+} catch (Exception $e) {
+    echo json_encode(["status" => "invalid_token"]);
+    exit;
+}
+
+// ==== FILE CHECK ====
+if (!isset($_FILES["profile_pic"]) || $_FILES["profile_pic"]["error"] !== 0) {
+    echo json_encode(["status" => "no_file", "message" => "No file uploaded"]);
     exit;
 }
 
 $file = $_FILES["profile_pic"];
 $allowed = ["image/jpeg", "image/png", "image/webp"];
 
-// MIME ellenőrzés
 if (!in_array($file["type"], $allowed)) {
-    http_response_code(400);
-    echo json_encode(["message" => "Invalid image format"]);
+    echo json_encode(["status" => "invalid_file", "message" => "Invalid file type"]);
     exit;
 }
 
-// Mappa, ha nem létezik
+// ==== UPLOAD FOLDER ====
 $upload_dir = "uploads/";
 if (!is_dir($upload_dir)) {
     mkdir($upload_dir, 0777, true);
 }
 
-// Új fájlnév
+// ==== CREATE FILENAME ====
 $ext = pathinfo($file["name"], PATHINFO_EXTENSION);
-$newName = "pfp_" . $user->id . "_" . time() . "." . $ext;
+$newName = "pfp_" . $user_id . "_" . time() . "." . $ext;
+$target_path = $upload_dir . $newName;
 
-$target = $upload_dir . $newName;
-
-// Mentés
-if (!move_uploaded_file($file["tmp_name"], $target)) {
-    http_response_code(500);
-    echo json_encode(["message" => "Upload failed"]);
+// ==== MOVE FILE ====
+if (!move_uploaded_file($file["tmp_name"], $target_path)) {
+    echo json_encode(["status" => "error", "message" => "File upload failed"]);
     exit;
 }
 
-// Adatbázis frissítés
-global $conn;
-$stmt = $conn->prepare("
-    UPDATE users 
-    SET profile_pic = ? 
-    WHERE id = ?
-");
-$stmt->bind_param("si", $target, $user->id);
+// ==== UPDATE DATABASE ====
+$stmt = $conn->prepare("UPDATE users SET profile_pic=? WHERE id=?");
+$stmt->bind_param("si", $newName, $user_id);
 $stmt->execute();
 
+// ==== RESPONSE ====
 echo json_encode([
-    "message" => "Profile picture updated",
-    "path" => $target
+    "status" => "ok",
+    "message" => "Profile updated",
+    "pic" => $upload_dir . $newName
 ]);

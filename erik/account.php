@@ -31,7 +31,7 @@ img.profile { width:100px; height:100px; border-radius:50%; object-fit:cover; ma
 <div class="container">
 
 <div style="text-align:center;">
-    <a href="KEBhangszerek.html">🏠 Főoldal</a>
+ <a href="KEBhangszerek.html" class="btn btn-primary">🏠 Vissza a főoldalra</a>
 </div>
 
 <div class="nav-btns">
