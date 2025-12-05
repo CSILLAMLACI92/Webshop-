@@ -1,0 +1,80 @@
+/* Alap világos téma */
+body.light-theme {
+  background: #ffffff !important;
+  color: #0d2b4d !important;
+}
+
+/* Header */
+body.light-theme header {
+  background: #ffffff !important;      /* FEHÉR */
+  color: #003366 !important;
+  border-bottom: none !important;      /* KÉK VONAL KISZEDVE */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);  /* semleges árnyék */
+  text-shadow: none !important;
+}
+
+/* Menü sor */
+body.light-theme .menu-row {
+  background: #ffffff !important;         /* fehér */
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .menu-btn {
+  background: #f5f5f5 !important;        /* finom világosszürke */
+  color: #003366 !important;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.light-theme .menu-btn:hover {
+  background: #e6e6e6 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Kereső */
+body.light-theme .search-container {
+  background: #ffffff !important;  
+  border-radius: 30px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .search-container input,
+body.light-theme .search-container button {
+  background: transparent !important;
+  color: #003366 !important;
+  border: none;
+}
+
+/* Oldalsó panel */
+body.light-theme #sidePanel {
+  background: #ffffff !important;
+  color: #0d2b4d !important;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Carousel */
+body.light-theme .carousel,
+body.light-theme .carousel-track {
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .carousel img {
+  background: #ffffff !important;
+  border: none !important;              /* kék border KISZEDVE */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header ikonok */
+body.light-theme .header-icons,
+body.light-theme .header-icons a {
+  background: transparent !important;
+  color: #003366 !important;
+  transition: color 0.2s ease;
+}
+
+body.light-theme .header-icons a:hover {
+  color: #3399ff !important;
+}
