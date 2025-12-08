@@ -1,0 +1,55 @@
+   body { background:#0b111f; color:white; }
+
+    .termek-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+      padding: 30px;
+    }
+
+    .termek {
+      background: #111a2b;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .termek img {
+      width: 100%;
+      height: fit-content;
+      object-fit: contain;
+      background: #000;
+      border-radius: 10px;
+    }
+
+    .review-box {
+      margin-top: 20px;
+      background: #0d1524;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .rev-item {
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #333;
+    }
+
+    .rev-pfp {
+      width: 45px !important;
+      height: 45px !important;
+      border-radius: 50% !important;
+      object-fit: cover !important;
+      margin-right: 10px !important;
+      border: 2px solid #4eaaff !important;
+      flex-shrink: 0 !important;
+    }
+
+    .csillag {
+      font-size: 24px;
+      cursor: pointer;
+      margin-right: 4px;
+      user-select: none
+    }
+
+    

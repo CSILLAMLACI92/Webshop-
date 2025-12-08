@@ -1,43 +1,36 @@
-/* Alap világos téma */
+/* ==========================
+   GLOBAL LIGHT THEME BASE
+========================== */
+
 body.light-theme {
   background: #ffffff !important;
   color: #0d2b4d !important;
 }
 
-/* Header */
+/* HEADER */
 body.light-theme header {
-  background: #ffffff !important;      /* FEHÉR */
+  background: #ffffff !important;
   color: #003366 !important;
-  border-bottom: none !important;      /* KÉK VONAL KISZEDVE */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);  /* semleges árnyék */
-  text-shadow: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Menü sor */
+/* MENU */
 body.light-theme .menu-row {
-  background: #ffffff !important;         /* fehér */
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  background: #ffffff !important;
 }
 
 body.light-theme .menu-btn {
-  background: #f5f5f5 !important;        /* finom világosszürke */
+  background: #f5f5f5 !important;
   color: #003366 !important;
-  border: none;
   border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-body.light-theme .menu-btn:hover {
-  background: #e6e6e6 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* Kereső */
+/* SEARCH BAR */
 body.light-theme .search-container {
-  background: #ffffff !important;  
+  background: #ffffff !important;
   border-radius: 30px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 body.light-theme .search-container input,
@@ -47,34 +40,118 @@ body.light-theme .search-container button {
   border: none;
 }
 
-/* Oldalsó panel */
+/* SIDE PANEL */
 body.light-theme #sidePanel {
   background: #ffffff !important;
   color: #0d2b4d !important;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Carousel */
+/* CAROUSEL */
 body.light-theme .carousel,
 body.light-theme .carousel-track {
   background: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 body.light-theme .carousel img {
   background: #ffffff !important;
-  border: none !important;              /* kék border KISZEDVE */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-/* Header ikonok */
-body.light-theme .header-icons,
+/* HEADER ICONS */
 body.light-theme .header-icons a {
-  background: transparent !important;
   color: #003366 !important;
-  transition: color 0.2s ease;
 }
 
 body.light-theme .header-icons a:hover {
   color: #3399ff !important;
+}
+
+/* TABLES */
+body.light-theme table {
+  background: #ffffff !important;
+  color: #003366 !important;
+}
+
+body.light-theme tbody tr {
+  background: #ffffff !important;
+}
+
+body.light-theme input[type="number"] {
+  background: #f0f4ff !important;
+  color: #003366 !important;
+  border: none !important;
+}
+
+/* BUTTONS */
+body.light-theme button {
+  background: #d8e6ff !important;
+  color: #003366 !important;
+  border-radius: 6px;
+  border: none !important;
+}
+
+body.light-theme button:hover {
+  background: #c6d8ff !important;
+}
+
+/* CONTAINER / FORMS */
+body.light-theme .container {
+  background: #f5f7ff !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05) !important;
+  border: none !important;
+}
+
+body.light-theme input {
+  background: #ffffff !important;
+  color: #003366 !important;
+  border: none !important;
+}
+
+body.light-theme input::placeholder {
+  color: #5a7ba0 !important;
+}
+
+/* LINKS */
+body.light-theme a {
+  color: #0055aa !important;
+}
+
+body.light-theme a:hover {
+  color: #003377 !important;
+}
+
+/* PRODUCT PAGE */
+body.light-theme .termek-grid {
+  background: #ffffff !important;
+}
+
+body.light-theme .termek {
+  background: #f8faff !important;
+  color: #003366 !important;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05) !important;
+  border: none !important;
+}
+
+body.light-theme .termek img {
+  border: none !important;
+}
+
+/* REVIEWS */
+body.light-theme .review-box {
+  background: #eef5ff !important;
+  color: #003366 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .rev-item {
+  border-bottom: none !important;
+}
+
+/* CART TOAST */
+body.light-theme .cart-toast {
+  background: #e6f2ff !important;
+  color: #003366 !important;
+  border-left: 4px solid #4eaaff !important;
 }
