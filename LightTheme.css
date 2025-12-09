@@ -1,17 +1,19 @@
 /* ==========================
-   GLOBAL LIGHT THEME BASE
+      GLOBAL LIGHT THEME
 ========================== */
 
 body.light-theme {
   background: #ffffff !important;
   color: #0d2b4d !important;
+  font-smooth: antialiased;
 }
 
 /* HEADER */
 body.light-theme header {
   background: #ffffff !important;
   color: #003366 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px);
 }
 
 /* MENU */
@@ -22,29 +24,41 @@ body.light-theme .menu-row {
 body.light-theme .menu-btn {
   background: #f5f5f5 !important;
   color: #003366 !important;
-  border-radius: 6px;
+  border-radius: 8px;
+  padding: 8px 14px;
+  transition: 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .menu-btn:hover {
+  background: #e9eef9 !important;
 }
 
 /* SEARCH BAR */
 body.light-theme .search-container {
   background: #ffffff !important;
   border-radius: 30px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+  padding: 6px 14px;
+  transition: 0.2s ease;
+}
+
+body.light-theme .search-container:focus-within {
+  box-shadow: 0 0 8px rgba(0, 80, 170, 0.18);
 }
 
 body.light-theme .search-container input,
 body.light-theme .search-container button {
   background: transparent !important;
   color: #003366 !important;
-  border: none;
+  border: none !important;
 }
 
 /* SIDE PANEL */
 body.light-theme #sidePanel {
   background: #ffffff !important;
   color: #0d2b4d !important;
-  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.05);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
 /* CAROUSEL */
@@ -56,12 +70,14 @@ body.light-theme .carousel-track {
 
 body.light-theme .carousel img {
   background: #ffffff !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* HEADER ICONS */
 body.light-theme .header-icons a {
   color: #003366 !important;
+  transition: 0.2s ease;
 }
 
 body.light-theme .header-icons a:hover {
@@ -82,6 +98,7 @@ body.light-theme input[type="number"] {
   background: #f0f4ff !important;
   color: #003366 !important;
   border: none !important;
+  border-radius: 4px;
 }
 
 /* BUTTONS */
@@ -89,6 +106,7 @@ body.light-theme button {
   background: #d8e6ff !important;
   color: #003366 !important;
   border-radius: 6px;
+  transition: 0.2s ease;
   border: none !important;
 }
 
@@ -96,17 +114,18 @@ body.light-theme button:hover {
   background: #c6d8ff !important;
 }
 
-/* CONTAINER / FORMS */
+/* CONTAINERS / FORMS */
 body.light-theme .container {
   background: #f5f7ff !important;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.05) !important;
-  border: none !important;
+  border-radius: 10px;
 }
 
 body.light-theme input {
   background: #ffffff !important;
   color: #003366 !important;
   border: none !important;
+  border-radius: 4px;
 }
 
 body.light-theme input::placeholder {
@@ -116,13 +135,14 @@ body.light-theme input::placeholder {
 /* LINKS */
 body.light-theme a {
   color: #0055aa !important;
+  transition: 0.15s ease;
 }
 
 body.light-theme a:hover {
   color: #003377 !important;
 }
 
-/* PRODUCT PAGE */
+/* PRODUCT GRID */
 body.light-theme .termek-grid {
   background: #ffffff !important;
 }
@@ -131,18 +151,25 @@ body.light-theme .termek {
   background: #f8faff !important;
   color: #003366 !important;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05) !important;
-  border: none !important;
+  border-radius: 8px;
+  transition: 0.2s ease;
+}
+
+body.light-theme .termek:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08) !important;
 }
 
 body.light-theme .termek img {
   border: none !important;
+  border-radius: 6px;
 }
 
 /* REVIEWS */
 body.light-theme .review-box {
   background: #eef5ff !important;
   color: #003366 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 8px;
 }
 
 body.light-theme .rev-item {
@@ -154,4 +181,5 @@ body.light-theme .cart-toast {
   background: #e6f2ff !important;
   color: #003366 !important;
   border-left: 4px solid #4eaaff !important;
+  border-radius: 6px;
 }

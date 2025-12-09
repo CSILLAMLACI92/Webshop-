@@ -38,35 +38,73 @@ header {
   transition: all 0.3s ease-in-out;
 }
 
-/* Teljes szélességű menüsor */
+/* =======================================
+   SZÉP, POLISHED HANGSZER KATEGÓRIA MENÜ
+   ======================================= */
+
 .menu-row {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(to right, #1c3464, #034569, #235b79, #086ca2, #3c9dd0);
-  border-top: 2px solid #0a58ca;
-  border-bottom: 2px solid #0a58ca;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    padding: 8px 0;
+    background: linear-gradient(to right, #0f2e55, #08486d, #0f6a9f);
+    border-top: 2px solid #0a58ca;
+    border-bottom: 2px solid #0a58ca;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
-.menu-row .row { margin: 0; }
-.menu-row .col { padding: 0; }
+/* Sor kisebb spacing-gel */
+.menu-row .row {
+    margin: 0 auto;
+    max-width: 1200px;
+    gap: 6px;                /* 🔵 Gombok közelebb egymáshoz */
+    padding: 0 12px;
+}
 
+/* Oszlopok szűkítése */
+.menu-row .col {
+    flex: 1;
+    padding: 0;
+}
+
+/* 📌 Gombok (szebb, egységesebb stílus) */
 .menu-btn {
-  border-radius: 6px;
-  font-weight: bold;
-  padding: 1rem;
-  background: linear-gradient(to right, #1c3464, #034569, #235b79, #086ca2, #3c9dd0);
-  color: #e0e0e0;
-  border: 1px solid #5c74ae;
-  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 10px;
+
+    background: linear-gradient(145deg, #0d3e66, #1590d8);
+    border: 1px solid #3c9dd0;
+    color: #e8f4ff;
+
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.4px;
+
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    transition:
+        transform 0.18s ease,
+        background 0.25s ease,
+        letter-spacing 0.2s ease,
+        box-shadow 0.25s ease;
 }
 
+/* 🔵 Hover: finom glow + enyhe méretnövekedés */
 .menu-btn:hover {
-  background: linear-gradient(to right, #3c9dd0, #086ca2, #235b79);
-  color: #ffffff;
-  transform: scale(1.02);
+    background: linear-gradient(145deg, #1da2f0, #0b5887);
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    letter-spacing: 0.6px;
 }
+
+/* 🔵 Aktív oldal (ha szeretnéd használni class="active") */
+.menu-btn.active {
+    background: linear-gradient(145deg, #32b0ff, #0b5887);
+    border-color: #67c3ff;
+    color: #fff;
+    transform: scale(1.05);
+}
+
 
 /* Carousel (egyedi, nem Bootstrap) */
 .carousel {
