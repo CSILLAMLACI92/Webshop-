@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KEB Billenty&#369;k</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/LightTheme.css" />
+  <link rel="stylesheet" href="../assets/css/market.css?v=20260210">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+  <link rel="stylesheet" href="../assets/css/toast.css">
+  <link rel="stylesheet" href="../assets/css/wishlist.css">
+
+  <style>
+  </style>
+</head>
+
+<body class="bg-dark text-light">
+<div class="lang-switch" role="group" aria-label="Nyelv">
+  <button type="button" class="lang-pill" data-lang="hu">HU</button>
+  <button type="button" class="lang-pill" data-lang="en">EN</button>
+  <button type="button" class="lang-pill" data-lang="de">DE</button>
+</div>
+
+  <section class="cat-hero">
+    <div class="cat-hero-banner" data-category-slug="billentyu" data-default-hero="../assets/img/zongora.jfif" style="background-image:url('../assets/img/zongora.jfif')">
+      <h1 class="section-title" data-i18n="cat_keys">Billenty&#369;s hangszerek</h1>
+      <p>Szintik, stage pian&oacute;k &eacute;s otthoni gyakorl&oacute; hangszerek.</p>
+    </div>
+  </section>
+
+  <script>
+    window.PRODUCTS = [
+  { id: 301, nev: "Yamaha PSR-E373", ar: 85000,  kep: "../uploads/bill1.jpg",  hang: "../assets/audio/synth01.wav" },
+  { id: 302, nev: "Casio CT-X700",   ar: 78000,  kep: "../uploads/bill2.jpg",  hang: "../assets/audio/synth02.wav" },
+  { id: 303, nev: "Roland GO:Keys",  ar: 130000, kep: "../uploads/bill3.jpg",  hang: "../assets/audio/synth03.wav" },
+  { id: 304, nev: "Korg B2",         ar: 160000, kep: "../uploads/bill4.jpg",  hang: "../assets/audio/synth04.wav" },
+  { id: 305, nev: "Yamaha P-45",     ar: 180000, kep: "../uploads/bill5.jpg",  hang: "../assets/audio/synth05.wav" },
+  { id: 306, nev: "Kawai ES110",     ar: 245000, kep: "../uploads/bill6.jpg",  hang: "../assets/audio/synth06.wav" },
+  { id: 307, nev: "Alesis Recital Pro", ar: 120000, kep: "../uploads/bill7.jpg", hang: "../assets/audio/synth07.wav" },
+  { id: 308, nev: "Kurzweil KP100",  ar: 70000,  kep: "../uploads/bill8.jpg",  hang: "../assets/audio/synth08.wav" },
+  { id: 309, nev: "Roland FP-10",    ar: 210000, kep: "../uploads/bill9.jpg",  hang: "../assets/audio/synth09.wav" },
+  { id: 310, nev: "Nord Electro 6D", ar: 780000, kep: "../uploads/bill10.jpg", hang: "../assets/audio/synth10.wav" }
+];
+  </script>
+
+  <div class="market-layout">
+    <aside class="market-sidebar">
+      <button id="vissza" class="btn btn-outline-info back-btn" data-i18n="back">Vissza</button>
+    </aside>
+    <div class="market-content">
+      <div id="termekLista" class="termek-grid"></div>
+    </div>
+  </div>
+
+  <div class="container text-center my-4">
+    <button id="elozo" class="btn btn-outline-info" data-i18n="prev">El&#337;z&#337;</button>
+    <span id="oldalSzam" class="mx-3 fw-bold text-info"></span>
+    <button id="kovetkezo" class="btn btn-outline-info" data-i18n="next">K&#246;vetkez&#337;</button>
+  </div>
+
+  <script src="../assets/js/lang.js"></script>
+  <script src="../assets/js/categoryHero.js"></script>
+  <script src="../assets/js/review.js"></script>
+  <script src="../assets/js/DarkLight.js"></script>
+  <script src="../assets/js/KEB-Billentyu.js?v=5"></script>
+  <script src="../assets/js/wishlist.js"></script>
+
+  <script>
+    document.getElementById("vissza").onclick = () => {
+      window.location.href = "KEBhangszerek.html";
+    };
+  </script>
+
+  <div id="cart-toast-root"></div>
+
+</body>
+</html>
+
+
+

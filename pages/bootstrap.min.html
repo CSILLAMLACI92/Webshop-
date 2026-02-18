@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KEB hangszerbolt</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- SajĂˇt CSS kĂĽlĂ¶n fĂˇjlban -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+</head>
+<body>
+<div class="lang-switch" role="group" aria-label="Nyelv">
+  <button type="button" class="lang-pill" data-lang="hu">HU</button>
+  <button type="button" class="lang-pill" data-lang="en">EN</button>
+  <button type="button" class="lang-pill" data-lang="de">DE</button>
+</div>
+
+  <!-- FejlĂ©c -->
+  <header class="mb-4">
+    KEB hangszerbolt
+  </header>
+
+  <!-- Ikonok jobb felsĹ‘ sarokban -->
+  <div class="header-icons">
+    <a href="KEB-KosĂˇr.html" class="icon" title="KosĂˇr">đź›’</a>
+    <a href="../server/account.php" class="icon" title="FiĂłk">đź‘¤</a>
+  </div>
+
+  <!-- Profil stĂˇtusz -->
+  <div class="user-status">
+    <img src="../uploads/profil.jpg" alt="ProfilkĂ©p">
+    <span>Ăśdv, <a href="../server/account.php">Botond</a></span>
+  </div>
+
+  <!-- KeresĹ‘ -->
+  <div class="container my-4">
+    <div class="input-group search-container">
+      <input type="text" class="form-control" placeholder="KeresĂ©s">
+      <button class="btn btn-outline-light" type="submit">đź”Ť</button>
+    </div>
+  </div>
+
+  <!-- MenĂĽ -->
+  <div class="container mb-4">
+    <div class="row g-2 text-center">
+      <div class="col"><a href="KEB-GitĂˇr.html" class="btn btn-primary w-100">GitĂˇr</a></div>
+      <div class="col"><a href="KEB-Basszus.html" class="btn btn-primary w-100">Basszus GitĂˇr</a></div>
+      <div class="col"><a href="KEB-Dobszettek.html" class="btn btn-primary w-100">Dobszettek</a></div>
+      <div class="col"><a href="KEB-BillentyĹ±.html" class="btn btn-primary w-100">BillentyĹ±</a></div>
+      <div class="col"><a href="KEB-Mikrofon.html" class="btn btn-primary w-100">Mikrofon</a></div>
+      <div class="col"><a href="KEB-TartozĂ©kok.html" class="btn btn-primary w-100">TartozĂ©kok</a></div>
+      <div class="col"><a href="KEB-Hangfalak.html" class="btn btn-primary w-100">Hangfalak</a></div>
+    </div>
+  </div>
+
+  <!-- Carousel -->
+  <div id="kebCarousel" class="carousel slide container mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="../uploads/Erik.jpg" class="d-block w-100" alt="KĂ©p 1">
+      </div>
+      <div class="carousel-item">
+        <img src="../uploads/boti.jpg" class="d-block w-100" alt="KĂ©p 2">
+      </div>
+      <div class="carousel-item">
+        <img src="../uploads/dobok.jpg" class="d-block w-100" alt="KĂ©p 3">
+      </div>
+      <!-- TovĂˇbbi kĂ©pek -->
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#kebCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#kebCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/lang.js"></script>
+  <script src="../assets/js/DarkLight.js"></script>
+</body>
+</html>
+

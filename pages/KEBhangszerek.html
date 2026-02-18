@@ -1,0 +1,1612 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KEB hangszerbolt</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/KEBhangszerbolt.css?v=2" />
+  <link rel="stylesheet" href="../assets/css/LightTheme.css" />
+  <link rel="stylesheet" href="../assets/css/Mobile.css" />
+  <link rel="stylesheet" href="../assets/css/wishlist.css" />
+
+  <style>
+    body.home-page {
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body.home-page::before,
+    body.home-page::after {
+      content: "";
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(55px);
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.22;
+      animation: ambientFloat 14s ease-in-out infinite;
+    }
+
+    body.home-page::before {
+      top: -140px;
+      left: -120px;
+      background: radial-gradient(circle at 30% 30%, #4dd8ff, #183d7a 70%);
+    }
+
+    body.home-page::after {
+      right: -120px;
+      bottom: -180px;
+      background: radial-gradient(circle at 70% 40%, #2f6bff, #0b264b 70%);
+      animation-delay: 2.5s;
+    }
+
+    textarea {
+      resize: none !important;
+    }
+
+    @keyframes ambientFloat {
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+      50% { transform: translateY(-16px) translateX(10px) scale(1.05); }
+    }
+
+    .profile-header-img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ffffff88;
+      cursor: pointer;
+    }
+
+    .header-icons {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 10;
+    }
+
+    #togglePanelBtn {
+      top: 14px !important;
+      left: 14px !important;
+      margin: 0 !important;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(120, 220, 255, 0.65);
+      background: linear-gradient(120deg, rgba(9, 41, 76, 0.92), rgba(17, 86, 140, 0.88));
+      color: #dff6ff;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(3px);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      z-index: 20;
+    }
+
+    #togglePanelBtn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(185, 240, 255, 0.9);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.42), 0 0 14px rgba(98, 212, 255, 0.25);
+    }
+
+    header {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-row {
+      backdrop-filter: blur(4px);
+      position: relative;
+      transition: padding .25s ease, min-height .25s ease;
+      padding-top: 10px;
+    }
+
+    .menu-row .search-container.search-inline {
+      width: min(760px, 100%);
+      max-height: 120px;
+      max-width: 760px;
+      opacity: 1;
+      transform: translateY(0);
+      overflow: hidden;
+      transform-origin: center center;
+      transition: max-width .32s ease, max-height .28s ease, opacity .24s ease, transform .24s ease, margin .24s ease;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Live search dropdown ne legyen levagva */
+    .menu-row .search-container.search-inline {
+      overflow: visible !important;
+      max-height: none !important;
+    }
+
+    .menu-row .search-container.search-inline .live-search-box {
+      top: calc(100% + 8px);
+      z-index: 9999;
+    }
+
+    /* Egységes kereső szélesség minden témában */
+    .menu-row .search-container.search-inline {
+      width: min(760px, 100%) !important;
+      max-width: 760px !important;
+    }
+
+    /* Felso kategoriagombok: kisebb, teglas stilus */
+    .menu-center-cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .menu-center-cats .menu-pill {
+      border-radius: 14px !important;
+      padding: 8px 14px !important;
+      width: 140px;
+      min-width: 140px;
+      max-width: 140px;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 0.98rem;
+      font-weight: 700;
+      border: 1px solid rgba(120, 200, 255, 0.55) !important;
+      background: linear-gradient(180deg, rgba(45, 121, 187, 0.95), rgba(26, 93, 152, 0.95)) !important;
+      box-shadow: 0 8px 18px rgba(7, 30, 56, 0.34) !important;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+
+    .menu-center-cats .menu-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 11px 20px rgba(7, 30, 56, 0.42) !important;
+      filter: brightness(1.04);
+    }
+
+    body.light-theme .menu-center-cats .menu-pill {
+      background: linear-gradient(180deg, #f5f9ff, #e8f1ff) !important;
+      color: #1a3350 !important;
+      border: 1px solid #c8d9fb !important;
+      box-shadow: 0 8px 16px rgba(26, 51, 80, 0.12) !important;
+    }
+
+
+    .vibe-strip {
+      width: min(1180px, 94%);
+      margin: 14px auto 8px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .vibe-strip .vibe-chip:last-child {
+      grid-column: 2 / 4;
+      justify-self: center;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .vibe-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #ffffff !important;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(118, 213, 255, 0.45);
+      background: linear-gradient(120deg, rgba(15, 47, 88, 0.85), rgba(10, 28, 53, 0.85));
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vibe-chip::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 20%, rgba(130, 223, 255, 0.28) 50%, transparent 80%);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .vibe-chip:hover::after,
+    .vibe-chip.active::after {
+      transform: translateX(120%);
+    }
+
+    .vibe-chip:hover,
+    .vibe-chip.active {
+      transform: translateY(-2px);
+      border-color: rgba(170, 236, 255, 0.85);
+      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.34), 0 0 16px rgba(98, 212, 255, 0.2);
+    }
+
+    .video-promo {
+      margin: 24px auto 8px;
+      width: min(1180px, 94%);
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(120,200,255,0.35);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+      background: #03182b;
+    }
+
+    .video-promo video {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+    }
+
+    .promo-rotator {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: flex-end;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .promo-chip {
+      pointer-events: auto;
+      text-decoration: none;
+      color: #dff7ff;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(3, 20, 35, 0.78);
+      border: 1px solid rgba(113, 214, 255, 0.65);
+      backdrop-filter: blur(2px);
+      transition: transform .22s ease, opacity .22s ease, box-shadow .22s ease;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+      animation: promoChipFloat 2.8s ease-in-out infinite;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .promo-chip::before {
+      content: "↻";
+      font-size: 14px;
+      opacity: 0.9;
+      animation: promoChipSpin 1.8s linear infinite;
+      display: inline-block;
+    }
+
+    .promo-chip.fade {
+      opacity: .25;
+      transform: translateY(-6px);
+    }
+
+    .promo-chip:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+    }
+
+    @keyframes promoChipSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes promoChipFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    .video-controls {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+    }
+
+    .video-control-btn {
+      border: 1px solid rgba(113, 214, 255, 0.65);
+      background: rgba(0, 17, 31, 0.8);
+      color: #dff7ff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .video-caption {
+      margin: 0;
+      padding: 12px 16px 14px;
+      color: #b9e9ff;
+      background: #041a2d;
+      border-top: 1px solid rgba(120,200,255,0.25);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .carousel {
+      box-shadow:
+        inset 0 0 0 1px rgba(120, 200, 255, 0.08),
+        0 16px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    @media (max-width: 980px) {
+      .vibe-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .vibe-strip .vibe-chip:last-child {
+        grid-column: 1 / -1;
+        justify-self: center;
+        width: 100%;
+        max-width: 560px;
+      }
+    }
+
+    body.light-theme header {
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%) !important;
+      border-bottom: 1px solid #d6e3fb !important;
+      box-shadow: 0 8px 24px rgba(25, 55, 95, 0.12) !important;
+    }
+
+    body.light-theme .header-title,
+    body.light-theme .header-sub {
+      color: #1a3350 !important;
+      text-shadow: none !important;
+    }
+
+    body.light-theme .menu-pill {
+      background: #ffffff !important;
+      color: #1a3350 !important;
+      border-color: #c8d9fb !important;
+      box-shadow: 0 8px 20px rgba(26, 51, 80, 0.1) !important;
+    }
+
+    body.light-theme .menu-side-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%) !important;
+      border-color: #d1def7 !important;
+      box-shadow: 0 10px 26px rgba(26, 51, 80, 0.14) !important;
+    }
+
+    body.light-theme .menu-side-title,
+    body.light-theme .menu-side-text,
+    body.light-theme .menu-side-cta {
+      color: #1a3350 !important;
+    }
+
+    body.light-theme .menu-side-cta {
+      border-color: #bfd2f4 !important;
+      background: #ffffff !important;
+    }
+
+    body.light-theme #togglePanelBtn {
+      background: #ffffff !important;
+      color: #1a3350 !important;
+      border-color: #c8d9fb !important;
+      box-shadow: 0 8px 20px rgba(26, 51, 80, 0.14) !important;
+    }
+
+    body.light-theme .vibe-chip {
+      background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%) !important;
+      color: #1a3350 !important;
+      border-color: #c9dafb !important;
+      box-shadow: 0 10px 24px rgba(26, 51, 80, 0.12) !important;
+    }
+
+    body.light-theme .search-inner input,
+    body.light-theme .search-inner input::placeholder {
+      color: #3e5575 !important;
+      opacity: 1;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) #togglePanelBtn {
+      background: linear-gradient(140deg, #1f66a8, #124a7d) !important;
+      border-color: rgba(164, 225, 255, 0.68) !important;
+      color: #eff9ff !important;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .menu-pill {
+      background: linear-gradient(140deg, #2d79bb, #1a5d98) !important;
+      border-color: rgba(186, 232, 255, 0.62) !important;
+      color: #f5fbff !important;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .menu-side-cta {
+      background: linear-gradient(140deg, #2b74b5, #18578f) !important;
+      border-color: rgba(176, 226, 255, 0.62) !important;
+      color: #f5fbff !important;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .vibe-chip {
+      background: linear-gradient(140deg, #1e67a9, #123f6f) !important;
+      border-color: rgba(162, 223, 255, 0.62) !important;
+      color: #f2f9ff !important;
+      box-shadow: 0 10px 22px rgba(7, 30, 56, 0.42) !important;
+    }
+
+    /* Kék témában: ne legyen nagy külső burok, maradjon kék belső kereső */
+    body:not(.light-theme):not(.midnight-theme) .search-container.compact.search-inline {
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .search-container.compact.search-inline .search-inner {
+      background: linear-gradient(135deg, rgba(12, 24, 40, 0.9), rgba(18, 40, 64, 0.9)) !important;
+      border: 1px solid rgba(120, 200, 255, 0.3) !important;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .search-container.compact.search-inline .search-inner input {
+      color: #eaf6ff !important;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .search-container.compact.search-inline .search-inner input::placeholder {
+      color: rgba(234, 246, 255, 0.7) !important;
+      opacity: 1;
+    }
+
+    body:not(.light-theme):not(.midnight-theme) .search-container.compact.search-inline .search-inner button {
+      background: rgba(77, 184, 255, 0.2) !important;
+      color: #eaf6ff !important;
+    }
+
+    body.midnight-theme #togglePanelBtn,
+    body.midnight-theme .menu-pill,
+    body.midnight-theme .menu-side-cta,
+    body.midnight-theme .vibe-chip {
+      background: linear-gradient(140deg, #070b13, #0b1220) !important;
+      color: #f2f7ff !important;
+    }
+
+    body.midnight-theme #togglePanelBtn {
+      border-color: rgba(140, 214, 255, 0.45) !important;
+    }
+
+    body.midnight-theme .menu-pill,
+    body.midnight-theme .menu-side-cta {
+      border-color: rgba(255, 255, 255, 0.16) !important;
+    }
+
+    body.midnight-theme .vibe-chip {
+      border-color: rgba(120, 210, 255, 0.45) !important;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    #sidePanel {
+      width: min(390px, 92vw);
+      right: calc(-1 * min(390px, 92vw));
+      padding: 18px 16px;
+    }
+
+    .sp-head {
+      margin-bottom: 12px;
+    }
+
+    .sp-title {
+      margin: 0;
+      font-size: 1.22rem;
+      color: #d8efff;
+    }
+
+    .sp-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .sp-tab-btn {
+      border: 1px solid rgba(120, 200, 255, 0.35);
+      border-radius: 12px;
+      padding: 8px 10px;
+      background: rgba(6, 24, 45, 0.7);
+      color: #eaf6ff;
+      font-weight: 700;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+
+    .sp-tab-btn.active {
+      background: linear-gradient(135deg, #4db8ff, #2079c0);
+      color: #081527;
+      border-color: transparent;
+    }
+
+    .sp-tab-panel {
+      display: none;
+    }
+
+    .sp-tab-panel.active {
+      display: block;
+    }
+
+    .sp-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(120, 200, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      color: #eaf6ff !important;
+      padding: 11px 12px;
+      font-weight: 600;
+    }
+
+    .sp-link::after {
+      content: ">";
+      opacity: 0.7;
+    }
+
+    .sp-link:hover {
+      background: rgba(77, 184, 255, 0.2);
+      transform: translateX(-2px);
+    }
+
+    #toggleThemeBtn {
+      width: 100%;
+      margin-top: 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(120, 200, 255, 0.4);
+      background: linear-gradient(135deg, rgba(77, 184, 255, 0.2), rgba(19, 89, 148, 0.9));
+      color: #eaf6ff;
+      padding: 10px 12px;
+    }
+
+    body.light-theme .sp-title {
+      color: #1a3350;
+    }
+
+    body.light-theme .sp-tab-btn {
+      background: #ffffff;
+      color: #1a3350;
+      border-color: #c9dafb;
+    }
+
+    body.light-theme .sp-tab-btn.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, #2f80da, #1662b3);
+    }
+
+    body.light-theme .sp-link {
+      background: #ffffff;
+      color: #1a3350 !important;
+      border-color: #dce6ff;
+    }
+
+    body.light-theme #toggleThemeBtn {
+      background: linear-gradient(135deg, #2f80da, #1662b3);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+  </style>
+</head>
+<body class="home-page">
+
+  <button id="togglePanelBtn" class="btn btn-outline-info position-fixed top-0 start-0 m-3 z-3" data-i18n="menu_btn">☰ Men&uuml;</button>
+
+  <header>
+    <div class="header-title">KEB hangszerbolt</div>
+    <div class="header-sub" data-i18n="header_sub">Hangszer, hang, inspiraci&oacute;</div>
+  </header>
+
+  <div class="header-icons">
+    <a href="KEB-Kos%C3%A1r.html" class="icon icon-circle" aria-label="Kosar">&#128722;</a>
+    <a href="chat.html" class="icon icon-circle" aria-label="Chat">&#128172;</a>
+    <div class="currency-lang">
+      <div class="currency-flags" role="group" aria-label="Valuta">
+        <button type="button" class="currency-flag flag-hu" data-currency="HUF" aria-label="HUF"></button>
+        <button type="button" class="currency-flag flag-eu" data-currency="EUR" aria-label="EUR"></button>
+        <button type="button" class="currency-flag flag-us" data-currency="USD" aria-label="USD"></button>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Nyelv">
+        <button type="button" class="lang-pill active" data-lang="hu">HU</button>
+        <button type="button" class="lang-pill" data-lang="en">EN</button>
+        <button type="button" class="lang-pill" data-lang="de">DE</button>
+      </div>
+    </div>
+    <a id="loginIcon" href="../server/account.php" class="icon" aria-label="Bejelentkezés">&#128100;</a>
+    <a id="profileLink" href="../server/account.php" aria-label="Profil">
+      <img
+        id="topProfilePic"
+        src="../uploads/Default.avatar.jpg"
+        class="profile-header-img d-none"
+        alt="Profilkép"
+        onerror="this.onerror=null; this.src='../uploads/Default.avatar.jpg';">
+    </a>
+  </div>
+
+  <div id="sidePanel">
+    <div class="sp-head">
+      <h2 class="sp-title" data-i18n="side_panel">Oldals&oacute; panel</h2>
+    </div>
+    <div class="sp-tabs" role="tablist" aria-label="Men&uuml; szekci&oacute;k">
+      <button class="sp-tab-btn active" type="button" data-panel-target="spProducts" data-i18n="tab_products">Term&eacute;kek</button>
+      <button class="sp-tab-btn" type="button" data-panel-target="spServices" data-i18n="tab_services">Szolg&aacute;ltat&aacute;sok</button>
+    </div>
+
+    <div id="spProducts" class="sp-tab-panel active">
+      <a class="sp-link" href="KEB-Git%C3%A1r.html" data-i18n="cat_gitar">Git&aacute;r</a>
+      <a class="sp-link" href="KEB-Basszus.html" data-i18n="cat_bass">Basszus git&aacute;r</a>
+      <a class="sp-link" href="KEB-Dobszettek.html" data-i18n="cat_drum">Dobszettek</a>
+      <a class="sp-link" href="KEB-Billenty%C5%B1.html" data-i18n="cat_keys">Billenty&#369;</a>
+      <a class="sp-link" href="KEB-Mikrofon.html" data-i18n="cat_mic">Mikrofon</a>
+      <a class="sp-link" href="KEB-Tartoz%C3%A9kok.html" data-i18n="cat_accessories">Tartoz&eacute;kok</a>
+      <a class="sp-link" href="KEB-Hangfalak.html" data-i18n="cat_speakers">Hangfalak</a>
+      <a class="sp-link" href="hasznalt.html" data-i18n="used_title">Haszn&aacute;lt elad&oacute; cuccok</a>
+      <a class="sp-link" href="kivansaglista.html" data-i18n="wishlist_title">K&iacute;v&aacute;ns&aacute;glista</a>
+    </div>
+
+    <div id="spServices" class="sp-tab-panel">
+      <a class="sp-link" href="bandakereso.html" data-i18n="band_title">Bandakeres&#337;</a>
+      <a class="sp-link" href="chat.html" data-i18n="chat_title">Chat</a>
+      <a class="sp-link" href="KEB-Account.html" data-i18n="account_title">Fi&oacute;k</a>
+      <a class="sp-link" href="szallitas.html" data-i18n="shipping">Sz&aacute;ll&iacute;t&aacute;s</a>
+      <a class="sp-link" href="ASZF.html" data-i18n="terms">ASZF</a>
+      <a class="sp-link" href="Garancia.html" data-i18n="warranty">Garancia</a>
+      <a class="sp-link" href="adatvedelem.html" data-i18n="privacy">Adatv&eacute;delem</a>
+      <a class="sp-link" href="El%C3%A9rhet%C5%91s%C3%A9gek.html" data-i18n="contacts">El&eacute;rhet&#337;s&eacute;geink</a>
+    </div>
+
+    <button id="toggleThemeBtn" type="button" data-i18n="theme_toggle">T&eacute;ma v&aacute;lt&aacute;s</button>
+  </div>
+
+  <div class="menu-row">
+    <div class="menu-side menu-side-left">
+      <div class="menu-side-card">
+        <div class="menu-side-title" data-i18n="used_title">Használt eladó cuccok</div>
+        <div class="menu-side-text" data-i18n="used_short_desc">Használt cuccok.</div>
+        <a class="menu-side-cta" href="hasznalt.html" data-i18n="jump">Ugrás</a>
+      </div>
+    </div>
+    <div class="menu-center">
+      <div class="menu-center-cats">
+        <a href="KEB-Git%C3%A1r.html" class="menu-pill" data-i18n="cat_gitar">Git&aacute;r</a>
+        <a href="KEB-Basszus.html" class="menu-pill" data-i18n="cat_bass">Basszus git&aacute;r</a>
+        <a href="KEB-Dobszettek.html" class="menu-pill" data-i18n="cat_drum">Dobszettek</a>
+        <a href="KEB-Billenty%C5%B1.html" class="menu-pill" data-i18n="cat_keys">Billenty&#369;</a>
+        <a href="KEB-Mikrofon.html" class="menu-pill" data-i18n="cat_mic">Mikrofon</a>
+        <a href="KEB-Tartoz%C3%A9kok.html" class="menu-pill" data-i18n="cat_accessories">Tartoz&eacute;kok</a>
+        <a href="KEB-Hangfalak.html" class="menu-pill" data-i18n="cat_speakers">Hangfalak</a>
+      </div>
+
+      <div class="search-container compact search-inline">
+        <div class="search-inner">
+          <input type="text" id="searchInput" placeholder="Keres&eacute;s..." data-i18n-placeholder="search">
+          <button type="button">&#128269;</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-side menu-side-right">
+      <div class="menu-side-card">
+        <div class="menu-side-title" data-i18n="band_title">Bandakereső</div>
+        <div class="menu-side-text" data-i18n="band_short_desc">Keress bandát.</div>
+        <a class="menu-side-cta" href="bandakereso.html" data-i18n="jump">Ugrás</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="vibe-strip" aria-label="Gyors linkek">
+    <a class="vibe-chip" href="KEB-Git%C3%A1r.html">🎸 Gitár ajánlatok</a>
+    <a class="vibe-chip" href="KEB-Basszus.html">🎼 Basszus újdonságok</a>
+    <a class="vibe-chip" href="hasznalt.html">♻️ Használt piactér</a>
+    <a class="vibe-chip" href="bandakereso.html">🤝 Zenekar kereső</a>
+    <a class="vibe-chip" href="chat.html">💬 Üzenetek</a>
+  </section>
+
+  <div class="carousel">
+    <div class="carousel-promo" id="carouselPromo">
+      <div class="promo-tag" data-i18n="promo_tag">Vedd meg most!</div>
+      <div class="promo-name" id="promoName">Gitár</div>
+      <button class="promo-btn" id="promoBtn" type="button" data-i18n="view">Megnézem</button>
+    </div>
+    <div class="carousel-track" id="carouselTrack"></div>
+  </div>
+
+  <section class="home-section" id="akciok">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="promo_title_long">Akci&oacute;k</h2>
+        <p data-i18n="promo_desc">Friss le&aacute;raz&aacute;sok a h&eacute;ten. Kattints &eacute;s n&eacute;zd meg a r&eacute;szleteket.</p>
+      </div>
+      <a class="section-link" href="KEB-Kos%C3%A1r.html" data-i18n="promo_cart">Akci&oacute;s kos&aacute;r</a>
+    </div>
+
+    <div class="promo-grid">
+      <a class="promo-card" href="KEB-Basszus.html" data-offer="1" data-name="Yamaha TRBX174" data-price="76000">
+        <span class="promo-badge">-20%</span>
+        <img src="../uploads/bass2.jpg" alt="Yamaha TRBX174">
+        <div class="promo-body">
+          <h3>Yamaha TRBX174</h3>
+          <div class="promo-price">
+            <span class="promo-old price" data-price="95000"></span>
+            <span class="promo-now price" data-price="76000"></span>
+          </div>
+          <span class="promo-cta" data-i18n="add_to_cart">Kos&aacute;rba</span>
+        </div>
+      </a>
+      <a class="promo-card" href="KEB-Git%C3%A1r.html" data-offer="1" data-name="Ibanez RG421" data-price="153000">
+        <span class="promo-badge">-15%</span>
+        <img src="../uploads/Ibanez%20RG421.jpg" alt="Ibanez RG421">
+        <div class="promo-body">
+          <h3>Ibanez RG421</h3>
+          <div class="promo-price">
+            <span class="promo-old price" data-price="180000"></span>
+            <span class="promo-now price" data-price="153000"></span>
+          </div>
+          <span class="promo-cta" data-i18n="add_to_cart">Kos&aacute;rba</span>
+        </div>
+      </a>
+      <a class="promo-card" href="KEB-Dobszettek.html" data-offer="1" data-name="Pearl Export Series" data-price="315000">
+        <span class="promo-badge">-10%</span>
+        <img src="../uploads/dob2.jpg" alt="Pearl Export Series">
+        <div class="promo-body">
+          <h3>Pearl Export Series</h3>
+          <div class="promo-price">
+            <span class="promo-old price" data-price="350000"></span>
+            <span class="promo-now price" data-price="315000"></span>
+          </div>
+          <span class="promo-cta" data-i18n="add_to_cart">Kos&aacute;rba</span>
+        </div>
+      </a>
+      <a class="promo-card" href="KEB-Mikrofon.html" data-offer="1" data-name="Shure SM58" data-price="31500">
+        <span class="promo-badge">-25%</span>
+        <img src="../uploads/mik1.jpg" alt="Shure SM58">
+        <div class="promo-body">
+          <h3>Shure SM58</h3>
+          <div class="promo-price">
+            <span class="promo-old price" data-price="42000"></span>
+            <span class="promo-now price" data-price="31500"></span>
+          </div>
+          <span class="promo-cta" data-i18n="add_to_cart">Kos&aacute;rba</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="home-section" id="ajanlott">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="rec_title_long">Aj&aacute;nlott hangszerek</h2>
+        <p data-i18n="rec_desc">V&aacute;logat&aacute;s a legn&eacute;pszer&#369;bb cuccokb&oacute;l.</p>
+      </div>
+      <a class="section-link" href="KEBhangszerek.html" data-i18n="view_all">Teljes k&iacute;n&aacute;lat</a>
+    </div>
+
+    <div class="recommend-grid">
+      <a class="rec-card" href="KEB-Git%C3%A1r.html" data-offer="0" data-name="Yamaha Pacifica 112V" data-price="135000">
+        <img src="../uploads/Yamaha.jpg" alt="Yamaha Pacifica 112V">
+        <div class="rec-body">
+          <h3>Yamaha Pacifica 112V</h3>
+          <p>Git&aacute;r &middot; <span class="price" data-price="135000"></span></p>
+        </div>
+      </a>
+      <a class="rec-card" href="KEB-Billenty%C5%B1.html" data-offer="0" data-name="Yamaha PSR-E373" data-price="85000">
+        <img src="../uploads/bill1.jpg" alt="Yamaha PSR-E373">
+        <div class="rec-body">
+          <h3>Yamaha PSR-E373</h3>
+          <p>Billenty&#369; &middot; <span class="price" data-price="85000"></span></p>
+        </div>
+      </a>
+      <a class="rec-card" href="KEB-Dobszettek.html" data-offer="0" data-name="Mapex Tornado" data-price="180000">
+        <img src="../uploads/dob3.jpg" alt="Mapex Tornado">
+        <div class="rec-body">
+          <h3>Mapex Tornado</h3>
+          <p>Dobszett &middot; <span class="price" data-price="180000"></span></p>
+        </div>
+      </a>
+      <a class="rec-card" href="KEB-Mikrofon.html" data-offer="0" data-name="Rode NT1-A" data-price="85000">
+        <img src="../uploads/mik4.jpg" alt="Rode NT1-A">
+        <div class="rec-body">
+          <h3>Rode NT1-A</h3>
+          <p>Mikrofon &middot; <span class="price" data-price="85000"></span></p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="why_title">Mi&eacute;rt a KEB?</h2>
+        <p data-i18n="why_desc">Gyors rendel&eacute;s, biztos csomagol&aacute;s, zen&eacute;szbar&aacute;t t&aacute;mogat&aacute;s.</p>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-card">
+        <div class="feature-icon">&#128230;</div>
+        <h3 data-i18n="feature_safe_title">Biztons&aacute;gos csomag</h3>
+        <p data-i18n="feature_safe_desc">Dupla v&eacute;delem, &uacute;t k&ouml;zben is biztos.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128640;</div>
+        <h3 data-i18n="feature_fast_title">Gyors kisz&aacute;ll&iacute;t&aacute;s</h3>
+        <p data-i18n="feature_fast_desc">Rakt&aacute;ron l&eacute;v&#337; term&eacute;kek 24-48 &oacute;ra.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128142;</div>
+        <h3 data-i18n="feature_real_title">Val&oacute;di zen&eacute;szek</h3>
+        <p data-i18n="feature_real_desc">Aj&aacute;nl&aacute;sok gyakorl&oacute; muzsikusokt&oacute;l.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="reviews_title">V&eacute;lem&eacute;nyek</h2>
+          <p data-i18n="reviews_desc">P&aacute;r mondat a zen&eacute;szekt&#337;l.</p>
+        </div>
+      </div>
+
+    <div class="quote-toolbar">
+      <button id="quotePrev" class="quote-btn" type="button" data-i18n="prev">&larr; El&#337;z&#337;</button>
+      <div class="quote-page" id="quotePage">1 / 1</div>
+      <button id="quoteNext" class="quote-btn" type="button" data-i18n="next">K&ouml;vetkez&#337; &rarr;</button>
+    </div>
+
+    <div class="quote-track" aria-label="Velemenyek" id="quoteTrack"></div>
+
+    <div id="quoteForm" class="quote-form d-none">
+      <div class="quote-form-title" data-i18n="quote_title">V&eacute;lem&eacute;ny &iacute;r&aacute;sa</div>
+      <textarea id="quoteText" class="quote-input" rows="3" placeholder="&Iacute;rj v&eacute;lem&eacute;nyt..." data-i18n-placeholder="write_review"></textarea>
+      <div class="quote-form-row">
+        <input id="quoteName" class="quote-input" type="text" placeholder="N&eacute;v" data-i18n-placeholder="name" readonly>
+        <select id="quoteTag" class="quote-input">
+          <option value="Az oldal" data-i18n="tag_site">Az oldal</option>
+          <option value="Git&aacute;r" data-i18n="tag_gitar">Git&aacute;r</option>
+          <option value="Basszus git&aacute;r" data-i18n="tag_bass">Basszus git&aacute;r</option>
+          <option value="Dob" data-i18n="tag_drum">Dob</option>
+          <option value="Billenty&#369;" data-i18n="tag_keys">Billenty&#369;</option>
+          <option value="Mikrofon" data-i18n="tag_mic">Mikrofon</option>
+          <option value="Hangfal" data-i18n="tag_speakers">Hangfal</option>
+          <option value="Tartoz&eacute;k" data-i18n="tag_accessories">Tartoz&eacute;k</option>
+        </select>
+      </div>
+      <button id="quoteSubmit" class="quote-submit" type="button" data-i18n="send">K&uuml;ld&eacute;s</button>
+    </div>
+    <p id="quoteLoginNote" class="quote-login-note" data-i18n="must_login_review">Be kell jelentkezned a vélemény írásához!</p>
+  </section>
+
+  <script src="../assets/js/lang.js?v=20260204"></script>
+
+  <script>
+    const toggleBtn = document.getElementById("togglePanelBtn");
+    const sidePanel = document.getElementById("sidePanel");
+    toggleBtn.addEventListener("click", () => {
+      sidePanel.classList.toggle("active");
+    });
+
+    document.querySelectorAll(".sp-tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-panel-target");
+        document.querySelectorAll(".sp-tab-btn").forEach((b) => b.classList.toggle("active", b === btn));
+        document.querySelectorAll(".sp-tab-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.id === target);
+        });
+      });
+    });
+  </script>
+
+  <script src="../assets/js/DarkLight.js"></script>
+  <script src="../assets/js/wishlist.js"></script>
+
+  <script>
+    const APP_BASE = (() => {
+      const p = window.location.pathname.replace(/\\+/g, "/");
+      const idx = p.lastIndexOf("/pages/");
+      return idx >= 0 ? p.slice(0, idx) : "";
+    })();
+
+    function normalizeProfilePicPath(raw) {
+      const p = String(raw || "").trim();
+      if (!p) return (APP_BASE || "") + "/uploads/Default.avatar.jpg";
+      if (/^https?:\/\//i.test(p)) return p;
+      if (APP_BASE && p.startsWith(APP_BASE + "/uploads/")) return p;
+      if (p.startsWith("/uploads/")) return (APP_BASE || "") + p;
+      if (p.startsWith("../uploads/")) return (APP_BASE || "") + "/uploads/" + p.slice(11);
+      if (p.startsWith("uploads/")) return (APP_BASE || "") + "/" + p;
+      if (p.startsWith("/")) return (APP_BASE || "") + p;
+      return (APP_BASE || "") + "/uploads/" + p.replace(/^\/+/, "");
+    }
+
+    function applyLiveProfilePic(raw) {
+      const normalized = normalizeProfilePicPath(raw || "Default.avatar.jpg");
+      const top = document.getElementById("topProfilePic");
+      const side = document.getElementById("sp_pfp");
+      if (top) top.src = normalized + (normalized.includes("?") ? "&" : "?") + "t=" + Date.now();
+      if (side) side.src = normalized + (normalized.includes("?") ? "&" : "?") + "t=" + Date.now();
+    }
+
+    window.addEventListener("storage", (e) => {
+      if (e.key !== "profile_pic_update" || !e.newValue) return;
+      try {
+        const payload = JSON.parse(e.newValue);
+        if (payload && payload.url) applyLiveProfilePic(payload.url);
+      } catch (_) {}
+    });
+
+    const token = localStorage.getItem("token");
+    const profileLink = document.getElementById("profileLink");
+
+    if (token) {
+      let profileHref = "profile.html";
+
+      fetch(`../server/get_profile_pic.php?t=${Date.now()}`, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "ok") {
+          if (data.username) {
+            profileHref = `profile.html?user=${encodeURIComponent(data.username)}`;
+          }
+          profileLink.href = profileHref;
+          const loginIcon = document.getElementById("loginIcon");
+          if (loginIcon) loginIcon.classList.add("d-none");
+
+          const img = document.getElementById("topProfilePic");
+          const src = normalizeProfilePicPath(data.pic);
+          img.src = src + (src.includes("?") ? "&" : "?") + "t=" + Date.now();
+          img.onerror = () => { img.src = normalizeProfilePicPath("Default.avatar.jpg"); };
+          img.classList.remove("d-none");
+        }
+      })
+      .catch(() => {});
+
+    } else {
+      profileLink.href = "../server/account.php";
+    }
+  </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tr = (key, fallback) => {
+      const translated = window.SH_LANG && window.SH_LANG.t ? window.SH_LANG.t(key) : "";
+      if (!translated || translated === key) return fallback || key;
+      return translated;
+    };
+    const promoItems = [
+      { name: "Yamaha Pacifica 112V", page: "hangszer.html?cat=gitar&id=1" },
+      { name: "Fender Stratocaster", page: "hangszer.html?cat=gitar&id=2" },
+      { name: "Ibanez RG421", page: "hangszer.html?cat=gitar&id=3" },
+      { name: "Epiphone Les Paul", page: "hangszer.html?cat=gitar&id=4" },
+      { name: "PRS SE Custom 24", page: "hangszer.html?cat=gitar&id=5" }
+    ];
+
+    const promoWrap = document.getElementById("carouselPromo");
+    const promoName = document.getElementById("promoName");
+    const promoBtn = document.getElementById("promoBtn");
+    const carouselTrack = document.getElementById("carouselTrack");
+    let promoIndex = 0;
+
+    const fallbackCarousel = [
+      { path: "../uploads/Erik.jpg", alt: "Kep 1" },
+      { path: "../uploads/boti.jpg", alt: "Kep 2" },
+      { path: "../uploads/dobok.jpg", alt: "Kep 3" },
+      { path: "../uploads/mic.jpg", alt: "Kep 4" },
+      { path: "../uploads/harph.jpeg", alt: "Kep 5" },
+      { path: "../uploads/dobocska.jpg", alt: "Kep 6" },
+      { path: "../uploads/bass2.jpg", alt: "Kep 7" },
+      { path: "../uploads/meno.jpg", alt: "Kep 8" }
+    ];
+
+    function renderCarousel(images) {
+      if (!carouselTrack) return;
+      const list = Array.isArray(images) && images.length ? images : fallbackCarousel;
+      const doubled = list.concat(list);
+      carouselTrack.innerHTML = doubled.map(img => {
+        const src = img.path || img.src || "../uploads/Default.avatar.jpg";
+        const alt = img.alt || "Carousel kep";
+        return `<img src="${src}" alt="${alt}" onerror="this.onerror=null; this.src='../uploads/Default.avatar.jpg';">`;
+      }).join("");
+    }
+
+    fetch("../api/site_media.php", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        const imgs = data && Array.isArray(data.carousel_images) ? data.carousel_images : [];
+        renderCarousel(imgs);
+      })
+      .catch(() => renderCarousel([]));
+
+    function setPromo() {
+      if (!promoWrap || !promoName || !promoBtn) return;
+      promoIndex = Math.floor(Math.random() * promoItems.length);
+      const item = promoItems[promoIndex];
+      promoName.textContent = item.name;
+      promoBtn.onclick = () => {
+        window.location.href = item.page;
+      };
+      promoWrap.classList.add("show");
+      setTimeout(() => promoWrap.classList.remove("show"), 4200);
+    }
+
+    if (promoWrap) {
+      setPromo();
+      setInterval(setPromo, 12000);
+    }
+
+    const vibeChips = Array.from(document.querySelectorAll(".vibe-chip"));
+    if (vibeChips.length) {
+      let chipIndex = 0;
+      vibeChips[0].classList.add("active");
+      setInterval(() => {
+        vibeChips[chipIndex].classList.remove("active");
+        chipIndex = (chipIndex + 1) % vibeChips.length;
+        vibeChips[chipIndex].classList.add("active");
+      }, 1900);
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    function showToast(message) {
+      const root = document.getElementById("cart-toast-root");
+      if (!root) return;
+      const toast = document.createElement("div");
+      toast.className = "cart-toast";
+      toast.textContent = message;
+      root.appendChild(toast);
+      setTimeout(() => toast.classList.add("show"), 10);
+      setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    }
+
+    const rates = {
+      HUF: 1,
+      EUR: 390,
+      USD: 360
+    };
+
+    const symbols = {
+      HUF: "Ft",
+      EUR: "EUR",
+      USD: "USD"
+    };
+
+    let currentCurrency = localStorage.getItem("currency") || "HUF";
+
+    function formatNumber(value, decimals) {
+      const fixed = value.toFixed(decimals);
+      const parts = fixed.split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      return parts.length > 1 ? `${parts[0]}.${parts[1]}` : parts[0];
+    }
+
+    function formatPrice(amountFt) {
+      const rate = rates[currentCurrency] || 1;
+      const value = amountFt / rate;
+      const decimals = currentCurrency === "HUF" ? 0 : 2;
+      return `${formatNumber(value, decimals)} ${symbols[currentCurrency]}`;
+    }
+
+    function updatePrices() {
+      document.querySelectorAll(".price[data-price]").forEach(el => {
+        const amount = Number(el.getAttribute("data-price"));
+        if (!Number.isFinite(amount)) return;
+        el.textContent = formatPrice(amount);
+      });
+    }
+
+    function updateCurrencyButtons() {
+      document.querySelectorAll(".currency-btn, .currency-flag").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-currency") === currentCurrency);
+      });
+    }
+
+    function setCurrency(code) {
+      currentCurrency = code;
+      localStorage.setItem("currency", code);
+      updatePrices();
+      updateCurrencyButtons();
+    }
+
+    document.querySelectorAll(".currency-btn, .currency-flag").forEach(btn => {
+      btn.addEventListener("click", () => {
+        setCurrency(btn.getAttribute("data-currency") || "HUF");
+      });
+    });
+
+    const fallbackProducts = [
+      { nev: "Yamaha Pacifica 112V", ar: 129000, kep: "../uploads/Yamaha.jpg", page: "KEB-Git%C3%A1r.html" },
+      { nev: "Fender Stratocaster", ar: 289000, kep: "../uploads/Fender Stratocaster.jpg", page: "KEB-Git%C3%A1r.html" },
+      { nev: "Ibanez RG421", ar: 179000, kep: "../uploads/Ibanez RG421.jpg", page: "KEB-Git%C3%A1r.html" },
+      { nev: "Yamaha TRBX174", ar: 99000, kep: "../uploads/bass2.jpg", page: "KEB-Basszus.html" },
+      { nev: "Pearl Export Series", ar: 349000, kep: "../uploads/dob2.jpg", page: "KEB-Dobszettek.html" },
+      { nev: "Shure SM58", ar: 48900, kep: "../uploads/mik1.jpg", page: "KEB-Mikrofon.html" },
+      { nev: "Yamaha HS5", ar: 109000, kep: "../uploads/hang1.jpg", page: "KEB-Hangfalak.html" },
+      { nev: "Gitár heveder", ar: 5900, kep: "../uploads/tart1.jpg", page: "KEB-Tartoz%C3%A9kok.html" }
+    ];
+
+    let products = [...fallbackProducts];
+    const categoryPage = {
+      "gitar": "KEB-Git%C3%A1r.html",
+      "basszus-gitar": "KEB-Basszus.html",
+      "dobszettek": "KEB-Dobszettek.html",
+      "billentyu": "KEB-Billenty%C5%B1.html",
+      "mikrofon": "KEB-Mikrofon.html",
+      "tartozekok": "KEB-Tartoz%C3%A9kok.html",
+      "hangfalak": "KEB-Hangfalak.html"
+    };
+
+    fetch("../api/products.php?limit=500", { cache: "no-store" })
+      .then(r => r.json())
+      .then(list => {
+        if (!Array.isArray(list) || !list.length) return;
+        products = list.map(p => ({
+          nev: p.nev,
+          ar: p.ar,
+          kep: p.kep || "../uploads/Default.avatar.jpg",
+          page: categoryPage[p.category_slug] || "KEBhangszerek.html"
+        }));
+      })
+      .catch(() => {
+        products = [...fallbackProducts];
+      });
+
+    const searchContainer = document.querySelector(".search-container.compact.search-inline") || document.querySelector(".search-container");
+    if (!searchContainer) return;
+
+    const searchField = searchContainer.querySelector("input");
+    if (!searchField) return;
+    const searchButton = searchContainer.querySelector("button");
+    const searchInner = searchContainer.querySelector(".search-inner");
+
+    const searchBox = document.createElement("div");
+    searchBox.className = "live-search-box";
+    searchBox.style.display = "none";
+    searchBox.style.position = "absolute";
+    searchBox.style.left = "0";
+    searchBox.style.top = "calc(100% + 8px)";
+    searchBox.style.width = "100%";
+    searchBox.style.zIndex = "9999";
+
+    document.body.appendChild(searchBox);
+
+    function positionSearchBox() {
+      const anchor = searchInner || searchContainer;
+      if (!anchor) return;
+      const rect = anchor.getBoundingClientRect();
+      searchBox.style.position = "fixed";
+      searchBox.style.left = `${Math.round(rect.left)}px`;
+      searchBox.style.top = `${Math.round(rect.bottom + 8)}px`;
+      searchBox.style.width = `${Math.round(rect.width)}px`;
+      searchBox.style.maxWidth = `${Math.round(rect.width)}px`;
+      searchBox.style.zIndex = "2147483647";
+    }
+
+    function normalizeSearchText(value) {
+      return (value || "")
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+    }
+
+    function renderSearch() {
+      const q = normalizeSearchText(searchField.value);
+      searchBox.innerHTML = "";
+
+      if (!q) {
+        searchBox.style.display = "none";
+        return;
+      }
+
+      const results = products.filter(p => normalizeSearchText(p.nev).includes(q));
+
+      if (!results.length) {
+        const empty = document.createElement("div");
+        empty.className = "search-empty";
+        empty.textContent = tr("no_results");
+        searchBox.appendChild(empty);
+        positionSearchBox();
+        searchBox.style.display = "block";
+        return;
+      }
+
+      results.slice(0, 20).forEach(item => {
+        const row = document.createElement("div");
+        row.className = "search-row";
+
+        const img = document.createElement("img");
+        img.src = item.kep;
+        img.alt = item.nev;
+        img.className = "search-thumb";
+
+        const textWrap = document.createElement("div");
+        textWrap.className = "search-text";
+
+        const name = document.createElement("div");
+        name.className = "search-name";
+        name.textContent = item.nev;
+
+        const price = document.createElement("div");
+        price.className = "search-price";
+        price.textContent = formatPrice(item.ar);
+
+        textWrap.appendChild(name);
+        textWrap.appendChild(price);
+
+        row.appendChild(img);
+        row.appendChild(textWrap);
+
+        row.addEventListener("click", () => {
+          window.location.href =
+            item.page + "?product=" + encodeURIComponent(item.nev);
+        });
+
+        searchBox.appendChild(row);
+      });
+
+      positionSearchBox();
+      searchBox.style.display = "block";
+    }
+
+    searchField.addEventListener("input", renderSearch);
+
+    document.addEventListener("click", e => {
+      if (!searchContainer.contains(e.target)) {
+        searchBox.style.display = "none";
+      }
+    });
+
+    searchField.addEventListener("click", e => {
+      e.stopPropagation();
+      if (searchField.value.trim()) {
+        renderSearch();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (searchBox.style.display === "block") positionSearchBox();
+    });
+    window.addEventListener("scroll", () => {
+      if (searchBox.style.display === "block") positionSearchBox();
+    }, true);
+
+    if (searchButton) {
+      searchButton.addEventListener("click", e => {
+        e.preventDefault();
+        renderSearch();
+        searchField.focus();
+      });
+    }
+
+    searchField.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        searchField.value = "";
+        searchBox.style.display = "none";
+      }
+    });
+
+    updatePrices();
+    updateCurrencyButtons();
+    document.querySelectorAll(".promo-card").forEach(card => {
+      const price = card.getAttribute("data-price");
+      const name = card.getAttribute("data-name") || "";
+
+      if (!price) return;
+
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        const numericPrice = Number(price.replace(/\s+/g, ""));
+        const item = { nev: name, ar: numericPrice, db: 1 };
+        const kosar = JSON.parse(localStorage.getItem("kosar")) || [];
+        const existing = kosar.find(i => i.nev === item.nev && i.ar === item.ar);
+        if (existing) existing.db += 1;
+        else kosar.push(item);
+        localStorage.setItem("kosar", JSON.stringify(kosar));
+        showToast(tr("added_to_cart"));
+      });
+    });
+
+    document.querySelectorAll(".rec-card").forEach(card => {
+      card.addEventListener("click", (e) => {
+        e.stopImmediatePropagation();
+      });
+    });
+
+    const quoteTrack = document.getElementById("quoteTrack");
+    const quotePrev = document.getElementById("quotePrev");
+    const quoteNext = document.getElementById("quoteNext");
+    const quotePage = document.getElementById("quotePage");
+    const quoteForm = document.getElementById("quoteForm");
+    const quoteText = document.getElementById("quoteText");
+    const quoteName = document.getElementById("quoteName");
+    const quoteTag = document.getElementById("quoteTag");
+    const quoteSubmit = document.getElementById("quoteSubmit");
+    const quoteLoginNote = document.getElementById("quoteLoginNote");
+
+    const storageKey = "home_quotes";
+    const stored = JSON.parse(localStorage.getItem(storageKey) || "null");
+    const buildDefaultQuotes = () => ([
+      { text: tr("quote_1_text"), name: "Toth Erik", tag: "Gitar" },
+      { text: tr("quote_2_text"), name: "Dani", tag: "Gitar" },
+      { text: tr("quote_3_text"), name: "Zsofi", tag: "Dob" },
+      { text: tr("quote_4_text"), name: "Mark", tag: "Billentyu" }
+    ]);
+
+    let quotes = Array.isArray(stored) && stored.length ? stored : buildDefaultQuotes();
+    let currentUserName = "";
+
+    let quotePageIndex = 0;
+    const perPage = 4;
+
+    function translateTag(tag) {
+      const raw = (tag || "").toString().trim().toLowerCase();
+      if (!raw) return tr("tag_site");
+      if (raw === "az oldal" || raw === "site") return tr("tag_site");
+      if (raw === "gitar" || raw === "gitár" || raw === "guitar") return tr("tag_gitar");
+      if (raw === "basszus gitar" || raw === "basszus gitár" || raw === "bass guitar") return tr("tag_bass");
+      if (raw === "dob" || raw === "drums" || raw === "schlagzeug") return tr("tag_drum");
+      if (raw === "billentyu" || raw === "billentyL?" || raw === "keyboard") return tr("tag_keys");
+      if (raw === "mikrofon" || raw === "microphone") return tr("tag_mic");
+      if (raw === "hangfal" || raw === "speakers" || raw === "lautsprecher") return tr("tag_speakers");
+      if (raw === "tartozek" || raw === "tartozék" || raw === "accessories") return tr("tag_accessories");
+      return tag;
+    }
+
+    function renderQuotes() {
+      if (!quoteTrack) return;
+      quoteTrack.innerHTML = "";
+      const start = quotePageIndex * perPage;
+      const slice = quotes.slice(start, start + perPage);
+      slice.forEach(q => {
+        const card = document.createElement("article");
+        card.className = "quote-card";
+        const tagLabel = translateTag(q.tag);
+        card.innerHTML = `
+          <p class="quote-text">"${q.text}"</p>
+          <div class="quote-meta">
+            <span class="quote-name">${q.name}</span>
+            <span class="quote-note">${tagLabel}</span>
+          </div>
+        `;
+        quoteTrack.appendChild(card);
+      });
+      const totalPages = Math.max(1, Math.ceil(quotes.length / perPage));
+      if (quotePage) quotePage.textContent = `${quotePageIndex + 1} / ${totalPages}`;
+      if (quotePrev) quotePrev.disabled = quotePageIndex === 0;
+      if (quoteNext) quoteNext.disabled = quotePageIndex >= totalPages - 1;
+    }
+
+    if (quotePrev) {
+      quotePrev.addEventListener("click", () => {
+        if (quotePageIndex > 0) {
+          quotePageIndex -= 1;
+          renderQuotes();
+        }
+      });
+    }
+
+    if (quoteNext) {
+      quoteNext.addEventListener("click", () => {
+        const totalPages = Math.ceil(quotes.length / perPage);
+        if (quotePageIndex < totalPages - 1) {
+          quotePageIndex += 1;
+          renderQuotes();
+        }
+      });
+    }
+
+    if (quoteForm) {
+      const token = localStorage.getItem("token");
+      let payload = null;
+      try {
+        payload = token ? JSON.parse(atob(token.split(".")[1] || "")) : null;
+      } catch (_) {
+        payload = null;
+      }
+      currentUserName = (payload && payload.data && payload.data.username) ? String(payload.data.username).trim() : "";
+
+      const canWrite = !!(token && currentUserName);
+      quoteForm.classList.toggle("d-none", !canWrite);
+      if (quoteLoginNote) quoteLoginNote.classList.toggle("d-none", canWrite);
+      if (quoteName) quoteName.value = currentUserName;
+    }
+
+    if (quoteSubmit) {
+      quoteSubmit.addEventListener("click", () => {
+        if (!currentUserName) return;
+        const text = (quoteText.value || "").trim();
+        const name = currentUserName;
+        const tag = (quoteTag.value || tr("tag_site")).trim();
+        if (!text) return;
+        quotes.unshift({ text, name, tag: tag || "Hangszer" });
+        localStorage.setItem(storageKey, JSON.stringify(quotes));
+        quoteText.value = "";
+        quoteName.value = currentUserName;
+        quoteTag.value = "";
+        quotePageIndex = 0;
+        renderQuotes();
+      });
+    }
+
+    renderQuotes();
+
+    window.onLangChange = () => {
+      if (!Array.isArray(stored) || !stored.length) {
+        quotes = buildDefaultQuotes();
+        quotePageIndex = 0;
+      }
+      renderQuotes();
+    };
+  });
+  </script>
+
+  <section class="video-promo" aria-label="Promocio video">
+    <video id="promoVideo" autoplay loop muted playsinline preload="metadata">
+      <source id="promoVideoSource" src="../uploads/Track 1 - A eerie unsettling song, with electronic dark ambient style, for a industrial finance.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+    <div class="promo-rotator">
+      <a id="promoRotateLink" class="promo-chip" href="hasznalt.html">Használt gitárok</a>
+    </div>
+    <div class="video-controls">
+      <button id="promoMuteBtn" class="video-control-btn" type="button">Némítva</button>
+    </div>
+    <p class="video-caption" data-i18n="video_caption">Friss hangulatvideó a közösségről. Fent váltakozva gyors linket kapsz a Használt gitárok és a Bandakereső oldalra.</p>
+  </section>
+
+  <script>
+    (function () {
+      const items = [
+        { href: "hasznalt.html", labelKey: "video_link_used" },
+        { href: "bandakereso.html", labelKey: "video_link_band" }
+      ];
+
+      const rotateLink = document.getElementById("promoRotateLink");
+      const muteBtn = document.getElementById("promoMuteBtn");
+      const promoVideo = document.getElementById("promoVideo");
+      const promoSource = document.getElementById("promoVideoSource");
+      let idx = 0;
+
+      function setRotator(next) {
+        if (!rotateLink) return;
+        rotateLink.classList.add("fade");
+        setTimeout(() => {
+          rotateLink.href = items[next].href;
+          const key = items[next].labelKey;
+          rotateLink.textContent = (window.SH_LANG && window.SH_LANG.t) ? window.SH_LANG.t(key) : key;
+          rotateLink.classList.remove("fade");
+        }, 200);
+      }
+
+      if (rotateLink) {
+        setRotator(0);
+        setInterval(() => {
+          idx = (idx + 1) % items.length;
+          setRotator(idx);
+        }, 2800);
+      }
+
+      if (muteBtn && promoVideo) {
+        const refreshMute = () => {
+          muteBtn.textContent = promoVideo.muted
+            ? ((window.SH_LANG && window.SH_LANG.t) ? window.SH_LANG.t("video_muted") : "Némítva")
+            : ((window.SH_LANG && window.SH_LANG.t) ? window.SH_LANG.t("video_unmuted") : "Hanggal");
+        };
+        refreshMute();
+        muteBtn.addEventListener("click", () => {
+          promoVideo.muted = !promoVideo.muted;
+          if (!promoVideo.paused) promoVideo.play().catch(() => {});
+          refreshMute();
+        });
+      }
+
+      fetch("../api/site_media.php", { cache: "no-store" })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          const media = (data && data.promo_video) ? data.promo_video : data;
+          if (!media || !media.path || !promoSource || !promoVideo) return;
+          promoSource.src = media.path;
+          if (media.mime_type) promoSource.type = media.mime_type;
+          promoVideo.load();
+          promoVideo.play().catch(() => {});
+        })
+        .catch(() => {});
+    })();
+  </script>
+
+  <div id="cart-toast-root"></div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-column">
+        <h3 data-i18n="footer_pay_title">Biztons&aacute;gos v&aacute;s&aacute;rl&aacute;s &eacute;s fizet&eacute;s</h3>
+        <div class="payment-icons">
+          <div class="payment-item">
+            <img src="../uploads/Visa.png" alt="VISA">
+            <span>VISA</span>
+          </div>
+          <div class="payment-item">
+            <img src="../uploads/mastercard.png" alt="Mastercard">
+            <span>Mastercard</span>
+          </div>
+          <div class="payment-item">
+            <img src="../uploads/Paypal.png" alt="PayPal">
+            <span>PayPal</span>
+          </div>
+          <div class="payment-item">
+            <img src="../uploads/money.png" alt="Banki atutalas">
+            <span data-i18n="footer_bank_transfer">Banki atutalas</span>
+          </div>
+        </div>
+        <p class="small-text" data-i18n="footer_pay_desc">
+          Fizessen biztons&aacute;gosan titkos&iacute;tott kapcsolaton kereszt&uuml;l.
+          (Teszt oldal, ez nem l&eacute;tezik)
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h3 data-i18n="footer_benefits">El&#337;ny&ouml;k</h3>
+        <ul>
+          <li data-i18n="benefit_warranty">3 &eacute;v garancia</li>
+          <li data-i18n="benefit_refund">30 napos p&eacute;nzvisszafizet&eacute;s</li>
+          <li data-i18n="benefit_service">Szerviz &eacute;s jav&iacute;t&aacute;s</li>
+          <li data-i18n="benefit_support">Szak&eacute;rt&#337;i t&aacute;mogat&aacute;s</li>
+          <li data-i18n="benefit_test">Tesz oldal</li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3 data-i18n="footer_services">Szolg&aacute;ltat&aacute;sok</h3>
+        <ul>
+          <li><a href="szallitas.html" data-i18n="shipping_pay">Sz&aacute;ll&iacute;t&aacute;s &eacute;s fizet&eacute;s</a></li>
+          <li><a href="adatvedelem.html" data-i18n="privacy">Adatv&eacute;delem</a></li>
+          <li><a href="garancia.html" data-i18n="warranty">Garancia</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <div class="footer-links">
+          <a href="aszf.html" data-i18n="terms">ASZF</a>
+          <a href="adatvedelem.html" data-i18n="privacy">Adatv&eacute;delem</a>
+          <a href="garancia.html" data-i18n="warranty">Garancia</a>
+        </div>
+        <p data-i18n="footer_copyright">&copy; 2025 KEB Hangszerbolt - Minden jog fenntartva. Vizsga oldal.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+
+
+

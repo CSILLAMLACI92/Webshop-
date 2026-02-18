@@ -1,0 +1,1243 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel</title>
+<script>
+  (function () {
+    const adminGuardToken = localStorage.getItem("token");
+    if (!adminGuardToken) {
+      window.location.replace("profile.html");
+      return;
+    }
+    let payload = null;
+    try {
+      payload = JSON.parse(atob(adminGuardToken.split(".")[1] || ""));
+    } catch (_) {
+      payload = null;
+    }
+    const role = payload && payload.data ? String(payload.data.role || "").toLowerCase() : "";
+    const exp = payload && payload.exp ? Number(payload.exp) : 0;
+    const isExpired = exp > 0 && exp < Math.floor(Date.now() / 1000);
+    if (role !== "admin" || isExpired) {
+      window.location.replace("profile.html");
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050d1f;
+    --bg-soft: #0b1731;
+    --card: rgba(11, 22, 45, 0.75);
+    --card-strong: rgba(9, 18, 38, 0.9);
+    --line: rgba(122, 180, 255, 0.22);
+    --line-strong: rgba(122, 180, 255, 0.4);
+    --text: #ecf4ff;
+    --muted: #a8bfdc;
+    --primary: #63c2ff;
+    --primary-strong: #2d93f3;
+    --danger: #ff6f85;
+    --danger-strong: #e84a63;
+    --ok: #71ebb1;
+    --radius: 18px;
+    --shadow: 0 18px 52px rgba(0, 0, 0, 0.38);
+    --scroll-track: #0a1630;
+    --scroll-thumb: #2f7ccc;
+    --scroll-thumb-hover: #4ca8ff;
+  }
+
+  body.light-theme {
+    --bg: #e8f0ff;
+    --bg-soft: #f5f9ff;
+    --card: rgba(255, 255, 255, 0.85);
+    --card-strong: rgba(255, 255, 255, 0.96);
+    --line: rgba(51, 112, 188, 0.2);
+    --line-strong: rgba(41, 101, 176, 0.35);
+    --text: #112744;
+    --muted: #4d6789;
+    --primary: #59acf7;
+    --primary-strong: #2d7de2;
+    --danger: #ff6a7c;
+    --danger-strong: #e14a5d;
+    --ok: #2fb778;
+    --shadow: 0 20px 48px rgba(32, 78, 146, 0.14);
+    --scroll-track: #dfeaff;
+    --scroll-thumb: #6daef2;
+    --scroll-thumb-hover: #4f95e8;
+  }
+
+  body.midnight-theme {
+    --bg: #010307;
+    --bg-soft: #060a14;
+    --card: rgba(8, 11, 17, 0.78);
+    --card-strong: rgba(8, 10, 16, 0.92);
+    --line: rgba(103, 154, 226, 0.2);
+    --line-strong: rgba(103, 154, 226, 0.36);
+    --text: #edf5ff;
+    --muted: #8ca2c4;
+    --primary: #8ce8ff;
+    --primary-strong: #44c0e3;
+    --danger: #ff7782;
+    --danger-strong: #e85061;
+    --ok: #7bf2b8;
+    --shadow: 0 18px 52px rgba(0, 0, 0, 0.54);
+    --scroll-track: #070b13;
+    --scroll-thumb: #2d93bc;
+    --scroll-thumb-hover: #57c5ea;
+  }
+
+  * { box-sizing: border-box; }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+  }
+
+  *::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--scroll-track);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--scroll-thumb), var(--scroll-thumb-hover));
+    border-radius: 999px;
+    border: 2px solid var(--scroll-track);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    background:
+      radial-gradient(900px 520px at -8% -15%, rgba(90, 187, 255, 0.26), transparent 62%),
+      radial-gradient(840px 500px at 108% 2%, rgba(55, 122, 208, 0.3), transparent 60%),
+      linear-gradient(170deg, #030a1a 0%, #071328 40%, #050e1e 100%);
+    padding: 20px;
+  }
+
+  body.light-theme {
+    background:
+      radial-gradient(900px 520px at -8% -15%, rgba(98, 167, 255, 0.2), transparent 62%),
+      radial-gradient(840px 500px at 108% 2%, rgba(154, 193, 255, 0.24), transparent 60%),
+      linear-gradient(170deg, #f3f8ff 0%, #ecf4ff 100%);
+  }
+
+  body.midnight-theme {
+    background:
+      radial-gradient(900px 520px at -8% -15%, rgba(69, 186, 227, 0.14), transparent 62%),
+      radial-gradient(840px 500px at 108% 2%, rgba(64, 145, 214, 0.14), transparent 60%),
+      linear-gradient(170deg, #010205 0%, #02050b 100%);
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 4px 2px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(34px, 4vw, 56px);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-shadow: 0 8px 28px rgba(0,0,0,.3);
+  }
+
+  .lang-switch {
+    display: flex;
+    gap: 8px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .top-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .theme-switch {
+    display: flex;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--card-strong);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    backdrop-filter: blur(8px);
+  }
+
+  body.light-theme .theme-switch {
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
+  }
+
+  .lang-pill {
+    border: 1px solid var(--line-strong);
+    background: var(--card-strong);
+    color: var(--text);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: .16s transform, .2s background, .2s border-color;
+  }
+
+  .lang-pill:hover {
+    transform: translateY(-1px);
+  }
+
+  .lang-pill.active {
+    border-color: transparent;
+    color: #061124;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  }
+
+  .theme-pill {
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    padding: 7px 12px;
+    font-weight: 700;
+    color: var(--text);
+    background: transparent;
+    transition: .16s transform, .16s filter;
+  }
+
+  .theme-pill:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.07);
+  }
+
+  .theme-pill.active {
+    color: #061124;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  }
+
+  .message {
+    min-height: 20px;
+    margin: 0 0 10px;
+    font-weight: 700;
+  }
+
+  .error { color: #ff9ca5; }
+  .success { color: var(--ok); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+    grid-template-areas:
+      "add comments"
+      "add products";
+    gap: 14px;
+    align-items: start;
+  }
+
+  .panel-add { grid-area: add; position: sticky; top: 18px; }
+  .panel-comments { grid-area: comments; }
+  .panel-products { grid-area: products; }
+
+  .panel {
+    background: linear-gradient(180deg, var(--card), var(--card-strong));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+  }
+
+  .panel h2 {
+    margin: 0 0 12px;
+    color: #85d2ff;
+    font-size: 36px;
+    font-size: clamp(28px, 2.1vw, 40px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: .01em;
+  }
+
+  body.light-theme .panel h2 { color: #2d7de2; }
+  body.midnight-theme .panel h2 { color: #7de3ff; }
+
+  .stack { display: flex; flex-direction: column; gap: 11px; }
+
+  input, select, textarea {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(5, 16, 36, 0.58);
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    padding: 12px 13px;
+    outline: none;
+    transition: .15s border-color, .15s box-shadow, .15s background;
+  }
+
+  input[type="file"] {
+    padding: 8px 10px;
+  }
+
+  input[type="file"]::file-selector-button {
+    border: 0;
+    margin-right: 10px;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    color: #061124;
+    background: linear-gradient(135deg, #80cbff, #44a8ff);
+    transition: .15s filter, .15s transform;
+  }
+
+  input[type="file"]::file-selector-button:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--line-strong);
+    background: rgba(7, 20, 43, 0.78);
+    box-shadow: 0 0 0 3px rgba(88,184,255,.2);
+  }
+
+  textarea { min-height: 126px; resize: vertical; }
+
+  .btn {
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 11px 14px;
+    letter-spacing: .01em;
+    transition: .15s transform, .15s filter, .15s box-shadow;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.22);
+  }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    color: #041022;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  }
+
+  .btn-danger {
+    color: #200208;
+    background: linear-gradient(135deg, var(--danger), var(--danger-strong));
+  }
+
+  .btn-muted {
+    color: #d8e8ff;
+    background: #2a3f67;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .preview {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: rgba(8, 20, 41, 0.56);
+  }
+
+  .preview img {
+    width: 102px;
+    height: 102px;
+    border-radius: 14px;
+    border: 1px solid var(--line-strong);
+    object-fit: cover;
+    background: #091224;
+  }
+
+  .section-title {
+    margin: 8px 0 0;
+    color: #8fd7ff;
+    font-size: 28px;
+    font-size: clamp(20px, 1.8vw, 30px);
+    font-weight: 800;
+  }
+
+  .user-tools {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .review-list,
+  .order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 220px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 430px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .review-item,
+  .product-item,
+  .order-item {
+    background: rgba(8, 20, 41, 0.66);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .product-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .product-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .thumb {
+    width: 84px;
+    height: 84px;
+    border-radius: 14px;
+    border: 1px solid var(--line-strong);
+    object-fit: cover;
+    background: #091224;
+  }
+
+  .muted-block {
+    border: 1px dashed var(--line-strong);
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--muted);
+    background: rgba(8, 20, 41, 0.38);
+  }
+
+  #confirmModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  #confirmModal.show { display: flex; }
+
+  #confirmBox {
+    width: min(420px, 92vw);
+    background: #122140;
+    border: 1px solid #4b7dc2;
+    border-radius: 12px;
+    padding: 18px;
+  }
+
+  #confirmBox h3 { margin: 0 0 8px; }
+  #confirmActions {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  @media (max-width: 1200px) {
+    .topbar {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .topbar-right {
+      width: 100%;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .layout {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "add"
+        "comments"
+        "products";
+    }
+    .panel-add { position: static; }
+    .review-list,.product-list,.order-list { max-height: none; }
+    h1 { font-size: clamp(30px, 8vw, 44px); }
+    .panel h2 { font-size: clamp(24px, 7vw, 34px); }
+    .section-title { font-size: clamp(20px, 6vw, 28px); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .panel {
+      animation: panelIn .35s ease both;
+    }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <h1 data-i18n="title">Admin Panel</h1>
+    <div class="topbar-right">
+      <a href="KEBhangszerek.html" class="lang-pill top-link" data-i18n="back_home">Vissza a főoldalra</a>
+      <div class="theme-switch" role="group" aria-label="Theme">
+        <button class="theme-pill active" data-theme="dark" data-i18n="theme_dark">Sötét</button>
+        <button class="theme-pill" data-theme="light" data-i18n="theme_light">Világos</button>
+        <button class="theme-pill" data-theme="midnight" data-i18n="theme_midnight">Éjfekete</button>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button class="lang-pill active" data-lang="hu">HU</button>
+        <button class="lang-pill" data-lang="en">EN</button>
+        <button class="lang-pill" data-lang="de">DE</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loadError" class="message error"></div>
+
+  <div class="layout">
+    <section class="panel stack panel-add">
+      <h2 data-i18n="add_product">Új termék hozzáadása</h2>
+      <input id="pName" type="text" data-i18n-ph="product_name" placeholder="Termék neve" required>
+      <input id="pPrice" type="number" data-i18n-ph="product_price" placeholder="Ár (Ft)" min="0" step="0.01" required>
+      <select id="pCategory" required>
+        <option value="" data-i18n="select_category">Kategória kiválasztása</option>
+      </select>
+      <textarea id="pDescription" data-i18n-ph="product_desc" placeholder="Leírás" required></textarea>
+      <input id="pImage" type="file" accept="image/*" required>
+      <button id="createProductBtn" class="btn btn-primary" data-i18n="btn_add_product">Termék hozzáadása</button>
+      <div id="productMsg" class="message"></div>
+    </section>
+
+    <section class="panel stack panel-comments">
+      <h2 data-i18n="user_comments">Felhasználói kommentek</h2>
+      <select id="userSelect">
+        <option value="" data-i18n="select_user">Válassz felhasználót...</option>
+      </select>
+      <div class="user-tools">
+        <button id="deleteUserBtn" class="btn btn-danger" style="display:none;" data-i18n="delete_user">Felhasználó törlése</button>
+      </div>
+
+      <div id="userPreview" class="preview" style="display:none;">
+        <img id="userPreviewImg" src="../uploads/Default.avatar.jpg" alt="User">
+        <div id="userPreviewText" class="meta"></div>
+      </div>
+
+      <div id="selectedUserMeta" class="meta" data-i18n="no_user_selected">Nincs kiválasztott felhasználó.</div>
+      <div id="reviewList" class="review-list"></div>
+
+      <div class="section-title" data-i18n="orders">Rendelések</div>
+      <div id="orderList" class="order-list"></div>
+    </section>
+
+    <section class="panel panel-products">
+      <h2 data-i18n="products_delete">Termékek (törlés)</h2>
+      <div class="stack" style="margin-bottom:10px;">
+        <select id="productSelect">
+          <option value="" data-i18n="select_product">Válassz terméket...</option>
+        </select>
+
+        <div id="productPreview" class="preview" style="display:none;">
+          <img id="productPreviewImg" src="../uploads/Default.avatar.jpg" alt="Product">
+          <div id="productPreviewText" class="meta"></div>
+        </div>
+      </div>
+
+      <div id="productList" class="product-list"></div>
+    </section>
+  </div>
+
+  <div id="confirmModal">
+    <div id="confirmBox">
+      <h3 id="confirmTitle" data-i18n="confirm_title">Megerősítés</h3>
+      <p id="confirmText" data-i18n="confirm_text">Biztos vagy benne?</p>
+      <div id="confirmActions">
+        <button id="confirmNo" class="btn btn-muted" data-i18n="cancel">Mégse</button>
+        <button id="confirmYes" class="btn btn-danger" data-i18n="delete">Törlés</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const I18N = {
+  hu: {
+    title: "Admin Panel",
+    back_home: "Vissza a főoldalra",
+    add_product: "Új termék hozzáadása",
+    product_name: "Termék neve",
+    product_price: "Ár (Ft)",
+    select_category: "Kategória kiválasztása",
+    product_desc: "Leírás",
+    btn_add_product: "Termék hozzáadása",
+    theme_dark: "Sötét",
+    theme_light: "Világos",
+    theme_midnight: "Éjfekete",
+    user_comments: "Felhasználói kommentek",
+    select_user: "Válassz felhasználót...",
+    no_user_selected: "Nincs kiválasztott felhasználó.",
+    no_comments: "Nincs felhasználói komment.",
+    orders: "Rendelések",
+    no_orders: "Nincs rendelés.",
+    products_delete: "Termékek (törlés)",
+    select_product: "Válassz terméket...",
+    no_products: "Nincs termék.",
+    no_items: "Nincs tétel",
+    order_num: "Rendelés",
+    total: "Összeg",
+    status: "Státusz",
+    date: "Dátum",
+    rating: "Értékelés",
+    delete_comment: "Komment törlése",
+    delete_user: "Felhasználó törlése",
+    delete_product: "Termék törlése",
+    confirm_title: "Megerősítés",
+    confirm_text: "Biztos vagy benne?",
+    cancel: "Mégse",
+    delete: "Törlés",
+    account_created: "Fiók létrehozva",
+    category_error: "Kategória hiba",
+    user_error: "Felhasználó hiba",
+    review_error: "Komment hiba",
+    order_error: "Rendelés hiba",
+    product_error: "Termék hiba",
+    invalid_json: "Érvénytelen JSON válasz",
+    required_fields: "Minden mező kötelező.",
+    save_error: "Sikertelen mentés",
+    added_ok: "Termék hozzáadva",
+    admin_required_add: "Admin belépés szükséges a hozzáadáshoz.",
+    admin_required_del: "Admin belépés szükséges a törléshez.",
+    delete_comment_error: "Komment törlés hiba",
+    delete_user_error: "Felhasználó törlés hiba",
+    delete_product_error: "Termék törlés hiba",
+    load_error: "Betöltési hiba",
+    unknown: "ismeretlen",
+    pick_user: "Válassz felhasználót",
+    pick_product: "Válassz terméket",
+    no_category: "Nincs kategória"
+  },
+  en: {
+    title: "Admin Panel",
+    back_home: "Back to home",
+    add_product: "Add New Product",
+    product_name: "Product name",
+    product_price: "Price (HUF)",
+    select_category: "Select category",
+    product_desc: "Description",
+    btn_add_product: "Add Product",
+    theme_dark: "Dark",
+    theme_light: "Light",
+    theme_midnight: "Midnight",
+    user_comments: "User Comments",
+    select_user: "Select user...",
+    no_user_selected: "No user selected.",
+    no_comments: "No user comments.",
+    orders: "Orders",
+    no_orders: "No orders.",
+    products_delete: "Products (delete)",
+    select_product: "Select product...",
+    no_products: "No products.",
+    no_items: "No items",
+    order_num: "Order",
+    total: "Total",
+    status: "Status",
+    date: "Date",
+    rating: "Rating",
+    delete_comment: "Delete comment",
+    delete_user: "Delete user",
+    delete_product: "Delete product",
+    confirm_title: "Confirmation",
+    confirm_text: "Are you sure?",
+    cancel: "Cancel",
+    delete: "Delete",
+    account_created: "Account created",
+    category_error: "Category error",
+    user_error: "User error",
+    review_error: "Comment error",
+    order_error: "Order error",
+    product_error: "Product error",
+    invalid_json: "Invalid JSON response",
+    required_fields: "All fields are required.",
+    save_error: "Save failed",
+    added_ok: "Product added",
+    admin_required_add: "Admin login required for adding.",
+    admin_required_del: "Admin login required for deleting.",
+    delete_comment_error: "Comment delete error",
+    delete_user_error: "User delete error",
+    delete_product_error: "Product delete error",
+    load_error: "Load error",
+    unknown: "unknown",
+    pick_user: "Select user",
+    pick_product: "Select product",
+    no_category: "No category"
+  },
+  de: {
+    title: "Admin Panel",
+    back_home: "Zurück zur Startseite",
+    add_product: "Neues Produkt hinzufügen",
+    product_name: "Produktname",
+    product_price: "Preis (HUF)",
+    select_category: "Kategorie auswählen",
+    product_desc: "Beschreibung",
+    btn_add_product: "Produkt hinzufügen",
+    theme_dark: "Dunkel",
+    theme_light: "Hell",
+    theme_midnight: "Mitternacht",
+    user_comments: "Benutzerkommentare",
+    select_user: "Benutzer auswählen...",
+    no_user_selected: "Kein Benutzer ausgewählt.",
+    no_comments: "Keine Benutzerkommentare.",
+    orders: "Bestellungen",
+    no_orders: "Keine Bestellungen.",
+    products_delete: "Produkte (löschen)",
+    select_product: "Produkt auswählen...",
+    no_products: "Keine Produkte.",
+    no_items: "Keine Positionen",
+    order_num: "Bestellung",
+    total: "Summe",
+    status: "Status",
+    date: "Datum",
+    rating: "Bewertung",
+    delete_comment: "Kommentar löschen",
+    delete_user: "Benutzer löschen",
+    delete_product: "Produkt löschen",
+    confirm_title: "Bestätigung",
+    confirm_text: "Bist du sicher?",
+    cancel: "Abbrechen",
+    delete: "Löschen",
+    account_created: "Konto erstellt",
+    category_error: "Kategoriefehler",
+    user_error: "Benutzerfehler",
+    review_error: "Kommentarfehler",
+    order_error: "Bestellfehler",
+    product_error: "Produktfehler",
+    invalid_json: "Ungültige JSON-Antwort",
+    required_fields: "Alle Felder sind erforderlich.",
+    save_error: "Speichern fehlgeschlagen",
+    added_ok: "Produkt hinzugefügt",
+    admin_required_add: "Admin-Login zum Hinzufügen erforderlich.",
+    admin_required_del: "Admin-Login zum Löschen erforderlich.",
+    delete_comment_error: "Kommentar-Löschfehler",
+    delete_user_error: "Benutzer-Löschfehler",
+    delete_product_error: "Produkt-Löschfehler",
+    load_error: "Ladefehler",
+    unknown: "unbekannt",
+    pick_user: "Benutzer wählen",
+    pick_product: "Produkt wählen",
+    no_category: "Keine Kategorie"
+  }
+};
+
+let lang = localStorage.getItem("admin_lang") || "hu";
+const tr = (k) => (I18N[lang] && I18N[lang][k]) || I18N.hu[k] || k;
+const THEMES = ["dark", "light", "midnight"];
+let theme = localStorage.getItem("theme") || "dark";
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.textContent = tr(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+    el.placeholder = tr(el.dataset.i18nPh);
+  });
+  document.querySelectorAll(".lang-pill").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+}
+
+function applyTheme() {
+  if (!THEMES.includes(theme)) theme = "dark";
+  document.documentElement.classList.remove("dark-theme", "light-theme", "midnight-theme");
+  document.body.classList.remove("dark-theme", "light-theme", "midnight-theme");
+  document.documentElement.classList.add(theme + "-theme");
+  document.body.classList.add(theme + "-theme");
+  document.querySelectorAll(".theme-pill").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.theme === theme);
+  });
+}
+
+function initThemeSwitch() {
+  document.querySelectorAll(".theme-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      theme = btn.dataset.theme;
+      localStorage.setItem("theme", theme);
+      applyTheme();
+    });
+  });
+}
+
+function initLangSwitch() {
+  document.querySelectorAll(".lang-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      lang = btn.dataset.lang;
+      localStorage.setItem("admin_lang", lang);
+      applyLang();
+      refreshStaticTexts();
+    });
+  });
+}
+
+const APP_BASE = (() => {
+  const p = window.location.pathname.replace(/\\+/g, "/");
+  const idx = p.lastIndexOf("/pages/");
+  return idx >= 0 ? p.slice(0, idx) : "";
+})();
+const API = (APP_BASE || "") + "/server/Admin_dashboard.php";
+const token = localStorage.getItem("token");
+
+let users = [];
+let products = [];
+let pendingDelete = { type: null, id: null };
+
+const qs = {
+  category: document.getElementById("pCategory"),
+  name: document.getElementById("pName"),
+  price: document.getElementById("pPrice"),
+  desc: document.getElementById("pDescription"),
+  image: document.getElementById("pImage"),
+  productMsg: document.getElementById("productMsg"),
+  userSelect: document.getElementById("userSelect"),
+  userPreview: document.getElementById("userPreview"),
+  userPreviewImg: document.getElementById("userPreviewImg"),
+  userPreviewText: document.getElementById("userPreviewText"),
+  deleteUserBtn: document.getElementById("deleteUserBtn"),
+  selectedUserMeta: document.getElementById("selectedUserMeta"),
+  reviewList: document.getElementById("reviewList"),
+  orderList: document.getElementById("orderList"),
+  productSelect: document.getElementById("productSelect"),
+  productPreview: document.getElementById("productPreview"),
+  productPreviewImg: document.getElementById("productPreviewImg"),
+  productPreviewText: document.getElementById("productPreviewText"),
+  productList: document.getElementById("productList"),
+  loadError: document.getElementById("loadError"),
+  confirmModal: document.getElementById("confirmModal"),
+  confirmTitle: document.getElementById("confirmTitle"),
+  confirmText: document.getElementById("confirmText"),
+  confirmNo: document.getElementById("confirmNo"),
+  confirmYes: document.getElementById("confirmYes")
+};
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function normalizePicPath(raw) {
+  const p = String(raw || "").trim();
+  if (!p) return (APP_BASE || "") + "/uploads/Default.avatar.jpg";
+  if (/^https?:\/\//i.test(p)) return p;
+  if (p.startsWith("/uploads/")) return (APP_BASE || "") + p;
+  if (p.startsWith("../uploads/")) return (APP_BASE || "") + "/uploads/" + p.slice(11);
+  if (p.startsWith("uploads/")) return (APP_BASE || "") + "/" + p;
+  if (p.startsWith("/Images/") || p.startsWith("/images/") || p.startsWith("Images/") || p.startsWith("images/")) {
+    return (APP_BASE || "") + "/uploads/" + p.split("/").pop();
+  }
+  return (APP_BASE || "") + "/uploads/" + p;
+}
+
+function money(v) {
+  return new Intl.NumberFormat(lang === "de" ? "de-DE" : "hu-HU").format(Number(v || 0)) + " Ft";
+}
+
+function fmtDate(s) {
+  if (!s) return "-";
+  const d = new Date(String(s).replace(" ", "T"));
+  if (Number.isNaN(d.getTime())) return s;
+  const locale = lang === "en" ? "en-GB" : (lang === "de" ? "de-DE" : "hu-HU");
+  return d.toLocaleString(locale);
+}
+
+function setMsg(el, text, cls) {
+  el.className = "message " + (cls || "");
+  el.textContent = text || "";
+}
+
+function mutedBlock(text) {
+  return `<div class="muted-block">${escapeHtml(text)}</div>`;
+}
+
+async function apiJson(url, opts = {}) {
+  const headers = { ...(opts.headers || {}) };
+  if (token) headers["Authorization"] = "Bearer " + token;
+  const res = await fetch(url, { ...opts, headers });
+  const txt = await res.text();
+  const clean = txt.replace(/^\uFEFF/, "");
+  let data;
+  try {
+    data = clean ? JSON.parse(clean) : null;
+  } catch {
+    throw new Error(tr("invalid_json"));
+  }
+  return { res, data };
+}
+
+function refreshStaticTexts() {
+  qs.confirmTitle.textContent = tr("confirm_title");
+  qs.confirmText.textContent = tr("confirm_text");
+  qs.confirmNo.textContent = tr("cancel");
+  qs.confirmYes.textContent = tr("delete");
+
+  // refresh lists with current language
+  if (qs.userSelect.value) {
+    loadReviewsForUser(qs.userSelect.value).catch(() => {});
+    loadOrdersForUser(qs.userSelect.value).catch(() => {});
+  }
+  loadProducts().catch(() => {});
+}
+
+async function loadCategories() {
+  const { res, data } = await apiJson(API + "?action=categories");
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("category_error"));
+
+  qs.category.innerHTML = `<option value="">${tr("select_category")}</option>`;
+  (data || []).forEach(c => {
+    qs.category.insertAdjacentHTML("beforeend", `<option value="${c.id}">${escapeHtml(c.name)}</option>`);
+  });
+}
+
+async function loadUsers() {
+  const { res, data } = await apiJson(API + "?action=users");
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("user_error"));
+  if (!Array.isArray(data)) throw new Error(tr("user_error"));
+
+  users = data;
+  const prev = qs.userSelect.value;
+  qs.userSelect.innerHTML = `<option value="">${tr("select_user")}</option>`;
+  users.forEach(u => {
+    qs.userSelect.insertAdjacentHTML("beforeend", `<option value="${u.id}">${escapeHtml(u.username)} (${escapeHtml(u.email)})</option>`);
+  });
+
+  if (prev && users.some(u => String(u.id) === String(prev))) {
+    qs.userSelect.value = prev;
+    qs.deleteUserBtn.style.display = "inline-block";
+    await loadReviewsForUser(prev);
+    await loadOrdersForUser(prev);
+  } else {
+    qs.userPreview.style.display = "none";
+    qs.deleteUserBtn.style.display = "none";
+    qs.selectedUserMeta.textContent = tr("no_user_selected");
+    qs.reviewList.innerHTML = "";
+    qs.orderList.innerHTML = "";
+  }
+}
+
+async function loadReviewsForUser(userId) {
+  const u = users.find(x => String(x.id) === String(userId));
+  if (!u) return;
+
+  qs.userPreviewImg.src = normalizePicPath(u.profile_pic);
+  qs.userPreviewImg.onerror = () => { qs.userPreviewImg.src = normalizePicPath("Default.avatar.jpg"); };
+  qs.userPreviewText.textContent = `${u.username} (${u.email})`;
+  qs.userPreview.style.display = "flex";
+  qs.selectedUserMeta.textContent = `${u.username} | ${u.email} | ${tr("account_created")}: ${fmtDate(u.created_at)}`;
+
+  const { res, data } = await apiJson(API + "?action=user_reviews&user_id=" + encodeURIComponent(userId));
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("review_error"));
+
+  if (!Array.isArray(data) || data.length === 0) {
+    qs.reviewList.innerHTML = mutedBlock(tr("no_comments"));
+    return;
+  }
+
+  qs.reviewList.innerHTML = data.map(r => `
+    <article class="review-item">
+      <div class="row">
+        <div>
+          <div><b>${escapeHtml(r.product_name || ("#" + r.product_id))}</b></div>
+          <div class="meta">${tr("rating")}: ${escapeHtml(r.rating)} | ${tr("date")}: ${escapeHtml(fmtDate(r.created_at))}</div>
+        </div>
+        <button class="btn btn-danger" data-action="delete-review" data-id="${r.id}">${tr("delete_comment")}</button>
+      </div>
+      <div style="margin-top:7px; white-space:pre-wrap;">${escapeHtml(r.comment || "")}</div>
+    </article>
+  `).join("");
+}
+
+async function loadOrdersForUser(userId) {
+  const { res, data } = await apiJson(API + "?action=user_orders&user_id=" + encodeURIComponent(userId));
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("order_error"));
+
+  if (!Array.isArray(data) || data.length === 0) {
+    qs.orderList.innerHTML = mutedBlock(tr("no_orders"));
+    return;
+  }
+
+  qs.orderList.innerHTML = data.map(o => {
+    const items = Array.isArray(o.items) ? o.items : [];
+    const itemText = items.length
+      ? items.map(i => `${escapeHtml(i.product_name)} x${escapeHtml(i.quantity)} (${money(i.unit_price)})`).join("<br>")
+      : tr("no_items");
+
+    return `
+      <article class="order-item">
+        <div><b>${tr("order_num")} #${escapeHtml(o.id)}</b></div>
+        <div class="meta">${tr("total")}: ${money(o.total)} | ${tr("status")}: ${escapeHtml(o.status)} | ${tr("date")}: ${escapeHtml(fmtDate(o.created_at))}</div>
+        <div style="margin-top:6px;" class="meta">${itemText}</div>
+      </article>
+    `;
+  }).join("");
+}
+
+async function loadProducts() {
+  const { res, data } = await apiJson(API + "?action=products");
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("product_error"));
+  if (!Array.isArray(data)) throw new Error(tr("product_error"));
+
+  products = data;
+  qs.productSelect.innerHTML = `<option value="">${tr("select_product")}</option>`;
+  products.forEach(p => {
+    qs.productSelect.insertAdjacentHTML("beforeend", `<option value="${p.id}">#${p.id} - ${escapeHtml(p.name)}</option>`);
+  });
+
+  if (products.length === 0) {
+    qs.productPreview.style.display = "none";
+    qs.productList.innerHTML = mutedBlock(tr("no_products"));
+    return;
+  }
+
+  qs.productList.innerHTML = products.map(p => {
+    const pic = normalizePicPath(p.image_path);
+    return `
+      <article class="product-item">
+        <div class="product-row">
+          <div class="product-left">
+            <img class="thumb" src="${escapeHtml(pic)}" alt="kép" onerror="this.onerror=null;this.src='${escapeHtml(normalizePicPath("Default.avatar.jpg"))}';">
+            <div>
+              <div><b>#${p.id} - ${escapeHtml(p.name)}</b></div>
+              <div class="meta">${money(p.price)} | ${escapeHtml(p.category_name || tr("no_category"))}</div>
+            </div>
+          </div>
+          <button class="btn btn-danger" data-action="delete-product" data-id="${p.id}">${tr("delete_product")}</button>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function showSelectedProduct(id) {
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p) {
+    qs.productPreview.style.display = "none";
+    return;
+  }
+  qs.productPreviewImg.src = normalizePicPath(p.image_path);
+  qs.productPreviewImg.onerror = () => { qs.productPreviewImg.src = normalizePicPath("Default.avatar.jpg"); };
+  qs.productPreviewText.textContent = `#${p.id} - ${p.name} | ${money(p.price)} | ${p.category_name || tr("no_category")}`;
+  qs.productPreview.style.display = "flex";
+}
+
+async function createProduct() {
+  if (!token) throw new Error(tr("admin_required_add"));
+
+  const name = qs.name.value.trim();
+  const price = qs.price.value.trim();
+  const category = qs.category.value;
+  const description = qs.desc.value.trim();
+  const image = qs.image.files[0];
+
+  if (!name || !price || !category || !description || !image) {
+    setMsg(qs.productMsg, tr("required_fields"), "error");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append("name", name);
+  fd.append("price", price);
+  fd.append("category_id", category);
+  fd.append("description", description);
+  fd.append("image", image);
+
+  const { res, data } = await apiJson(API + "?action=create_product", {
+    method: "POST",
+    body: fd
+  });
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("save_error"));
+
+  setMsg(qs.productMsg, `${tr("added_ok")} (ID: ${data.product_id}).`, "success");
+  qs.name.value = "";
+  qs.price.value = "";
+  qs.desc.value = "";
+  qs.image.value = "";
+  qs.category.value = "";
+
+  await loadProducts();
+  qs.productSelect.value = String(data.product_id);
+  showSelectedProduct(data.product_id);
+}
+
+async function deleteReview(id) {
+  if (!token) throw new Error(tr("admin_required_del"));
+  const { res, data } = await apiJson(API + "?action=delete_review&id=" + encodeURIComponent(id));
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("delete_comment_error"));
+  if (qs.userSelect.value) await loadReviewsForUser(qs.userSelect.value);
+}
+
+async function deleteProduct(id) {
+  if (!token) throw new Error(tr("admin_required_del"));
+  const { res, data } = await apiJson(API + "?action=delete_product&id=" + encodeURIComponent(id));
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("delete_product_error"));
+  await loadProducts();
+}
+
+async function deleteUser(id) {
+  if (!token) throw new Error(tr("admin_required_del"));
+  const { res, data } = await apiJson(API + "?action=delete_user&id=" + encodeURIComponent(id));
+  if (!res.ok || data?.error) throw new Error(data?.error || tr("delete_user_error"));
+  await loadUsers();
+}
+
+function openConfirm(type, id, title, text) {
+  pendingDelete = { type, id };
+  qs.confirmTitle.textContent = title;
+  qs.confirmText.textContent = text;
+  qs.confirmModal.classList.add("show");
+}
+
+function closeConfirm() {
+  pendingDelete = { type: null, id: null };
+  qs.confirmModal.classList.remove("show");
+}
+
+qs.confirmNo.addEventListener("click", closeConfirm);
+qs.confirmYes.addEventListener("click", async () => {
+  if (!pendingDelete.type || !pendingDelete.id) return;
+  try {
+    if (pendingDelete.type === "review") await deleteReview(pendingDelete.id);
+    if (pendingDelete.type === "product") await deleteProduct(pendingDelete.id);
+    if (pendingDelete.type === "user") await deleteUser(pendingDelete.id);
+  } catch (e) {
+    alert("Hiba: " + (e.message || tr("unknown")));
+  } finally {
+    closeConfirm();
+  }
+});
+
+qs.userSelect.addEventListener("change", async () => {
+  const id = qs.userSelect.value;
+  if (!id) {
+    qs.userPreview.style.display = "none";
+    qs.deleteUserBtn.style.display = "none";
+    qs.selectedUserMeta.textContent = tr("no_user_selected");
+    qs.reviewList.innerHTML = "";
+    qs.orderList.innerHTML = "";
+    return;
+  }
+  qs.deleteUserBtn.style.display = "inline-block";
+
+  try {
+    await loadReviewsForUser(id);
+    await loadOrdersForUser(id);
+  } catch (e) {
+    qs.reviewList.innerHTML = mutedBlock("Hiba: " + (e.message || tr("unknown")));
+  }
+});
+
+qs.productSelect.addEventListener("change", () => {
+  showSelectedProduct(qs.productSelect.value);
+});
+
+document.getElementById("createProductBtn").addEventListener("click", async () => {
+  try {
+    await createProduct();
+  } catch (e) {
+    setMsg(qs.productMsg, "Hiba: " + (e.message || tr("unknown")), "error");
+  }
+});
+
+qs.deleteUserBtn.addEventListener("click", () => {
+  const id = qs.userSelect.value;
+  if (!id) return;
+  const u = users.find(x => String(x.id) === String(id));
+  const label = u ? `${u.username} (${u.email})` : `ID ${id}`;
+  openConfirm("user", id, tr("delete_user"), `${tr("confirm_text")} ${label}`);
+});
+
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-action]");
+  if (!btn) return;
+
+  const id = btn.dataset.id;
+  const action = btn.dataset.action;
+
+  if (action === "delete-review") {
+    openConfirm("review", id, tr("delete_comment"), tr("confirm_text"));
+  }
+  if (action === "delete-product") {
+    openConfirm("product", id, tr("delete_product"), tr("confirm_text"));
+  }
+  if (action === "delete-user") {
+    openConfirm("user", id, tr("delete_user"), tr("confirm_text"));
+  }
+});
+
+applyLang();
+initLangSwitch();
+applyTheme();
+initThemeSwitch();
+
+Promise.all([loadCategories(), loadUsers(), loadProducts()]).catch(e => {
+  qs.loadError.textContent = `${tr("load_error")}: ${e.message || tr("unknown")}`;
+  console.error(e);
+});
+</script>
+</body>
+</html>

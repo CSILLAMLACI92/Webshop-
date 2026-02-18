@@ -1,0 +1,1923 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="profile_title">Profil</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/LightTheme.css">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+  <script src="../assets/js/lang.js?v=20260204"></script>
+
+  <style>
+    :root {
+      --profile-bg: #070f20;
+      --panel-bg: rgba(17, 26, 43, 0.92);
+      --panel-border: rgba(78, 170, 255, 0.2);
+      --panel-glow: rgba(40, 140, 255, 0.18);
+      --text-main: #eaf6ff;
+      --text-soft: rgba(231, 240, 255, 0.72);
+      --accent: #55b6ff;
+      --accent-strong: #1d7fe0;
+      --danger: #ff5d6c;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(1000px 520px at -10% -12%, rgba(74, 169, 255, 0.26), transparent 62%),
+        radial-gradient(920px 520px at 110% 4%, rgba(41, 107, 194, 0.25), transparent 62%),
+        linear-gradient(170deg, #040b1a 0%, #071127 45%, #060f21 100%);
+      color: var(--text-main);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      padding: 110px 24px 60px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    body.light-theme {
+      --profile-bg: #edf2ff;
+      --panel-bg: rgba(255, 255, 255, 0.96);
+      --panel-border: rgba(35, 90, 170, 0.12);
+      --panel-glow: rgba(45, 120, 220, 0.16);
+      --text-main: #112642;
+      --text-soft: rgba(17, 38, 66, 0.7);
+      --accent: #2f7fe7;
+      --accent-strong: #1158b2;
+      --danger: #d83f50;
+    }
+
+    body.midnight-theme {
+      --profile-bg: #000000;
+      --panel-bg: rgba(10, 10, 10, 0.95);
+      --panel-border: rgba(125, 249, 255, 0.2);
+      --panel-glow: rgba(125, 249, 255, 0.2);
+      --text-main: #f1f1f1;
+      --text-soft: rgba(241, 241, 241, 0.7);
+      --accent: #7df9ff;
+      --accent-strong: #4ed5dd;
+      --danger: #ff6363;
+    }
+
+    body.profile-bg-aurora {
+      background:
+        radial-gradient(980px 520px at -10% -12%, rgba(74, 169, 255, 0.26), transparent 62%),
+        radial-gradient(920px 520px at 110% 4%, rgba(41, 107, 194, 0.25), transparent 62%),
+        linear-gradient(170deg, #040b1a 0%, #071127 45%, #060f21 100%) !important;
+    }
+
+    body.profile-bg-noir {
+      background:
+        radial-gradient(circle at top, rgba(30, 30, 30, 0.4), transparent 55%),
+        #000000 !important;
+    }
+
+    body.profile-bg-cloud {
+      background:
+        radial-gradient(circle at top, rgba(180, 200, 255, 0.45), transparent 55%),
+        #f0f4ff !important;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      z-index: 20;
+      background: rgba(8, 14, 28, 0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(80, 140, 220, 0.2);
+    }
+
+    body.light-theme .top-bar {
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 1px solid rgba(35, 90, 170, 0.12);
+    }
+
+    body.midnight-theme .top-bar {
+      background: rgba(0, 0, 0, 0.9);
+      border-bottom: 1px solid rgba(125, 249, 255, 0.2);
+    }
+
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-toggle-btn {
+      border: 1px solid rgba(120, 200, 255, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-pill {
+      border: 1px solid rgba(120, 200, 255, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .lang-pill.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #081a2b;
+      border: none;
+    }
+
+    .profile-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .profile-hero {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(24, 42, 76, 0.9), rgba(9, 13, 24, 0.95));
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 26px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    body.light-theme .profile-hero {
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(35, 90, 170, 0.16);
+    }
+
+    body.midnight-theme .profile-hero {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(8, 8, 8, 0.96));
+      border: 1px solid rgba(125, 249, 255, 0.2);
+    }
+
+    .profile-cover {
+      height: 210px;
+      position: relative;
+      background: linear-gradient(120deg, rgba(39, 86, 155, 0.8), rgba(16, 24, 52, 0.9));
+    }
+
+    .profile-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(5, 10, 20, 0.85));
+    }
+
+    .hero-content {
+      display: grid;
+      gap: 18px;
+      padding: 24px 32px 28px;
+      margin-top: 0;
+    }
+
+    .hero-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .profile-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+      background: #0b0b0b;
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 6px;
+      min-width: 240px;
+    }
+
+    .hero-name {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-sub {
+      color: var(--text-soft);
+      font-weight: 500;
+    }
+
+    body.light-theme .hero-name,
+    body.light-theme .hero-sub {
+      color: #0f223b;
+    }
+
+    body.midnight-theme .hero-name,
+    body.midnight-theme .hero-sub {
+      color: #f4f8ff;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(5, 10, 20, 0.5);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text-main);
+    }
+
+    body.light-theme .tag-pill {
+      background: rgba(233, 242, 255, 0.8);
+      border: 1px solid rgba(44, 96, 170, 0.16);
+    }
+
+    body.midnight-theme .tag-pill {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(125, 249, 255, 0.25);
+    }
+
+    .hero-actions {
+      margin-left: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .profile-btn {
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-weight: 600;
+      border: 1px solid rgba(120, 200, 255, 0.35);
+      background: rgba(8, 18, 34, 0.8);
+      color: var(--text-main);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    body.light-theme .profile-btn {
+      background: #ffffff;
+      border-color: rgba(35, 90, 170, 0.25);
+      color: #0f223b;
+    }
+
+    body.midnight-theme .profile-btn {
+      background: #000000;
+      border-color: rgba(125, 249, 255, 0.3);
+      color: #ffffff;
+    }
+
+    .profile-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+    }
+
+    .profile-btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      border: none;
+      color: #061a2a;
+    }
+
+    body.light-theme .profile-btn.primary {
+      color: #0f223b;
+    }
+
+    body.midnight-theme .profile-btn.primary {
+      color: #ffffff;
+    }
+
+    .upload-field {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px dashed rgba(120, 200, 255, 0.45);
+      background: linear-gradient(145deg, rgba(9, 20, 40, 0.78), rgba(7, 14, 28, 0.58));
+    }
+
+    body.light-theme .upload-field {
+      background: rgba(237, 245, 255, 0.9);
+    }
+
+    body.midnight-theme .upload-field {
+      background: rgba(0, 0, 0, 0.75);
+    }
+
+    #profile_pic,
+    #coverUpload {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .upload-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .upload-pick-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #05162a;
+      background: linear-gradient(135deg, #84d2ff, #50b8ff);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .upload-pick-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .upload-file-name {
+      font-size: 13px;
+      color: var(--text-soft);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .profile-btn.danger {
+      background: transparent;
+      border-color: rgba(255, 120, 130, 0.4);
+      color: var(--danger);
+    }
+
+    body.light-theme .profile-btn.danger {
+      color: #b22d3f;
+      border-color: rgba(178, 45, 63, 0.35);
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .profile-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      align-content: start;
+    }
+
+    .profile-col > .panel {
+      grid-column: auto !important;
+      width: 100%;
+    }
+
+    #profileSettingsPanel,
+    #bandPanel {
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .panel h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+
+    .panel p {
+      color: var(--text-soft);
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(7, 15, 28, 0.6);
+      border: 1px solid rgba(120, 200, 255, 0.15);
+    }
+
+    body.light-theme .stat-card {
+      background: rgba(240, 246, 255, 0.9);
+      border: 1px solid rgba(44, 96, 170, 0.12);
+    }
+
+    body.midnight-theme .stat-card {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(125, 249, 255, 0.25);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+      background: rgba(8, 18, 34, 0.75);
+      border: 1px solid rgba(120, 200, 255, 0.25);
+      color: var(--text-main);
+      border-radius: 12px;
+    }
+
+    body.light-theme .form-control,
+    body.light-theme .form-select,
+    body.light-theme textarea {
+      background: #ffffff;
+      color: #112642;
+      border: 1px solid rgba(44, 96, 170, 0.2);
+    }
+
+    body.midnight-theme .form-control,
+    body.midnight-theme .form-select,
+    body.midnight-theme textarea {
+      background: #050505;
+      border: 1px solid rgba(125, 249, 255, 0.25);
+      color: #f1f1f1;
+    }
+
+    .input-hint {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 6px;
+    }
+
+    .profile-main-actions {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .bio-text,
+    .view-text {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(120, 200, 255, 0.2);
+      background: rgba(10, 18, 34, 0.6);
+      color: var(--text-main);
+      min-height: 44px;
+    }
+
+    body.light-theme .bio-text,
+    body.light-theme .view-text {
+      background: #ffffff;
+      border: 1px solid rgba(44, 96, 170, 0.2);
+      color: #112642;
+    }
+
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px dashed rgba(120, 200, 255, 0.35);
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1.1;
+      font-weight: 600;
+      color: var(--text-main);
+      background: rgba(7, 15, 28, 0.5);
+    }
+
+    body.light-theme .tag-option {
+      background: rgba(234, 242, 255, 0.85);
+    }
+
+    body.midnight-theme .tag-option {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .tag-option input {
+      margin: 0;
+      width: 15px;
+      height: 15px;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid rgba(120, 200, 255, 0.55);
+      border-radius: 4px;
+      background: rgba(6, 12, 24, 0.9);
+      display: grid;
+      place-content: center;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+    }
+
+    .tag-option input::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      transform: scale(0);
+      transition: transform 0.12s ease;
+      background: linear-gradient(135deg, #ffffff, #dff3ff);
+      clip-path: polygon(14% 44%, 0 58%, 41% 100%, 100% 23%, 84% 9%, 40% 63%);
+    }
+
+    .tag-option:hover input {
+      border-color: rgba(132, 210, 255, 0.9);
+      box-shadow: 0 0 0 3px rgba(77, 184, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .tag-option input:checked {
+      border-color: transparent;
+      background: linear-gradient(135deg, #74d1ff, #2d93f3);
+      box-shadow: 0 0 0 1px rgba(77, 184, 255, 0.6), 0 0 10px rgba(77, 184, 255, 0.35);
+    }
+
+    .tag-option input:checked::before {
+      transform: scale(1);
+    }
+
+    .tag-option input:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(77, 184, 255, 0.22);
+    }
+
+    body.light-theme .tag-option input {
+      border-color: rgba(44, 96, 170, 0.45);
+      background: #f4f8ff;
+      box-shadow: inset 0 0 0 1px rgba(44, 96, 170, 0.08);
+    }
+
+    body.light-theme .tag-option input:checked {
+      background: linear-gradient(135deg, #64beff, #2b80e7);
+      box-shadow: 0 0 0 1px rgba(43, 128, 231, 0.45), 0 0 8px rgba(77, 184, 255, 0.2);
+    }
+
+    body.midnight-theme .tag-option input {
+      border-color: rgba(125, 249, 255, 0.45);
+      background: rgba(0, 0, 0, 0.95);
+    }
+
+    body.midnight-theme .tag-option input:checked {
+      background: linear-gradient(135deg, #7df9ff, #2db6c4);
+      box-shadow: 0 0 0 1px rgba(125, 249, 255, 0.45), 0 0 10px rgba(125, 249, 255, 0.25);
+    }
+
+    .profile-message-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .message-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(120, 200, 255, 0.18);
+      background: rgba(8, 16, 32, 0.7);
+    }
+
+    body.light-theme .message-card {
+      background: rgba(244, 248, 255, 0.95);
+      border: 1px solid rgba(44, 96, 170, 0.14);
+    }
+
+    body.midnight-theme .message-card {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(125, 249, 255, 0.25);
+    }
+
+    .message-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .message-text {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .empty-state {
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px dashed rgba(120, 200, 255, 0.3);
+      color: var(--text-soft);
+      text-align: center;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(120, 200, 255, 0.18);
+      background: rgba(8, 16, 32, 0.7);
+      display: grid;
+      gap: 6px;
+    }
+
+    body.light-theme .mini-card {
+      background: rgba(244, 248, 255, 0.95);
+      border: 1px solid rgba(44, 96, 170, 0.14);
+    }
+
+    body.midnight-theme .mini-card {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(125, 249, 255, 0.25);
+    }
+
+    .mini-card-title {
+      font-weight: 700;
+    }
+
+    .account-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .account-col {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .rating-stars {
+      display: inline-flex;
+      gap: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    body.light-theme .rating-stars {
+      color: rgba(17, 38, 66, 0.4);
+    }
+
+    .rating-stars span.active {
+      color: #ffcc33;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(120, 200, 255, 0.2);
+      margin: 16px 0;
+    }
+
+    .profile-grid > .span-7 { grid-column: span 7; }
+    .profile-grid > .span-5 { grid-column: span 5; }
+    .profile-grid > .span-4 { grid-column: span 4; }
+    .profile-grid > .span-6 { grid-column: span 6; }
+    .profile-grid > .span-12 { grid-column: span 12; }
+
+    #ratingPanel {
+      grid-column: 1 / -1;
+    }
+
+    .profile-view .editable-only {
+      display: none !important;
+    }
+
+    body.profile-view #usedPanel {
+      grid-column: 1 / -1 !important;
+    }
+
+    body.profile-view #mainProfilePanel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.profile-view #musicianDataGrid {
+      flex: 1;
+      align-content: space-between;
+    }
+
+    .admin-entry-panel {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .admin-entry-panel.active {
+      display: flex;
+    }
+
+    @media (max-width: 1200px) {
+      .profile-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .profile-col { gap: 20px; }
+      .profile-grid > .span-7,
+      .profile-grid > .span-5,
+      .profile-grid > .span-4,
+      .profile-grid > .span-6,
+      .profile-grid > .span-12 { grid-column: span 1; }
+      .hero-content { padding: 0 20px 24px; }
+      .profile-cover { height: 200px; }
+      .hero-actions { width: 100%; }
+    }
+  </style>
+</head>
+<body class="profile-page">
+  <div class="top-bar">
+    <div class="d-flex align-items-center gap-3">
+      <a href="KEBhangszerek.html" class="btn btn-outline-info" data-i18n="profile_back">⬅ Vissza</a>
+      <div class="lang-switch" role="group" aria-label="Nyelv">
+        <button type="button" class="lang-pill active" data-lang="hu">HU</button>
+        <button type="button" class="lang-pill" data-lang="en">EN</button>
+        <button type="button" class="lang-pill" data-lang="de">DE</button>
+      </div>
+    </div>
+    <div class="top-bar-actions">
+      <button id="toggleThemeBtn" type="button" class="theme-toggle-btn" data-i18n="theme_toggle">Téma váltás</button>
+    </div>
+  </div>
+
+  <main class="profile-shell">
+    <section class="profile-hero">
+      <div class="profile-cover">
+        <img id="coverImage" src="../uploads/kek-feher-zene-formak-hatterkep-5498.jpg" alt="Borítókép" onerror="this.onerror=null;this.src='../uploads/kek-feher-zene-formak-hatterkep-5498.jpg';">
+        <div class="cover-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-row">
+          <img id="profilePic" class="profile-avatar" src="../uploads/Default.avatar.jpg" alt="Profilkép">
+          <div class="hero-meta">
+            <div class="hero-name" id="profileName">Betöltés...</div>
+            <div class="hero-sub" id="profileTitle">Zenész profil</div>
+            <div class="hero-tags" id="profileTags"></div>
+          </div>
+          <div class="hero-actions">
+            <button id="copyProfileLink" class="profile-btn" type="button">Profil link</button>
+            <button id="openPublicProfile" class="profile-btn" type="button">Publikus nézet</button>
+            <button id="logoutBtn" class="profile-btn danger" type="button" data-i18n="profile_logout_btn">Kijelentkezés</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-grid">
+      <div class="profile-col" id="leftProfileCol">
+      <div class="panel span-7" id="mainProfilePanel">
+        <h3>Bio</h3>
+        <textarea id="bioInput" rows="5" class="form-control editable-only" placeholder="Mesélj magadról..." maxlength="320"></textarea>
+        <div id="bioText" class="bio-text d-none"></div>
+        <div class="input-hint editable-only">Maximum 320 karakter.</div>
+        <div class="divider"></div>
+        <h3>Zenész adatok</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="countryInput">Ország</label>
+            <input id="countryInput" type="text" class="form-control editable-only" placeholder="Magyarország">
+            <div id="countryText" class="view-text d-none"></div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="ageInput">Életkor</label>
+            <input id="ageInput" type="number" min="10" max="99" class="form-control editable-only" placeholder="23">
+            <div id="ageText" class="view-text d-none"></div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="cityInput">Város</label>
+            <input id="cityInput" type="text" class="form-control editable-only" placeholder="Budapest">
+            <div id="cityText" class="view-text d-none"></div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="instrumentInput">Fő hangszer</label>
+            <input id="instrumentInput" type="text" class="form-control editable-only" placeholder="Gitár, Dob, Ének...">
+            <div id="instrumentText" class="view-text d-none"></div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="experienceInput">Tapasztalat</label>
+            <select id="experienceInput" class="form-select editable-only">
+              <option value="">Válassz</option>
+              <option value="Kezdő">Kezdő</option>
+              <option value="Haladó">Haladó</option>
+              <option value="Profi">Profi</option>
+              <option value="Stúdiós">Stúdiós</option>
+            </select>
+            <div id="experienceText" class="view-text d-none"></div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="studioInput">Stúdió / felszerelés</label>
+            <input id="studioInput" type="text" class="form-control editable-only" placeholder="Pedálboard, stúdió, hangkártya">
+            <div id="studioText" class="view-text d-none"></div>
+          </div>
+        </div>
+        <div class="profile-main-actions editable-only">
+          <button id="saveProfileBtn" class="profile-btn primary" type="button">Mentés</button>
+          <button id="resetProfileBtn" class="profile-btn" type="button">Visszaállítás</button>
+        </div>
+      </div>
+
+      <div class="panel span-6 editable-only" id="profileSettingsPanel">
+        <h3>Profil beállítások</h3>
+        <div class="row g-3" id="musicianDataGrid">
+          <div class="col-12">
+            <label class="form-label" for="coverUpload">Borítókép</label>
+            <div class="upload-field">
+              <input id="coverUpload" type="file" accept="image/*">
+              <div class="upload-row">
+                <label for="coverUpload" class="upload-pick-btn">Borítókép kiválasztása</label>
+                <div id="coverUploadFileName" class="upload-file-name">Nincs fájl kiválasztva</div>
+              </div>
+            </div>
+            <div id="coverUploadStatus" class="input-hint"></div>
+            <div class="input-hint">Javasolt: 1600x500px. Nagy képeket érdemes tömöríteni.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="bgSelect">Profil háttér</label>
+            <select id="bgSelect" class="form-select">
+              <option value="aurora">Aurora kék</option>
+              <option value="noir">Noir fekete</option>
+              <option value="cloud">Cloud fehér</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="profile_pic">Profilkép feltöltése</label>
+            <form id="uploadForm">
+              <div class="upload-field mb-3">
+                <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                <div class="upload-row">
+                  <label for="profile_pic" class="upload-pick-btn">Kép kiválasztása</label>
+                  <div id="profileUploadFileName" class="upload-file-name">Nincs fájl kiválasztva</div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" data-i18n="profile_upload_btn">Profilkép feltöltése</button>
+              <div id="profileUploadStatus" class="input-hint mt-2"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel span-6" id="bandPanel">
+        <h3 data-i18n="profile_bands_title">Bandáim</h3>
+        <div id="bandList" class="mini-list"></div>
+      </div>
+
+      </div>
+
+      <div class="profile-col" id="rightProfileCol">
+      <div class="panel span-5" id="quickStatsPanel">
+        <h3 id="quickStatsTitle">Gyors adatok</h3>
+        <div class="profile-stats" id="profileStats">
+          <div class="stat-card">
+            <div class="stat-label">Életkor</div>
+            <div class="stat-value" id="statAge">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Ország</div>
+            <div class="stat-value" id="statCountry">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Hangszer</div>
+            <div class="stat-value" id="statInstrument">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Szint</div>
+            <div class="stat-value" id="statLevel">-</div>
+          </div>
+        </div>
+        <div class="divider" id="quickStatsDivider"></div>
+        <h3>Tag-ek</h3>
+        <div class="tag-grid editable-only" id="tagOptions">
+          <label class="tag-option"><input type="checkbox" value="Profi gitáros"> Profi gitáros</label>
+          <label class="tag-option"><input type="checkbox" value="Dobos"> Dobos</label>
+          <label class="tag-option"><input type="checkbox" value="Billentyűs"> Billentyűs</label>
+          <label class="tag-option"><input type="checkbox" value="Stúdiós"> Stúdiós</label>
+          <label class="tag-option"><input type="checkbox" value="Producer"> Producer</label>
+          <label class="tag-option"><input type="checkbox" value="Session"> Session</label>
+        </div>
+        <div class="mt-3 editable-only">
+          <label class="form-label" for="customTagInput">Egyedi tag</label>
+          <div class="d-flex gap-2">
+            <input id="customTagInput" type="text" class="form-control" placeholder="pl. Metal, Jazz...">
+            <button id="addCustomTag" class="profile-btn" type="button">Hozzáad</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel span-6" id="wallPanel">
+        <h3>Üzenőfal</h3>
+        <p id="wallHint" class="mb-3">Írj egy üzenetet a profil tulajdonosának.</p>
+        <div id="messageForm" class="mb-3">
+          <textarea id="messageInput" rows="3" class="form-control" placeholder="Szia! Nagyon tetszett a produkciód..." maxlength="280"></textarea>
+          <button id="sendMessageBtn" class="profile-btn primary mt-3" type="button">Üzenet küldése</button>
+        </div>
+        <div id="messageList" class="profile-message-list"></div>
+      </div>
+
+      <div class="panel span-6 editable-only" id="accountPanel">
+        <h3>Név és kód váltó</h3>
+        <div class="mini-card-title" id="accountName">-</div>
+        <div class="hint mb-2" id="accountEmail">-</div>
+        <div class="hint">Név váltó</div>
+        <div class="account-row">
+          <input id="accountUsernameInput" type="text" class="form-control" placeholder="Új név">
+          <button id="accountSaveUsernameBtn" class="profile-btn" type="button">Név váltás</button>
+        </div>
+        <div class="hint">Kód váltó</div>
+        <div class="account-col">
+          <input id="accountCurrentPass" type="password" class="form-control" placeholder="Jelenlegi kód">
+          <input id="accountNewPass" type="password" class="form-control" placeholder="Új kód">
+          <button id="accountSavePassBtn" class="profile-btn primary" type="button">Kód csere</button>
+        </div>
+        <button id="accountLogoutBtn" class="profile-btn danger" type="button">Kijelentkezés</button>
+        <div class="divider"></div>
+        <h3>Rendeléseim</h3>
+        <div id="accountOrders" class="mini-list">
+          <div class="empty-state">Nincs rendelés.</div>
+        </div>
+      </div>
+
+      <div class="panel span-6" id="usedPanel">
+        <h3 data-i18n="profile_used_title">Eladó termékeim</h3>
+        <div id="usedList" class="mini-list"></div>
+      </div>
+
+      </div>
+
+      <div class="panel span-12" id="ratingPanel">
+        <h3 data-i18n="profile_rating_title">Profil értékelés</h3>
+        <div id="ratingForm" class="mb-3">
+          <div class="rating-stars" id="ratingStars"></div>
+          <textarea id="ratingComment" rows="3" class="form-control mt-3" data-i18n-placeholder="profile_rating_placeholder" placeholder="Írj pár sort..."></textarea>
+          <button id="ratingSend" class="profile-btn primary mt-3" type="button" data-i18n="profile_rating_send">Értékelés küldése</button>
+        </div>
+        <div id="ratingHint" class="hint"></div>
+        <div id="ratingList" class="mini-list"></div>
+      </div>
+    </section>
+
+    <section id="adminEntryPanel" class="panel admin-entry-panel">
+      <div>
+        <h3 class="mb-1">Admin panel</h3>
+        <p class="mb-0">Admin felület megnyitása alulról.</p>
+      </div>
+      <a href="Admin_dashboard.html" class="profile-btn primary text-decoration-none">Admin panel megnyitása</a>
+    </section>
+  </main>
+
+  <script src="../assets/js/DarkLight.js"></script>
+  <script>
+    const tr = (key) => (window.SH_LANG && window.SH_LANG.t ? window.SH_LANG.t(key) : key);
+    const token = localStorage.getItem("token");
+    const params = new URLSearchParams(window.location.search);
+    const requestedUser = params.get("user");
+    const forcedPublicView = params.get("view") === "public";
+    const APP_BASE = (() => {
+      const p = window.location.pathname.replace(/\\+/g, "/");
+      const idx = p.lastIndexOf("/pages/");
+      return idx >= 0 ? p.slice(0, idx) : "";
+    })();
+
+    function normalizeMediaPath(raw) {
+      const p = String(raw || "").trim();
+      if (!p) return (APP_BASE || "") + "/uploads/Default.avatar.jpg";
+      if (/^https?:\/\//i.test(p)) return p;
+      if (APP_BASE && p.startsWith(APP_BASE + "/uploads/")) return p;
+      if (p.startsWith("/uploads/")) return (APP_BASE || "") + p;
+      if (p.startsWith("../uploads/")) return (APP_BASE || "") + "/uploads/" + p.slice(11);
+      if (p.startsWith("uploads/")) return (APP_BASE || "") + "/" + p;
+      if (p.startsWith("/")) return (APP_BASE || "") + p;
+      return (APP_BASE || "") + "/uploads/" + p;
+    }
+
+    const state = {
+      isOwner: false,
+      isPublicView: forcedPublicView,
+      isSelfProfile: false,
+      profilePicUploading: false,
+      username: null,
+      email: null,
+      profilePic: null,
+      meta: {},
+      currentUser: null,
+      targetUser: null,
+      ratingValue: 0
+    };
+
+    function broadcastProfilePicUpdate(picUrl) {
+      try {
+        const payload = JSON.stringify({ url: picUrl, at: Date.now() });
+        localStorage.setItem("profile_pic_update", payload);
+        window.dispatchEvent(new CustomEvent("profile-pic-updated", { detail: { url: picUrl } }));
+      } catch (e) {}
+    }
+
+    const elements = {
+      name: document.getElementById("profileName"),
+      title: document.getElementById("profileTitle"),
+      tags: document.getElementById("profileTags"),
+      profilePic: document.getElementById("profilePic"),
+      coverImage: document.getElementById("coverImage"),
+      bioInput: document.getElementById("bioInput"),
+      countryInput: document.getElementById("countryInput"),
+      ageInput: document.getElementById("ageInput"),
+      cityInput: document.getElementById("cityInput"),
+      instrumentInput: document.getElementById("instrumentInput"),
+      experienceInput: document.getElementById("experienceInput"),
+      studioInput: document.getElementById("studioInput"),
+      statAge: document.getElementById("statAge"),
+      statCountry: document.getElementById("statCountry"),
+      statInstrument: document.getElementById("statInstrument"),
+      statLevel: document.getElementById("statLevel"),
+      quickStatsPanel: document.getElementById("quickStatsPanel"),
+      quickStatsTitle: document.getElementById("quickStatsTitle"),
+      profileStats: document.getElementById("profileStats"),
+      quickStatsDivider: document.getElementById("quickStatsDivider"),
+      tagOptions: document.getElementById("tagOptions"),
+      customTagInput: document.getElementById("customTagInput"),
+      addCustomTag: document.getElementById("addCustomTag"),
+      coverUpload: document.getElementById("coverUpload"),
+      coverUploadFileName: document.getElementById("coverUploadFileName"),
+      coverUploadStatus: document.getElementById("coverUploadStatus"),
+      profilePicInput: document.getElementById("profile_pic"),
+      profileUploadFileName: document.getElementById("profileUploadFileName"),
+      profileUploadStatus: document.getElementById("profileUploadStatus"),
+      bgSelect: document.getElementById("bgSelect"),
+      uploadForm: document.getElementById("uploadForm"),
+      messageForm: document.getElementById("messageForm"),
+      messageList: document.getElementById("messageList"),
+      wallHint: document.getElementById("wallHint"),
+      messageInput: document.getElementById("messageInput"),
+      sendMessageBtn: document.getElementById("sendMessageBtn"),
+      saveProfileBtn: document.getElementById("saveProfileBtn"),
+      resetProfileBtn: document.getElementById("resetProfileBtn"),
+      bioText: document.getElementById("bioText"),
+      countryText: document.getElementById("countryText"),
+      ageText: document.getElementById("ageText"),
+      cityText: document.getElementById("cityText"),
+      instrumentText: document.getElementById("instrumentText"),
+      experienceText: document.getElementById("experienceText"),
+      studioText: document.getElementById("studioText"),
+      profileSettingsPanel: document.getElementById("profileSettingsPanel"),
+      copyProfileLink: document.getElementById("copyProfileLink"),
+      openPublicProfile: document.getElementById("openPublicProfile"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      usedList: document.getElementById("usedList"),
+      bandList: document.getElementById("bandList"),
+      ratingForm: document.getElementById("ratingForm"),
+      ratingStars: document.getElementById("ratingStars"),
+      ratingComment: document.getElementById("ratingComment"),
+      ratingSend: document.getElementById("ratingSend"),
+      ratingHint: document.getElementById("ratingHint"),
+      ratingList: document.getElementById("ratingList"),
+      adminEntryPanel: document.getElementById("adminEntryPanel"),
+      accountPanel: document.getElementById("accountPanel"),
+      accountName: document.getElementById("accountName"),
+      accountEmail: document.getElementById("accountEmail"),
+      accountUsernameInput: document.getElementById("accountUsernameInput"),
+      accountSaveUsernameBtn: document.getElementById("accountSaveUsernameBtn"),
+      accountCurrentPass: document.getElementById("accountCurrentPass"),
+      accountNewPass: document.getElementById("accountNewPass"),
+      accountSavePassBtn: document.getElementById("accountSavePassBtn"),
+      accountLogoutBtn: document.getElementById("accountLogoutBtn"),
+      accountOrders: document.getElementById("accountOrders")
+    };
+
+    function showTags(list) {
+      elements.tags.innerHTML = "";
+      (list || []).forEach(tag => {
+        const pill = document.createElement("span");
+        pill.className = "tag-pill";
+        pill.textContent = tag;
+        elements.tags.appendChild(pill);
+      });
+      if (!list || !list.length) {
+        const pill = document.createElement("span");
+        pill.className = "tag-pill";
+        pill.textContent = "Nincsenek tag-ek";
+        elements.tags.appendChild(pill);
+      }
+    }
+
+    function applyMeta(meta) {
+      elements.bioInput.value = meta.bio || "";
+      elements.countryInput.value = meta.country || "";
+      elements.ageInput.value = meta.age || "";
+      elements.cityInput.value = meta.city || "";
+      elements.instrumentInput.value = meta.instrument || "";
+      elements.experienceInput.value = meta.experience || "";
+      elements.studioInput.value = meta.studio || "";
+      elements.bgSelect.value = meta.background || "aurora";
+
+      if (elements.bioText) elements.bioText.textContent = meta.bio || "-";
+      if (elements.countryText) elements.countryText.textContent = meta.country || "-";
+      if (elements.ageText) elements.ageText.textContent = meta.age ? `${meta.age} év` : "-";
+      if (elements.cityText) elements.cityText.textContent = meta.city || "-";
+      if (elements.instrumentText) elements.instrumentText.textContent = meta.instrument || "-";
+      if (elements.experienceText) elements.experienceText.textContent = meta.experience || "-";
+      if (elements.studioText) elements.studioText.textContent = meta.studio || "-";
+
+      const allTags = [...(meta.tags || []), ...(meta.custom_tags || [])];
+      showTags(allTags);
+
+      const selected = new Set(meta.tags || []);
+      elements.tagOptions.querySelectorAll("input[type='checkbox']").forEach(cb => {
+        cb.checked = selected.has(cb.value);
+      });
+
+      if (meta.cover_url) {
+        elements.coverImage.src = normalizeMediaPath(meta.cover_url);
+      }
+
+      updateStats(meta);
+      applyBackground(meta.background);
+    }
+
+    function updateStats(meta) {
+      elements.statAge.textContent = meta.age ? `${meta.age} év` : "-";
+      elements.statCountry.textContent = meta.country || "-";
+      elements.statInstrument.textContent = meta.instrument || "-";
+      elements.statLevel.textContent = meta.experience || "-";
+      elements.title.textContent = meta.experience ? `${meta.experience} zenész` : "Zenész profil";
+    }
+
+    function applyBackground(mode) {
+      const body = document.body;
+      body.classList.remove("profile-bg-aurora", "profile-bg-noir", "profile-bg-cloud");
+      const normalized = mode === "noir" || mode === "cloud" ? mode : "aurora";
+      body.classList.add(`profile-bg-${normalized}`);
+    }
+
+    function getSelectedTags() {
+      const tags = [];
+      elements.tagOptions.querySelectorAll("input[type='checkbox']:checked").forEach(cb => tags.push(cb.value));
+      return tags;
+    }
+
+    async function fetchProfileMeta(username) {
+      const url = username ? `../server/profile_meta.php?username=${encodeURIComponent(username)}` : "../server/profile_meta.php";
+      const res = await fetch(url, token ? { headers: { "Authorization": "Bearer " + token } } : undefined);
+      if (!res.ok) throw new Error("meta");
+      return res.json();
+    }
+
+    async function saveProfileMeta(meta) {
+      if (!token) return;
+      await fetch("../server/profile_meta.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify(meta)
+      });
+    }
+
+    async function loadMessages(username) {
+      const res = await fetch(`../server/profile_messages.php?username=${encodeURIComponent(username)}`);
+      if (!res.ok) return [];
+      return res.json();
+    }
+
+    function renderMessages(list) {
+      elements.messageList.innerHTML = "";
+      if (!list.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "Még nincs üzenet ezen a profilon.";
+        elements.messageList.appendChild(empty);
+        return;
+      }
+      list.forEach(msg => {
+        const card = document.createElement("div");
+        card.className = "message-card";
+        const meta = document.createElement("div");
+        meta.className = "message-meta";
+        meta.textContent = `${msg.author_name || "Vendég"} · ${msg.created_at}`;
+        const text = document.createElement("div");
+        text.className = "message-text";
+        text.textContent = msg.message;
+        card.appendChild(meta);
+        card.appendChild(text);
+        elements.messageList.appendChild(card);
+      });
+    }
+
+    function renderMiniEmpty(container, textKey) {
+      container.innerHTML = `<div class="empty-state">${tr(textKey)}</div>`;
+    }
+
+    async function loadUsedItems(userId) {
+      if (!elements.usedList) return;
+      const status = state.isOwner ? "all" : "active";
+      const res = await fetch(`../server/used_items.php?user_id=${encodeURIComponent(userId)}&status=${status}`);
+      if (!res.ok) {
+        renderMiniEmpty(elements.usedList, "profile_used_empty");
+        return;
+      }
+      const list = await res.json();
+      if (!Array.isArray(list) || !list.length) {
+        renderMiniEmpty(elements.usedList, "profile_used_empty");
+        return;
+      }
+      elements.usedList.innerHTML = "";
+      list.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "mini-card";
+        const usedPic = normalizeMediaPath(item.image_url || "Default.avatar.jpg");
+        card.innerHTML = `
+          <img src="${usedPic}" alt="${item.title}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;background:#0b0b0b;" onerror="this.onerror=null;this.src='${normalizeMediaPath("Default.avatar.jpg")}';">
+          <div class="mini-card-title">${item.title}</div>
+          <div class="hint">${item.category || ""} · ${item.condition_label || ""}</div>
+          <div class="hint">${item.price} Ft</div>
+        `;
+        const img = card.querySelector("img");
+        if (img) {
+          img.addEventListener("load", syncSidePanelHeights, { once: true });
+          img.addEventListener("error", syncSidePanelHeights, { once: true });
+        }
+        elements.usedList.appendChild(card);
+      });
+      syncSidePanelHeights();
+    }
+
+    async function loadBands(userId) {
+      if (!elements.bandList) return;
+      const res = await fetch(`../server/bands.php?owner_id=${encodeURIComponent(userId)}`);
+      if (!res.ok) {
+        renderMiniEmpty(elements.bandList, "profile_bands_empty");
+        return;
+      }
+      const list = await res.json();
+      if (!Array.isArray(list) || !list.length) {
+        renderMiniEmpty(elements.bandList, "profile_bands_empty");
+        return;
+      }
+      elements.bandList.innerHTML = "";
+      list.forEach(band => {
+        const card = document.createElement("div");
+        card.className = "mini-card";
+        const bandPic = normalizeMediaPath(band.image_url || "Default.avatar.jpg");
+        card.innerHTML = `
+          <img src="${bandPic}" alt="${band.name}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;background:#0b0b0b;" onerror="this.onerror=null;this.src='${normalizeMediaPath("Default.avatar.jpg")}';">
+          <div class="mini-card-title">${band.name}</div>
+          <div class="hint">${band.genre || ""} · ${band.city || ""}</div>
+          <div class="hint">Searching for: ${band.looking_for || "-"}</div>
+        `;
+        const img = card.querySelector("img");
+        if (img) {
+          img.addEventListener("load", syncSidePanelHeights, { once: true });
+          img.addEventListener("error", syncSidePanelHeights, { once: true });
+        }
+        elements.bandList.appendChild(card);
+      });
+      syncSidePanelHeights();
+    }
+
+    async function loadRatings(userId) {
+      if (!elements.ratingList) return;
+      const res = await fetch(`../server/profile_ratings.php?user_id=${encodeURIComponent(userId)}`);
+      if (!res.ok) {
+        renderMiniEmpty(elements.ratingList, "profile_rating_empty");
+        return;
+      }
+      const data = await res.json();
+      const list = data.ratings || [];
+      if (!list.length) {
+        renderMiniEmpty(elements.ratingList, "profile_rating_empty");
+        return;
+      }
+      elements.ratingList.innerHTML = "";
+      list.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "mini-card";
+        const stars = "★".repeat(r.rating || 0);
+        card.innerHTML = `
+          <div class="mini-card-title">${r.reviewer}</div>
+          <div class="hint">${stars}</div>
+          <div class="hint">${r.comment || ""}</div>
+        `;
+        elements.ratingList.appendChild(card);
+      });
+    }
+
+    function renderAccountOrders(orders) {
+      if (!elements.accountOrders) return;
+      if (!Array.isArray(orders) || !orders.length) {
+        elements.accountOrders.innerHTML = '<div class="empty-state">Nincs rendelés.</div>';
+        return;
+      }
+      elements.accountOrders.innerHTML = orders.map(o => {
+        const items = (o.items || []).map(it => `${it.product_name} x${it.quantity}`).join(", ");
+        return `
+          <div class="mini-card">
+            <div class="mini-card-title">#${o.id} · ${o.total} Ft</div>
+            <div class="hint">${o.status || "-"}</div>
+            <div class="hint">${items || "Nincs tétel"}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function loadAccountOrders() {
+      if (!elements.accountOrders || !token || !state.isOwner) return;
+      try {
+        const res = await fetch("../server/get_orders.php", { headers: { "Authorization": "Bearer " + token } });
+        const data = await res.json();
+        if (!res.ok || !data.orders) {
+          elements.accountOrders.innerHTML = '<div class="empty-state">Rendelések betöltése sikertelen.</div>';
+          return;
+        }
+        renderAccountOrders(data.orders);
+      } catch (e) {
+        elements.accountOrders.innerHTML = '<div class="empty-state">Rendelések betöltése sikertelen.</div>';
+      }
+    }
+
+    function performLogout() {
+      if (token) {
+        fetch("../api/activity.php", {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + token },
+          body: new URLSearchParams({ action: "logout" })
+        }).catch(() => {});
+      }
+      localStorage.removeItem("token");
+      window.location.href = "KEBhangszerek.html";
+    }
+
+    function setupRatingStars() {
+      if (!elements.ratingStars) return;
+      elements.ratingStars.innerHTML = "";
+      for (let i = 1; i <= 5; i++) {
+        const star = document.createElement("span");
+        star.textContent = "★";
+        star.addEventListener("click", () => {
+          state.ratingValue = i;
+          elements.ratingStars.querySelectorAll("span").forEach((s, idx) => {
+            s.classList.toggle("active", idx < i);
+          });
+        });
+        elements.ratingStars.appendChild(star);
+      }
+    }
+
+    function setupViewMode() {
+      const viewOnly = !state.isOwner;
+      const profileGrid = document.querySelector(".profile-grid");
+      const leftCol = document.getElementById("leftProfileCol");
+      const rightCol = document.getElementById("rightProfileCol");
+      const usedPanel = document.getElementById("usedPanel");
+      const ratingPanel = document.getElementById("ratingPanel");
+      const inputs = document.querySelectorAll("#bioInput, #countryInput, #ageInput, #cityInput, #instrumentInput, #experienceInput, #studioInput, #bgSelect, #coverUpload, #profile_pic");
+      inputs.forEach(input => {
+        input.disabled = viewOnly;
+      });
+      elements.tagOptions.querySelectorAll("input").forEach(cb => cb.disabled = viewOnly);
+      elements.addCustomTag.disabled = viewOnly;
+      elements.customTagInput.disabled = viewOnly;
+      elements.saveProfileBtn.disabled = viewOnly;
+      elements.resetProfileBtn.disabled = viewOnly;
+      if (elements.quickStatsTitle) elements.quickStatsTitle.classList.toggle("d-none", !viewOnly);
+      if (elements.profileStats) elements.profileStats.classList.toggle("d-none", !viewOnly);
+      if (elements.quickStatsDivider) elements.quickStatsDivider.classList.toggle("d-none", !viewOnly);
+
+      if (viewOnly) {
+        if (profileGrid && usedPanel && ratingPanel) {
+          profileGrid.insertBefore(usedPanel, ratingPanel);
+        }
+        document.body.classList.add("profile-view");
+        elements.uploadForm.classList.add("d-none");
+        elements.coverUpload.closest(".col-12").classList.add("d-none");
+        elements.bgSelect.closest(".col-12").classList.add("d-none");
+        elements.saveProfileBtn.classList.add("d-none");
+        elements.resetProfileBtn.classList.add("d-none");
+        elements.logoutBtn.classList.add("d-none");
+        if (elements.profileSettingsPanel) elements.profileSettingsPanel.classList.add("d-none");
+        if (elements.bioText) elements.bioText.classList.remove("d-none");
+        if (elements.countryText) elements.countryText.classList.remove("d-none");
+        if (elements.ageText) elements.ageText.classList.remove("d-none");
+        if (elements.cityText) elements.cityText.classList.remove("d-none");
+        if (elements.instrumentText) elements.instrumentText.classList.remove("d-none");
+        if (elements.experienceText) elements.experienceText.classList.remove("d-none");
+        if (elements.studioText) elements.studioText.classList.remove("d-none");
+      } else {
+        if (rightCol && usedPanel) rightCol.appendChild(usedPanel);
+      }
+      syncPublicMainPanelHeight();
+    }
+
+    function syncSidePanelHeights() {
+      const mainPanel = document.getElementById("mainProfilePanel");
+      const quickPanel = document.getElementById("quickStatsPanel");
+      const wallPanel = document.getElementById("wallPanel");
+      const settingsPanel = document.getElementById("profileSettingsPanel");
+      const accountPanel = document.getElementById("accountPanel");
+      const bandPanel = document.getElementById("bandPanel");
+      const usedPanel = document.getElementById("usedPanel");
+      const all = [mainPanel, quickPanel, wallPanel, settingsPanel, accountPanel, bandPanel, usedPanel];
+      all.forEach((el) => {
+        if (el) el.style.minHeight = "";
+      });
+      if (!bandPanel || !usedPanel) return;
+      bandPanel.style.minHeight = "";
+      usedPanel.style.minHeight = "";
+      if (window.innerWidth <= 1200) return;
+      if (document.body.classList.contains("profile-view")) return;
+
+      const isVisible = (el) => !!(el && !el.classList.contains("d-none") && el.offsetParent !== null);
+      const rightCol = document.getElementById("rightProfileCol");
+      const rightGap = rightCol ? parseFloat(getComputedStyle(rightCol).rowGap || getComputedStyle(rightCol).gap || "0") || 0 : 0;
+
+      if (isVisible(mainPanel) && isVisible(quickPanel) && isVisible(wallPanel)) {
+        const combinedRight = quickPanel.scrollHeight + wallPanel.scrollHeight + rightGap;
+        const targetMain = Math.max(mainPanel.scrollHeight, combinedRight);
+        mainPanel.style.minHeight = `${targetMain}px`;
+        const targetWall = Math.max(wallPanel.scrollHeight, targetMain - quickPanel.scrollHeight - rightGap);
+        wallPanel.style.minHeight = `${targetWall}px`;
+      }
+
+      if (isVisible(settingsPanel) && isVisible(accountPanel)) {
+        const target = Math.max(settingsPanel.scrollHeight, accountPanel.scrollHeight);
+        settingsPanel.style.minHeight = `${target}px`;
+        accountPanel.style.minHeight = `${target}px`;
+      }
+
+      if (isVisible(bandPanel) && isVisible(usedPanel)) {
+        const target = Math.max(bandPanel.scrollHeight, usedPanel.scrollHeight);
+        bandPanel.style.minHeight = `${target}px`;
+        usedPanel.style.minHeight = `${target}px`;
+      }
+    }
+
+    function syncPublicMainPanelHeight() {
+      const mainPanel = document.getElementById("mainProfilePanel");
+      const rightCol = document.getElementById("rightProfileCol");
+      if (!mainPanel || !rightCol) return;
+      mainPanel.style.minHeight = "";
+      if (window.innerWidth <= 1200) return;
+      if (!document.body.classList.contains("profile-view")) return;
+      const target = rightCol.offsetHeight;
+      if (target > 0) {
+        mainPanel.style.minHeight = `${target}px`;
+      }
+    }
+
+    function bindEvents() {
+      const setUploadStatus = (el, text, type = "info") => {
+        if (!el) return;
+        el.textContent = text || "";
+        if (type === "success") el.style.color = "#71ebb1";
+        else if (type === "error") el.style.color = "#ff9ca5";
+        else el.style.color = "";
+      };
+
+      const uploadProfilePicFile = async (file, showAlert = false) => {
+        if (!file) return;
+        if (!token) {
+          setUploadStatus(elements.profileUploadStatus, "Be kell jelentkezned a feltöltéshez.", "error");
+          return;
+        }
+        if (state.profilePicUploading) return;
+        state.profilePicUploading = true;
+        const submitBtn = elements.uploadForm ? elements.uploadForm.querySelector("button[type='submit']") : null;
+        const originalBtnText = submitBtn ? submitBtn.textContent : "";
+        setUploadStatus(elements.profileUploadStatus, "Feltöltés folyamatban...");
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Feltöltés...";
+        }
+        try {
+          const formData = new FormData();
+          formData.append("profile_pic", file);
+          const res = await fetch("../server/upload_pfp.php", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token },
+            body: formData
+          });
+          const raw = await res.text();
+          let data = null;
+          try {
+            data = raw ? JSON.parse(raw) : {};
+          } catch (_) {
+            throw new Error("Szerver válasz értelmezési hiba.");
+          }
+          if (!res.ok || data.status !== "ok") {
+            throw new Error(data.message || data.error || "Profilkép feltöltés sikertelen.");
+          }
+
+          const basePic = normalizeMediaPath(data.pic);
+          elements.profilePic.src = basePic + (basePic.includes("?") ? "&" : "?") + "t=" + Date.now();
+          broadcastProfilePicUpdate(basePic);
+          if (elements.profilePicInput) elements.profilePicInput.value = "";
+          if (elements.profileUploadFileName) elements.profileUploadFileName.textContent = "Nincs fájl kiválasztva";
+          setUploadStatus(elements.profileUploadStatus, "Profilkép sikeresen feltöltve.", "success");
+          if (showAlert) alert(tr("profile_updated"));
+        } catch (err) {
+          const message = (err && err.message) ? err.message : "Profilkép feltöltés sikertelen.";
+          setUploadStatus(elements.profileUploadStatus, message, "error");
+          if (showAlert) alert(message);
+        } finally {
+          state.profilePicUploading = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText || "Profilkép feltöltése";
+          }
+        }
+      };
+
+      if (elements.profilePicInput) {
+        elements.profilePicInput.addEventListener("change", () => {
+          const file = elements.profilePicInput.files && elements.profilePicInput.files[0];
+          if (elements.profileUploadFileName) {
+            elements.profileUploadFileName.textContent = file ? file.name : "Nincs fájl kiválasztva";
+          }
+          if (file) {
+            setUploadStatus(elements.profileUploadStatus, "Kattints a \"Profilkép feltöltése\" gombra.");
+          } else {
+            setUploadStatus(elements.profileUploadStatus, "");
+          }
+        });
+      }
+
+      elements.addCustomTag.addEventListener("click", () => {
+        const value = elements.customTagInput.value.trim();
+        if (!value) return;
+        const meta = state.meta;
+        meta.custom_tags = meta.custom_tags || [];
+        if (!meta.custom_tags.includes(value)) meta.custom_tags.push(value);
+        elements.customTagInput.value = "";
+        state.meta = meta;
+        applyMeta(meta);
+      });
+
+      elements.coverUpload.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (elements.coverUploadFileName) {
+          elements.coverUploadFileName.textContent = file ? file.name : "Nincs fájl kiválasztva";
+        }
+        if (!file) return;
+        if (!token) {
+          setUploadStatus(elements.coverUploadStatus, "Be kell jelentkezned a feltöltéshez.", "error");
+          return;
+        }
+        setUploadStatus(elements.coverUploadStatus, "Feltöltés folyamatban...");
+        try {
+          const fd = new FormData();
+          fd.append("cover", file);
+          const res = await fetch("../server/upload_cover.php", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token },
+            body: fd
+          });
+          const raw = await res.text();
+          let data = null;
+          try {
+            data = raw ? JSON.parse(raw) : {};
+          } catch (_) {
+            throw new Error("Szerver válasz értelmezési hiba.");
+          }
+          if (!res.ok || data.status !== "ok") {
+            throw new Error(data.message || data.error || "Borítókép feltöltés sikertelen.");
+          }
+          state.meta.cover_url = data.url;
+          elements.coverImage.src = normalizeMediaPath(data.url);
+          if (elements.coverUpload) elements.coverUpload.value = "";
+          if (elements.coverUploadFileName) elements.coverUploadFileName.textContent = "Nincs fájl kiválasztva";
+          setUploadStatus(elements.coverUploadStatus, "Borítókép sikeresen feltöltve.", "success");
+        } catch (err) {
+          const message = (err && err.message) ? err.message : "Borítókép feltöltés sikertelen.";
+          setUploadStatus(elements.coverUploadStatus, message, "error");
+          alert(message);
+        }
+      });
+
+      elements.bgSelect.addEventListener("change", (e) => {
+        state.meta.background = e.target.value;
+        applyBackground(state.meta.background);
+      });
+
+      elements.saveProfileBtn.addEventListener("click", async () => {
+        const meta = state.meta;
+        meta.bio = (elements.bioInput.value || "").trim().slice(0, 320);
+        meta.country = (elements.countryInput.value || "").trim();
+        meta.age = (elements.ageInput.value || "").trim();
+        meta.city = (elements.cityInput.value || "").trim();
+        meta.instrument = (elements.instrumentInput.value || "").trim();
+        meta.experience = elements.experienceInput.value || "";
+        meta.studio = (elements.studioInput.value || "").trim();
+        meta.tags = getSelectedTags();
+        meta.custom_tags = meta.custom_tags || [];
+        meta.background = elements.bgSelect.value || "aurora";
+        state.meta = meta;
+        await saveProfileMeta(meta);
+        applyMeta(meta);
+        elements.saveProfileBtn.textContent = "Mentve";
+        setTimeout(() => elements.saveProfileBtn.textContent = "Mentés", 1400);
+      });
+
+      elements.resetProfileBtn.addEventListener("click", async () => {
+        const emptyMeta = {
+          bio: "",
+          country: "",
+          age: "",
+          city: "",
+          instrument: "",
+          experience: "",
+          studio: "",
+          tags: [],
+          custom_tags: [],
+          cover_url: "",
+          background: "aurora"
+        };
+        state.meta = emptyMeta;
+        await saveProfileMeta(emptyMeta);
+        applyMeta(emptyMeta);
+      });
+
+      elements.sendMessageBtn.addEventListener("click", async () => {
+        const text = (elements.messageInput.value || "").trim();
+        if (!text) return;
+        if (state.isSelfProfile) return alert("Saját üzenőfalra nem lehet írni.");
+        if (!token) return alert("Be kell jelentkezned!");
+        await fetch("../server/profile_messages.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+          body: JSON.stringify({ username: state.targetUser.username, message: text })
+        });
+        elements.messageInput.value = "";
+        const list = await loadMessages(state.targetUser.username);
+        renderMessages(list);
+      });
+
+      elements.uploadForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const file = elements.profilePicInput ? elements.profilePicInput.files[0] : null;
+        if (!file) {
+          setUploadStatus(elements.profileUploadStatus, tr("profile_file_missing"), "error");
+          return alert(tr("profile_file_missing"));
+        }
+        uploadProfilePicFile(file, true);
+      });
+
+      if (elements.ratingSend) {
+        elements.ratingSend.addEventListener("click", async () => {
+          if (!token) return;
+          if (state.isSelfProfile) return alert("Saját profilt nem értékelhetsz.");
+          if (state.ratingValue <= 0) return;
+          await fetch("../server/profile_ratings.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify({
+              user_id: state.targetUser.id,
+              rating: state.ratingValue,
+              comment: elements.ratingComment.value || ""
+            })
+          });
+          elements.ratingComment.value = "";
+          state.ratingValue = 0;
+          setupRatingStars();
+          loadRatings(state.targetUser.id);
+        });
+      }
+
+      if (elements.accountSaveUsernameBtn) {
+        elements.accountSaveUsernameBtn.addEventListener("click", async () => {
+          const username = (elements.accountUsernameInput?.value || "").trim();
+          if (!username || !token || !state.isOwner) return;
+          const res = await fetch("../server/update_profile.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify({ action: "update_username", username })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            alert(data.error || "Hiba");
+            return;
+          }
+          if (data.token) localStorage.setItem("token", data.token);
+          state.username = username;
+          if (state.currentUser) state.currentUser.username = username;
+          if (state.targetUser) state.targetUser.username = username;
+          if (elements.name) elements.name.textContent = username;
+          if (elements.accountName) elements.accountName.textContent = username;
+          if (elements.accountUsernameInput) elements.accountUsernameInput.value = "";
+        });
+      }
+
+      if (elements.accountSavePassBtn) {
+        elements.accountSavePassBtn.addEventListener("click", async () => {
+          const current_password = (elements.accountCurrentPass?.value || "").trim();
+          const new_password = (elements.accountNewPass?.value || "").trim();
+          if (!current_password || !new_password || !token || !state.isOwner) return;
+          const res = await fetch("../server/update_profile.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify({ action: "update_password", current_password, new_password })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            alert(data.error || "Hiba");
+            return;
+          }
+          alert("Jelszó frissítve");
+          if (elements.accountCurrentPass) elements.accountCurrentPass.value = "";
+          if (elements.accountNewPass) elements.accountNewPass.value = "";
+        });
+      }
+    }
+
+    async function init() {
+      elements.name.textContent = tr("profile_loading");
+      elements.title.textContent = tr("profile_loading");
+      let tokenRejected = false;
+
+      if (!token && !requestedUser) {
+        window.location.href = "../server/account.php";
+        return;
+      }
+
+      if (token) {
+        try {
+          const res = await fetch("../server/profile_api.php", { headers: { "Authorization": "Bearer " + token } });
+          if (!res.ok) {
+            tokenRejected = true;
+          } else {
+            const data = await res.json();
+            if (data && data.user && data.user.id && data.user.username) {
+              state.currentUser = data.user;
+            } else {
+              tokenRejected = true;
+            }
+          }
+        } catch (e) {
+          tokenRejected = true;
+        }
+      }
+
+      if (tokenRejected && !requestedUser) {
+        localStorage.removeItem("token");
+        window.location.href = "../server/account.php";
+        return;
+      }
+
+      const targetUsername = requestedUser || (state.currentUser && state.currentUser.username);
+      if (!targetUsername) {
+        window.location.href = "../server/account.php";
+        return;
+      }
+
+      try {
+        const data = await fetchProfileMeta(targetUsername);
+        state.targetUser = data.user;
+        state.username = data.user.username;
+        state.meta = data.meta || {};
+        elements.name.textContent = data.user.username;
+        elements.profilePic.src = normalizeMediaPath(data.user.profile_pic || "Default.avatar.jpg");
+        elements.profilePic.onerror = () => { elements.profilePic.src = normalizeMediaPath("Default.avatar.jpg"); };
+        state.isSelfProfile = !!(
+          state.currentUser &&
+          (state.currentUser.id === data.user.id || state.currentUser.username === data.user.username)
+        );
+        state.isOwner = !state.isPublicView && state.currentUser && state.currentUser.id === data.user.id;
+        if (elements.adminEntryPanel && token && state.currentUser && state.currentUser.role === "admin") {
+          elements.adminEntryPanel.classList.add("active");
+        }
+        applyMeta(state.meta);
+        setupViewMode();
+        setupRatingStars();
+
+        const publicLink = `${window.location.origin}${window.location.pathname}?user=${encodeURIComponent(data.user.username)}&view=public`;
+        elements.copyProfileLink.onclick = () => {
+          navigator.clipboard.writeText(publicLink).then(() => {
+            elements.copyProfileLink.textContent = "Másolva!";
+            setTimeout(() => elements.copyProfileLink.textContent = "Profil link", 1600);
+          });
+        };
+        elements.openPublicProfile.onclick = () => window.open(publicLink, "_blank");
+        if (state.isPublicView) {
+          elements.openPublicProfile.classList.add("d-none");
+        }
+
+        const messages = await loadMessages(data.user.username);
+        renderMessages(messages);
+
+        if (state.isOwner || state.isSelfProfile) {
+          elements.wallHint.textContent = "Saját üzenőfalra nem lehet írni. Itt látod a hozzád érkezett üzeneteket.";
+          elements.messageForm.classList.add("d-none");
+          if (elements.ratingForm) elements.ratingForm.classList.add("d-none");
+        } else {
+          elements.wallHint.textContent = "Küldj üzenetet ennek a zenésznek.";
+          elements.messageForm.classList.toggle("d-none", !token);
+          if (elements.ratingForm) elements.ratingForm.classList.toggle("d-none", !token);
+          if (elements.ratingHint) elements.ratingHint.textContent = token ? "" : tr("profile_rating_login");
+        }
+
+        await loadUsedItems(data.user.id);
+        await loadBands(data.user.id);
+        await loadRatings(data.user.id);
+        await loadAccountOrders();
+
+        if (state.isOwner && state.currentUser) {
+          const username = String(state.currentUser.username || data.user.username || "");
+          const role = String(state.currentUser.role || "").toLowerCase();
+          const isAdminView = role === "admin" || username.toLowerCase() === "admin";
+          if (elements.accountName) elements.accountName.textContent = username || "-";
+          if (elements.accountEmail) {
+            elements.accountEmail.textContent = isAdminView ? "" : (state.currentUser.email || "");
+            elements.accountEmail.style.display = isAdminView ? "none" : "";
+          }
+          if (elements.accountPanel) elements.accountPanel.classList.remove("d-none");
+        } else if (elements.accountPanel) {
+          elements.accountPanel.classList.add("d-none");
+        }
+
+        if (state.currentUser && elements.logoutBtn) {
+          elements.logoutBtn.addEventListener("click", performLogout);
+          if (elements.accountLogoutBtn) elements.accountLogoutBtn.addEventListener("click", performLogout);
+        } else {
+          elements.logoutBtn.classList.add("d-none");
+          if (elements.accountPanel) elements.accountPanel.classList.add("d-none");
+        }
+
+        syncSidePanelHeights();
+        syncPublicMainPanelHeight();
+        bindEvents();
+      } catch (e) {
+        elements.name.textContent = tr("profile_loading");
+      }
+    }
+
+    init();
+
+    window.addEventListener("resize", () => {
+      syncSidePanelHeights();
+      syncPublicMainPanelHeight();
+    });
+
+    window.onLangChange = () => {
+      elements.name.textContent = state.username || tr("profile_loading");
+    };
+
+  </script>
+</body>
+</html>
+

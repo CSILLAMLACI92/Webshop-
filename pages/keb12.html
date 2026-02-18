@@ -1,0 +1,123 @@
+﻿<?php
+session_start();
+
+// TesztelĂ©shez user_id beĂˇllĂ­tĂˇsa, ha nincs bejelentkezve
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['user_id'] = 1; // PĂ©lda user ID
+}
+
+$user_id = $_SESSION['user_id'];
+
+// AdatbĂˇzis kapcsolat
+$mysqli = new mysqli("localhost", "root", "", "myshop");
+if ($mysqli->connect_error) {
+    die("AdatbĂˇzis kapcsolat hiba: " . $mysqli->connect_error);
+}
+
+// LekĂ©rjĂĽk a profilkĂ©pet
+$stmt = $mysqli->prepare("SELECT profile_pic FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($profile_pic);
+$stmt->fetch();
+$stmt->close();
+$mysqli->close();
+
+// AlapĂ©rtelmezett kĂ©p, ha nincs megadva profilkĂ©p
+if (!$profile_pic || trim($profile_pic) === '') {
+    $profile_pic = 'defa.png';
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../assets/css/KEBhangszerbolt.css" />
+  <link rel="stylesheet" href="../assets/css/Mobile.css" />
+  <title>KEB hangszerbolt</title>
+</head>
+<body>
+<div class="lang-switch" role="group" aria-label="Nyelv">
+  <button type="button" class="lang-pill" data-lang="hu">HU</button>
+  <button type="button" class="lang-pill" data-lang="en">EN</button>
+  <button type="button" class="lang-pill" data-lang="de">DE</button>
+</div>
+  <header>KEB hangszerbolt</header>
+
+  <!-- ProfilkĂ©p szerveroldali beĂˇllĂ­tĂˇsa PHP-vel -->
+  <img
+    class="bal"
+    id="profile-pic"
+    src="../uploads/<?php echo htmlspecialchars($profile_pic); ?>"
+    alt="ProfilkĂ©p"
+    width="50"
+    height="50"
+    style="border-radius:50%;"
+  />
+
+  <!-- A tovĂˇbbi HTML tartalom jĂ¶n ide -->
+  <!-- KosĂˇr Ă©s fiĂłk ikon -->
+  <div class="header-icons">
+    <a href="KEB-KosĂˇr.html" class="icon" title="KosĂˇr">đź›’</a>
+    <a href="../server/account.php" class="icon" title="FiĂłk">đź‘¤</a>
+  </div>
+
+  <!-- KeresĹ‘ -->
+  <div class="search-container">
+    <input type="text" placeholder="KeresĂ©s" />
+    <button type="submit">đź”Ť</button>
+  </div>
+
+  <!-- OldalsĂł panel -->
+  <div id="sidePanel">
+    <h2>OldalsĂł Panel</h2>
+    <hr />
+    <table>
+      <tr>
+        <th>
+          <a href="KEB-pĂ©nzvĂ©ltĂł.html" style="color: white;">PĂ©nzvĂˇltĂł</a>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <a href="ElĂ©rhetĹ‘sĂ©g.html" style="color: white;">ElĂ©rhetĹ‘sĂ©gĂĽnk</a>
+        </th>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FĹ‘ menĂĽ tĂˇblĂˇzat -->
+  <table>
+    <tr>
+      <th><a href="KEB-GitĂˇr.html" class="szin">GitĂˇr</a></th>
+      <th><a href="KEB-Basszus.html" class="szin">Basszus GitĂˇr</a></th>
+      <th><a href="KEB-Dobszettek.html" class="szin">Dobszettek</a></th>
+      <th><a href="KEB-BillentyĹ±.html" class="szin">BillentyĹ±</a></th>
+      <th><a href="KEB-Mikrofon.html" class="szin">Mikrofon</a></th>
+      <th><a href="KEB-TartozĂ©kok.html" class="szin">TartozĂ©kok</a></th>
+      <th><a href="KEB-Hangfalak.html" class="szin">Hangfalak</a></th>
+    </tr>
+  </table>
+
+  <!-- Carousel -->
+  <div class="carousel">
+    <div class="carousel-track">
+      <img src="../uploads/Erik.jpg" alt="KĂ©p 1" />
+      <img src="../uploads/boti.jpg" alt="KĂ©p 2" />
+      <img src="../uploads/dobok.jpg" alt="KĂ©p 3" />
+      <img src="../uploads/mic.jpg" alt="KĂ©p 4" />
+      <img src="../uploads/harph.jpeg" alt="KĂ©p 5" />
+      <img src="../uploads/dobok2.jpg" alt="KĂ©p 6" />
+      <img src="../uploads/bass2.jpg" alt="KĂ©p" />
+      <img src="../uploads/meno.jpg" alt="" />
+    </div>
+  </div>
+<script src="../assets/js/lang.js"></script>
+  <script src="../assets/js/DarkLight.js"></script>
+</body>
+</html>
+

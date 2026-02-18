@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="chat_title">Chat</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <link rel="stylesheet" href="../assets/css/LightTheme.css">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+  <link rel="stylesheet" href="../assets/css/community.css?v=20260212-3">
+  <script src="../assets/js/lang.js?v=20260213-1"></script>
+</head>
+<body class="band-page">
+  <div class="top-bar">
+    <div class="top-actions">
+      <a href="KEBhangszerek.html" class="btn-soft" data-i18n="back_home">Vissza a főoldalra</a>
+    </div>
+    <h1 data-i18n="chat_title">Chat</h1>
+    <div class="top-actions">
+      <a href="hasznalt.html" class="btn-soft" data-i18n="used_title">Használt cuccok</a>
+    </div>
+  </div>
+
+  <main class="band-shell">
+    <section class="panel hero">
+      <h2 data-i18n="messages_btn">Üzenetek</h2>
+      <p data-i18n="chat_intro">Itt tudsz írni más felhasználóknak hirdetésről vagy bármi másról.</p>
+    </section>
+
+    <section class="panel">
+      <div class="chat-layout">
+        <aside class="chat-threads">
+          <div class="chat-threads-title" data-i18n="chat_threads">Beszélgetések</div>
+          <div id="threadList" class="chat-thread-list"></div>
+        </aside>
+
+        <section class="chat-main">
+          <div id="chatLoginState" class="empty-state d-none"></div>
+          <div id="chatEmptyState" class="empty-state" data-i18n="chat_empty">Nincs még üzeneted.</div>
+
+          <div id="chatBox" class="d-none">
+            <div class="chat-header">
+              <img id="chatPeerPic" src="../uploads/Default.avatar.jpg" alt="Profilkép">
+              <div>
+                <div id="chatPeerName" class="chat-peer-name" data-i18n="chat_user">Felhasználó</div>
+                <div id="chatContext" class="hint"></div>
+              </div>
+            </div>
+            <div id="messageList" class="chat-message-list"></div>
+            <div class="chat-compose">
+              <input id="chatInput" type="text" class="form-control" data-i18n-placeholder="chat_write" placeholder="Írj üzenetet...">
+              <button id="sendBtn" type="button" class="ghost-btn" data-i18n="send">Küldés</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/js/DarkLight.js"></script>
+  <script src="../assets/js/chat.js?v=20260212-1"></script>
+</body>
+</html>
+

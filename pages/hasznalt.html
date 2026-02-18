@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="used_title">Használt eladó cuccok</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <link rel="stylesheet" href="../assets/css/LightTheme.css">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+  <link rel="stylesheet" href="../assets/css/community.css?v=20260213-4">
+  <script src="../assets/js/lang.js?v=20260213-1"></script>
+</head>
+<body class="market-page">
+  <div class="top-bar">
+    <div class="top-actions">
+      <button id="togglePanelBtn" class="btn-soft" data-i18n="menu_btn">Menü</button>
+      <a href="KEBhangszerek.html" class="btn-soft" data-i18n="back_home">Vissza a főoldalra</a>
+    </div>
+    <h1 data-i18n="used_title">Használt eladó cuccok</h1>
+    <div class="top-actions">
+      <a href="bandakereso.html" class="btn-soft" data-i18n="band_title">Bandakereső</a>
+    </div>
+  </div>
+
+  <div id="sidePanel">
+    <button id="closePanelBtn" class="sp-close" type="button" aria-label="Oldalsó panel bezárása">×</button>
+    <h2 data-i18n="side_panel">Oldalsó panel</h2>
+    <div class="sp-links">
+      <a class="sp-link" href="hasznalt.html" data-i18n="used_title">Használt eladó cuccok</a>
+      <a class="sp-link" href="bandakereso.html" data-i18n="band_title">Bandakereső</a>
+      <a class="sp-link" href="adatvedelem.html" data-i18n="privacy">Adatvédelem</a>
+      <a class="sp-link" href="szallitas.html" data-i18n="shipping">Szállítás</a>
+      <a class="sp-link" href="ASZF.html" data-i18n="terms">ASZF</a>
+      <a class="sp-link" href="Garancia.html" data-i18n="warranty">Garancia</a>
+      <a class="sp-link" href="El%C3%A9rhet%C5%91s%C3%A9gek.html" data-i18n="contacts">Elérhetőségeink</a>
+    </div>
+    <button id="toggleThemeBtn" class="btn btn-outline-info mt-3" data-i18n="theme_toggle">Téma váltás</button>
+  </div>
+
+  <main class="market-shell">
+    <section class="panel hero">
+      <h2 data-i18n="used_subtitle">Adj fel használt cuccot vagy alkudj korrekt ajánlatot.</h2>
+      <p data-i18n="used_desc">A piactérben a felhasználók ajánlatot tehetnek, az eladó pedig elfogadhatja vagy elutasíthatja.</p>
+    </section>
+
+    <section class="market-grid">
+      <div class="panel">
+        <h3 data-i18n="used_add_title">Termék feltöltése</h3>
+        <p id="usedLoginNote" class="hint" data-i18n="used_login_hint">Jelentkezz be a termék feltöltéséhez.</p>
+        <form id="usedForm">
+          <div class="mb-3">
+            <label class="form-label" data-i18n="used_title_label">Termék neve</label>
+            <input id="usedTitle" type="text" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" data-i18n="used_price_label">Ár (Ft)</label>
+            <input id="usedPrice" type="number" min="1" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" data-i18n="used_category_label">Kategória</label>
+            <select id="usedCategory" class="form-select">
+              <option value="Gitár" data-i18n="cat_gitar">Gitár</option>
+              <option value="Basszus" data-i18n="cat_bass">Basszus gitár</option>
+              <option value="Dob" data-i18n="cat_drum">Dob</option>
+              <option value="Billentyű" data-i18n="cat_keys">Billentyű</option>
+              <option value="Mikrofon" data-i18n="cat_mic">Mikrofon</option>
+              <option value="Hangfal" data-i18n="cat_speakers">Hangfal</option>
+              <option value="Tartozék" data-i18n="cat_accessories">Tartozék</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" data-i18n="used_condition_label">Állapot</label>
+            <select id="usedCondition" class="form-select">
+              <option value="Újszerű" data-i18n="used_condition_new">Újszerű</option>
+              <option value="Jó" data-i18n="used_condition_good">Jó</option>
+              <option value="Használt" data-i18n="used_condition_used">Használt</option>
+              <option value="Felújítandó" data-i18n="used_condition_fix">Felújítandó</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" data-i18n="used_desc_label">Leírás</label>
+            <textarea id="usedDesc" rows="3" class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" data-i18n="used_image_label">Kép</label>
+            <input id="usedImage" type="file" class="form-control" accept="image/*">
+          </div>
+          <button id="usedSubmit" class="primary-btn" type="submit" data-i18n="used_submit">Feltöltés</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="list-toolbar">
+          <input id="searchInput" type="text" class="form-control" data-i18n-placeholder="used_search" placeholder="Keresés...">
+          <select id="filterCategory" class="form-select">
+            <option value="" data-i18n="used_all">Összes</option>
+            <option value="Gitár" data-i18n="cat_gitar">Gitár</option>
+            <option value="Basszus" data-i18n="cat_bass">Basszus gitár</option>
+            <option value="Dob" data-i18n="cat_drum">Dob</option>
+            <option value="Billentyű" data-i18n="cat_keys">Billentyű</option>
+            <option value="Mikrofon" data-i18n="cat_mic">Mikrofon</option>
+            <option value="Hangfal" data-i18n="cat_speakers">Hangfal</option>
+            <option value="Tartozék" data-i18n="cat_accessories">Tartozék</option>
+          </select>
+          <select id="listMode" class="form-select">
+            <option value="all" data-i18n="used_mode_all">Minden ajánlat</option>
+            <option value="mine" data-i18n="used_mode_mine">Saját termékeim</option>
+          </select>
+          <button id="filterBtn" class="ghost-btn" type="button" data-i18n="used_filter_btn">Szűrés</button>
+        </div>
+        <div id="usedList" class="card-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const toggleBtn = document.getElementById("togglePanelBtn");
+    const sidePanel = document.getElementById("sidePanel");
+    const closeBtn = document.getElementById("closePanelBtn");
+    toggleBtn.addEventListener("click", () => {
+      sidePanel.classList.toggle("active");
+    });
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        sidePanel.classList.remove("active");
+      });
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") sidePanel.classList.remove("active");
+    });
+    document.addEventListener("click", (e) => {
+      if (!sidePanel.classList.contains("active")) return;
+      if (e.target.closest("#sidePanel") || e.target.closest("#togglePanelBtn")) return;
+      sidePanel.classList.remove("active");
+    });
+  </script>
+  <script src="../assets/js/DarkLight.js"></script>
+  <script src="../assets/js/hasznalt.js?v=20260213-5"></script>
+</body>
+</html>
+
+

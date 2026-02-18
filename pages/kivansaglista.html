@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kívánságlista</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <link rel="stylesheet" href="../assets/css/LightTheme.css">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+  <link rel="stylesheet" href="../assets/css/wishlist.css">
+</head>
+<body>
+  <main class="wishlist-page">
+    <h1>Kívánságlista</h1>
+    <p>Itt látod a szívecskével mentett termékeket.</p>
+    <div class="wishlist-actions" style="margin:12px 0 18px;">
+      <a class="btn btn-outline-info" href="KEBhangszerek.html">← Vissza</a>
+      <button class="btn btn-outline-danger" id="clearWishlistBtn" type="button">Lista ürítése</button>
+    </div>
+    <div id="wishlistEmpty">Még nincs mentett termék.</div>
+    <div id="wishlistGrid" class="wishlist-grid"></div>
+  </main>
+
+  <script src="../assets/js/wishlist.js"></script>
+  <script>
+    function renderWishlist() {
+      const items = (window.Wishlist && window.Wishlist.read) ? window.Wishlist.read() : [];
+      const grid = document.getElementById("wishlistGrid");
+      const empty = document.getElementById("wishlistEmpty");
+      if (!grid || !empty) return;
+      grid.innerHTML = "";
+      empty.style.display = items.length ? "none" : "block";
+
+      items.forEach((it) => {
+        const card = document.createElement("article");
+        card.className = "wishlist-item";
+        card.innerHTML = `
+          <img src="${it.image || "../uploads/Default.avatar.jpg"}" alt="${it.name || "Termék"}" onerror="this.onerror=null;this.src='../uploads/Default.avatar.jpg'">
+          <div class="wishlist-item-body">
+            <div class="wishlist-item-name">${it.name || "Termék"}</div>
+            <div class="wishlist-item-price">${it.price || ""}</div>
+            <div class="wishlist-actions">
+              <a class="btn btn-outline-info" href="${it.url || "#"}">Megnyitás</a>
+              <button class="btn btn-outline-danger" type="button">Törlés</button>
+            </div>
+          </div>
+        `;
+        const del = card.querySelector("button");
+        if (del) {
+          del.addEventListener("click", () => {
+            const next = items.filter((x) => x.id !== it.id);
+            window.Wishlist.write(next);
+            renderWishlist();
+          });
+        }
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById("clearWishlistBtn")?.addEventListener("click", () => {
+      window.Wishlist.write([]);
+      renderWishlist();
+    });
+
+    window.addEventListener("wishlist:changed", renderWishlist);
+    renderWishlist();
+  </script>
+  <script src="../assets/js/DarkLight.js"></script>
+</body>
+</html>

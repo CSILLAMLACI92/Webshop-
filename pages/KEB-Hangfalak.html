@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KEB Hangfalak</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Saját CSS -->
+  <link rel="stylesheet" href="../assets/css/LightTheme.css" />
+  <link rel="stylesheet" href="../assets/css/market.css?v=20260210">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+
+  <link rel="stylesheet" href="../assets/css/toast.css">
+  <link rel="stylesheet" href="../assets/css/wishlist.css">
+</head>
+<body class="bg-dark text-light">
+
+  <div class="currency-float">
+    <div class="currency-lang">
+      <div class="currency-flags" role="group" aria-label="Valuta">
+        <button type="button" class="currency-flag flag-hu" data-currency="HUF" aria-label="HUF"></button>
+        <button type="button" class="currency-flag flag-eu" data-currency="EUR" aria-label="EUR"></button>
+        <button type="button" class="currency-flag flag-us" data-currency="USD" aria-label="USD"></button>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Nyelv">
+        <button type="button" class="lang-pill active" data-lang="hu">HU</button>
+        <button type="button" class="lang-pill" data-lang="en">EN</button>
+        <button type="button" class="lang-pill" data-lang="de">DE</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="cat-hero">
+    <div class="cat-hero-banner" data-category-slug="hangfalak" data-default-hero="../assets/img/hang1.jpg" style="background-image:url('../assets/img/hang1.jpg')">
+      <h1 class="section-title" data-i18n="cat_speakers">Hangfalak</h1>
+      <p>Stúdiómonitorok, party hangfalak és hordozható kedvencek.</p>
+    </div>
+  </section>
+
+  <div class="market-layout">
+    <aside class="market-sidebar">
+      <button id="vissza" class="btn btn-outline-info back-btn" data-i18n="back_home">Vissza a főoldalra</button>
+    </aside>
+    <div class="market-content">
+      <div id="termekLista" class="termek-grid"></div>
+    </div>
+  </div>
+
+  <!-- Lapozó -->
+  <div class="lapozo container text-center mb-5">
+    <div class="btn-group">
+      <button id="elozo" class="btn btn-outline-info" data-i18n="prev">Előző</button>
+      <span id="oldalSzam" class="px-3 fw-bold text-info"></span>
+      <button id="kovetkezo" class="btn btn-outline-info" data-i18n="next">Következő</button>
+    </div>
+  </div>
+
+  <!-- Termékek JS -->
+  <script src="../assets/js/lang.js"></script>
+  <script src="../assets/js/categoryHero.js"></script>
+  <script src="../assets/js/KEB-Hangfalak.js?v=5"></script>
+  <script src="../assets/js/wishlist.js"></script>
+
+  <!-- Vissza gomb működése -->
+  <script>
+    document.getElementById("vissza").addEventListener("click", () => {
+      window.location.href = "KEBhangszerek.html";
+    });
+  </script>
+
+  <!-- 🌗 Téma váltó JS -->
+  <script src="../assets/js/DarkLight.js"></script>
+
+  <div id="cart-toast-root"></div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="register_title">Regisztráció</title>
+  <link rel="icon" href="../uploads/favicon-16x16.png">
+  <link rel="stylesheet" href="../assets/css/Mobile.css">
+  <script src="../assets/js/lang.js?v=20260216-4"></script>
+</head>
+<body>
+<div class="lang-switch" role="group" aria-label="Nyelv">
+  <button type="button" class="lang-pill" data-lang="hu">HU</button>
+  <button type="button" class="lang-pill" data-lang="en">EN</button>
+  <button type="button" class="lang-pill" data-lang="de">DE</button>
+</div>
+  <form id="registerForm">
+    <div id="verify_panel" style="display:none; margin-bottom:12px; padding:12px; border-radius:12px; border:1px solid rgba(120,200,255,0.35); background:rgba(77,184,255,0.08);">
+      <div id="verify_status" style="font-weight:700;">Ellenőrzés folyamatban...</div>
+      <div id="verify_email" style="opacity:0.8; margin-top:4px;"></div>
+      <div id="verify_spinner" style="margin-top:8px;">...</div>
+      <button type="button" id="verify_resend" style="margin-top:10px;" data-i18n="verify_resend_btn">Hitelesítő email újraküldése</button>
+    </div>
+    <input type="text" name="username" placeholder="Felhasználónév" data-i18n-placeholder="account_username" required minlength="3" maxlength="32" />
+    <input type="email" name="email" placeholder="Email" data-i18n-placeholder="email_label" required />
+    <input type="password" name="password" placeholder="Jelszó" data-i18n-placeholder="account_password" required minlength="6" />
+    <p id="register_error" style="color:#d43f3f; font-size:13px; min-height:18px;"></p>
+    <button type="submit" data-i18n="register_title">Regisztráció</button>
+  </form>
+
+  <script>
+    const tr = (key) => (window.SH_LANG && window.SH_LANG.t ? window.SH_LANG.t(key) : key);
+    let verifyState = "pending";
+    let verifyEmailValue = "";
+    let verifyDetail = "";
+    const LETTER_CLASS = "A-Za-zÁÉÍÓÖŐÚÜŰáéíóöőúüű";
+    const USERNAME_PATTERN = new RegExp(
+      `^[${LETTER_CLASS}][${LETTER_CLASS}0-9._-]*[${LETTER_CLASS}0-9]$`
+    );
+
+    function validateUsername(value) {
+      const username = (value || "").trim();
+      if (username.length < 3 || username.length > 32) return tr("account_username_len");
+      if (!USERNAME_PATTERN.test(username)) return tr("account_username_format");
+      if (/[._-]{2,}/.test(username)) return tr("account_username_separators");
+      if ((username.match(new RegExp(`[${LETTER_CLASS}]`, "g")) || []).length < 3) return tr("account_username_letters");
+      if (/(.)\1\1\1+/u.test(username)) return tr("account_username_repeat");
+      return "";
+    }
+
+    function updateVerifyUI() {
+      if (!verifyPanel) return;
+      const statusText = (() => {
+        if (verifyState === "success") return tr("verify_success");
+        if (verifyState === "sent") return tr("verify_email_sent");
+        if (verifyState === "resend_sent") return tr("verify_resend_sent");
+        if (verifyState === "error") return tr("verify_resend_error") + (verifyDetail || "");
+        return tr("verify_pending");
+      })();
+      verifyStatus.textContent = statusText;
+      verifyEmailEl.textContent = verifyEmailValue ? ("Email: " + verifyEmailValue) : "";
+      verifySpinner.textContent = (verifyState === "success") ? "OK" : "...";
+    }
+    const verifyPanel = document.getElementById("verify_panel");
+    const verifyStatus = document.getElementById("verify_status");
+    const verifyEmailEl = document.getElementById("verify_email");
+    const verifySpinner = document.getElementById("verify_spinner");
+    const verifyResend = document.getElementById("verify_resend");
+    let verifyTimer = null;
+
+    function showVerifyPanel(email) {
+      if (!verifyPanel) return;
+      verifyPanel.style.display = "block";
+      verifyStatus.textContent = "Ellenőrzés folyamatban...";
+      verifyEmailEl.textContent = email ? ("Email: " + email) : "";
+      verifySpinner.textContent = "...";
+      if (verifyTimer) clearInterval(verifyTimer);
+      if (!email) return;
+      verifyTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`../server/check_verification.php?email=${encodeURIComponent(email)}`);
+          const data = await res.json();
+          if (res.ok && data.verified) {
+            clearInterval(verifyTimer);
+            verifyStatus.textContent = "Sikeres hitelesítés";
+            verifySpinner.textContent = "OK";
+          }
+        } catch (e) {
+          // ignore polling errors
+        }
+      }, 4000);
+    }
+
+    if (verifyResend) {
+      verifyResend.onclick = async () => {
+        const email = document.querySelector("input[name='email']")?.value?.trim() || "";
+        if (!email) return;
+        try {
+          const res = await fetch("../server/resend_verification.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+            body: new URLSearchParams({ email })
+          });
+          let text = await res.text();
+          text = text.replace(/^\uFEFF/, "");
+          let data = {};
+          try { data = JSON.parse(text); } catch { data = { error: text }; }
+          if (!res.ok) {
+            verifyStatus.textContent = tr("verify_resend_error") + (data.error || tr("bad_json"));
+          } else {
+            verifyStatus.textContent = data.message || tr("verify_resend_sent");
+            verifySpinner.textContent = "...";
+          }
+        } catch (e) {
+          verifyStatus.textContent = tr("verify_resend_error") + (e?.message || tr("bad_json"));
+        }
+      };
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const errBox = document.getElementById("register_error");
+      if (errBox) errBox.textContent = "";
+
+      const formData = new FormData(this);
+      const username = formData.get('username');
+      const email = formData.get('email');
+      const password = formData.get('password');
+      const userError = validateUsername(username);
+      if (userError) {
+        if (errBox) errBox.textContent = userError;
+        return;
+      }
+
+      const res = await fetch('../server/register.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert((data && data.error) || tr('register_error'));
+        return;
+      }
+
+            if (data && data.requires_verification) {
+        alert(tr("verify_email_sent"));
+        showVerifyPanel(email);
+        verifyState = "sent";
+        updateVerifyUI();
+      } else {
+        alert(tr('register_success'));
+      }
+    });
+
+    window.onLangChange = () => {
+      updateVerifyUI();
+    };
+  </script>
+  <script src="../assets/js/DarkLight.js"></script>
+</body>
+</html>
+
+
+
+
