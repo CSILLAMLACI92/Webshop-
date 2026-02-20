@@ -1,0 +1,4 @@
+2026-02-03 10:19:23 | erik23toth@gmail.com | http://localhost/SH7.8/server/verify_email.php?token=16e90a4f0ebfbeefd6ad86483f47c6e7f922eb37fcf6331f3cca8380dca312c3
+2026-02-03 10:19:24 | erik23toth@gmail.com | http://localhost/SH7.8/server/verify_email.php?token=f2f95ae76b776ab27ad858ede97965535ed5ead1b4686094aafb1b9b60488f28
+2026-02-04 12:16:18 | erik@erik | http://localhost:8888/SH8.0/server/verify_email.php?token=4e2424a63a331d7454a2ddf9ca4890744bc10db4b8f7bc5f07e740cbb2681c80 | SMTP error: Invalid address:  (to): erik@erik
+2026-02-11 10:18:10 | erik@erik | http://localhost:8888/SH8.0/server/verify_email.php?token=efd3fcb4ff1558b9d4647e05dc1a268866b32c723b395af2bd479c45f0af3c6d | SMTP error: Invalid address:  (to): erik@erik
