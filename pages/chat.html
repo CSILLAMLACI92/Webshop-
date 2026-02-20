@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
@@ -7,8 +7,8 @@
   <link rel="icon" href="../uploads/favicon-16x16.png">
   <link rel="stylesheet" href="../assets/css/LightTheme.css">
   <link rel="stylesheet" href="../assets/css/Mobile.css">
-  <link rel="stylesheet" href="../assets/css/community.css?v=20260212-3">
-  <script src="../assets/js/lang.js?v=20260213-1"></script>
+  <link rel="stylesheet" href="../assets/css/community.css?v=20260220-2">
+  <script src="../assets/js/lang.js?v=20260219-9"></script>
 </head>
 <body class="band-page">
   <div class="top-bar">
@@ -46,8 +46,18 @@
                 <div id="chatContext" class="hint"></div>
               </div>
             </div>
+            <div id="chatOfferPanel" class="chat-offer-panel d-none"></div>
             <div id="messageList" class="chat-message-list"></div>
+            <div id="chatReplyBar" class="chat-reply-bar d-none">
+              <div class="chat-reply-meta">
+                <div class="chat-reply-label">Válasz</div>
+                <div id="chatReplyPreview" class="chat-reply-preview"></div>
+              </div>
+              <button id="chatReplyCancel" type="button" class="ghost-btn" title="Válasz törlése">✕</button>
+            </div>
             <div class="chat-compose">
+              <input id="chatImage" type="file" accept="image/*" class="d-none">
+              <button id="imageBtn" type="button" class="ghost-btn" title="Kép küldése">📷</button>
               <input id="chatInput" type="text" class="form-control" data-i18n-placeholder="chat_write" placeholder="Írj üzenetet...">
               <button id="sendBtn" type="button" class="ghost-btn" data-i18n="send">Küldés</button>
             </div>
@@ -58,7 +68,13 @@
   </main>
 
   <script src="../assets/js/DarkLight.js"></script>
-  <script src="../assets/js/chat.js?v=20260212-1"></script>
+  <script src="../assets/js/chat.js?v=20260220-2"></script>
 </body>
 </html>
+
+
+
+
+
+
 

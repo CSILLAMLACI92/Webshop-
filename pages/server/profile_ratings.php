@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once "connect.php";
 require_once "jwt_helper.php";
 require_once "market_schema.php";
+require_once "profanity.php";
 
 $schemaError = ensure_market_schema($conn);
 if ($schemaError) {
@@ -76,7 +77,7 @@ if ($method === "GET") {
     while ($row = $res->fetch_assoc()) {
         $list[] = [
             "rating" => (int)$row["rating"],
-            "comment" => $row["comment"] ?? "",
+            "comment" => sanitize_profanity_text((string)($row["comment"] ?? "")),
             "created_at" => $row["created_at"],
             "reviewer" => $row["reviewer"] ?? "",
             "reviewer_pic" => normalize_pic($row["reviewer_pic"] ?? "")
@@ -101,7 +102,7 @@ if ($method === "POST") {
     $username = trim($data["username"] ?? "");
     $target_id = (int)($data["user_id"] ?? 0);
     $rating = (int)($data["rating"] ?? 0);
-    $comment = trim((string)($data["comment"] ?? ""));
+    $comment = sanitize_profanity_text(trim((string)($data["comment"] ?? "")));
 
     if ($username !== "") {
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? LIMIT 1");

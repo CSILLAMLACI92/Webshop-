@@ -7,13 +7,12 @@
   <link rel="icon" href="../uploads/favicon-16x16.png">
   <link rel="stylesheet" href="../assets/css/LightTheme.css">
   <link rel="stylesheet" href="../assets/css/Mobile.css">
-  <link rel="stylesheet" href="../assets/css/community.css?v=20260213-4">
-  <script src="../assets/js/lang.js?v=20260213-1"></script>
+  <link rel="stylesheet" href="../assets/css/community.css?v=20260218-1">
+  <script src="../assets/js/lang.js?v=20260219-9"></script>
 </head>
 <body class="band-page">
   <div class="top-bar">
     <div class="top-actions">
-      <button id="togglePanelBtn" class="btn-soft" data-i18n="menu_btn">Menü</button>
       <a href="KEBhangszerek.html" class="btn-soft" data-i18n="back_home">Vissza a főoldalra</a>
     </div>
     <h1 data-i18n="band_title">Bandakereső</h1>
@@ -25,15 +24,16 @@
   <div id="sidePanel">
     <button id="closePanelBtn" class="sp-close" type="button" aria-label="Oldalsó panel bezárása">×</button>
     <h2 data-i18n="side_panel">Oldalsó panel</h2>
-    <div class="sp-links">
-      <a class="sp-link" href="hasznalt.html" data-i18n="used_title">Használt eladó cuccok</a>
-      <a class="sp-link" href="bandakereso.html" data-i18n="band_title">Bandakereső</a>
-      <a class="sp-link" href="adatvedelem.html" data-i18n="privacy">Adatvédelem</a>
-      <a class="sp-link" href="szallitas.html" data-i18n="shipping">Szállítás</a>
-      <a class="sp-link" href="ASZF.html" data-i18n="terms">ASZF</a>
-      <a class="sp-link" href="Garancia.html" data-i18n="warranty">Garancia</a>
-      <a class="sp-link" href="El%C3%A9rhet%C5%91s%C3%A9gek.html" data-i18n="contacts">Elérhetőségeink</a>
-    </div>
+    <hr>
+    <table>
+      <tr><th><a href="hasznalt.html" data-i18n="used_title">Használt eladó cuccok</a></th></tr>
+      <tr><th><a href="bandakereso.html" data-i18n="band_title">Bandakereső</a></th></tr>
+      <tr><th><a href="adatvedelem.html" data-i18n="privacy">Adatvédelem</a></th></tr>
+      <tr><th><a href="szallitas.html" data-i18n="shipping">Szállítás</a></th></tr>
+      <tr><th><a href="ASZF.html" data-i18n="terms">ASZF</a></th></tr>
+      <tr><th><a href="Garancia.html" data-i18n="warranty">Garancia</a></th></tr>
+      <tr><th><a href="elerhetosegek.html" data-i18n="contacts">Elérhetőségeink</a></th></tr>
+    </table>
     <button id="toggleThemeBtn" class="btn btn-outline-info mt-3" data-i18n="theme_toggle">Téma váltás</button>
   </div>
 
@@ -99,26 +99,36 @@
     const toggleBtn = document.getElementById("togglePanelBtn");
     const sidePanel = document.getElementById("sidePanel");
     const closeBtn = document.getElementById("closePanelBtn");
-    toggleBtn.addEventListener("click", () => {
-      sidePanel.classList.toggle("active");
-    });
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", () => {
+        sidePanel.classList.toggle("active");
+      });
+    }
     if (closeBtn) {
       closeBtn.addEventListener("click", () => {
         sidePanel.classList.remove("active");
       });
     }
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") sidePanel.classList.remove("active");
-    });
-    document.addEventListener("click", (e) => {
-      if (!sidePanel.classList.contains("active")) return;
-      if (e.target.closest("#sidePanel") || e.target.closest("#togglePanelBtn")) return;
-      sidePanel.classList.remove("active");
+    document.querySelectorAll("#sidePanel a[href]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href");
+        if (!href) return;
+        event.preventDefault();
+        window.location.assign(href);
+      });
     });
   </script>
   <script src="../assets/js/DarkLight.js"></script>
-  <script src="../assets/js/bandakereso.js?v=20260213-4"></script>
+  <script src="../assets/js/bandakereso.js?v=20260219-1"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 

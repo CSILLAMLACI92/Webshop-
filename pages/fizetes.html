@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title data-i18n="pay_title">Fizetés</title>
+  <title data-i18n="pay_title">FizetĂ©s</title>
   <link rel="icon" href="../uploads/favicon-16x16.png">
   <link rel="stylesheet" href="../assets/css/fizetes.css">
   <link rel="stylesheet" href="../assets/css/Mobile.css">
-  <script src="../assets/js/lang.js"></script>
+  <script src="../assets/js/lang.js?v=20260219-9"></script>
 </head>
 <body data-theme-toggle="off">
 
 <main class="checkout-page">
   <header class="page-head">
-    <h1 data-i18n="pay_title">Fizetés</h1>
-    <p data-i18n="pay_sub">Biztonságos fizetés, gyors szállítás, átlátható összegzés.</p>
+    <h1 data-i18n="pay_title">FizetĂ©s</h1>
+    <p data-i18n="pay_sub">BiztonsĂˇgos fizetĂ©s, gyors szĂˇllĂ­tĂˇs, ĂˇtlĂˇthatĂł Ă¶sszegzĂ©s.</p>
     <div class="lang-switch" role="group" aria-label="Nyelv">
       <button type="button" class="lang-pill active" data-lang="hu">HU</button>
       <button type="button" class="lang-pill" data-lang="en">EN</button>
@@ -24,12 +24,12 @@
 
   <div class="checkout-grid">
     <section class="panel">
-      <h2 data-i18n="billing_title">Számlázási adatok</h2>
+      <h2 data-i18n="billing_title">SzĂˇmlĂˇzĂˇsi adatok</h2>
 
       <div class="field-grid">
         <div class="field">
-          <label for="name" data-i18n="name_label">Név</label>
-          <input type="text" id="name" placeholder="Név" data-i18n-placeholder="name_placeholder">
+          <label for="name" data-i18n="name_label">NĂ©v</label>
+          <input type="text" id="name" placeholder="NĂ©v" data-i18n-placeholder="name_placeholder">
           <div id="error-name" class="error"></div>
         </div>
 
@@ -40,61 +40,64 @@
         </div>
 
         <div class="field full">
-          <label for="address" data-i18n="address_label">Cím</label>
-          <input type="text" id="address" placeholder="Cím" data-i18n-placeholder="address_placeholder">
+          <label for="address" data-i18n="address_label">CĂ­m</label>
+          <input type="text" id="address" placeholder="CĂ­m" data-i18n-placeholder="address_placeholder">
           <div id="error-address" class="error"></div>
         </div>
 
         <div class="field">
-          <label for="city" data-i18n="city_label">Város</label>
-          <input type="text" id="city" placeholder="Város" data-i18n-placeholder="city_placeholder">
+          <label for="city" data-i18n="city_label">VĂˇros</label>
+          <input type="text" id="city" placeholder="VĂˇros" data-i18n-placeholder="city_placeholder">
           <div id="error-city" class="error"></div>
         </div>
 
         <div class="field">
-          <label for="postal" data-i18n="postal_label">Irányítószám</label>
-          <input type="text" id="postal" placeholder="Irányítószám" data-i18n-placeholder="postal_placeholder">
+          <label for="postal" data-i18n="postal_label">IrĂˇnyĂ­tĂłszĂˇm</label>
+          <input type="text" id="postal" placeholder="IrĂˇnyĂ­tĂłszĂˇm" data-i18n-placeholder="postal_placeholder">
           <div id="error-postal" class="error"></div>
         </div>
       </div>
 
       <div id="error-method" class="error"></div>
 
-      <h2 data-i18n="shipping_title">Szállítás</h2>
+      <h2 data-i18n="shipping_title">SzĂˇllĂ­tĂˇs</h2>
       <div class="shipping-box">
         <label class="ship-option">
           <input type="radio" name="shipping" value="990">
-          <span data-i18n="ship_foxpost">📦 Foxpost automata – 990 Ft</span>
+          <span data-i18n="ship_foxpost">đź“¦ Foxpost automata â€“ 990 Ft</span>
         </label>
 
         <label class="ship-option">
           <input type="radio" name="shipping" value="1990">
-          <span data-i18n="ship_mpl">🚚 MPL házhoz – 1990 Ft</span>
+          <span data-i18n="ship_mpl">đźšš MPL hĂˇzhoz â€“ 1990 Ft</span>
         </label>
 
         <label class="ship-option">
           <input type="radio" name="shipping" value="2490">
-          <span data-i18n="ship_gls">🚛 GLS futár – 2490 Ft</span>
+          <span data-i18n="ship_gls">đźš› GLS futĂˇr â€“ 2490 Ft</span>
         </label>
 
         <label class="ship-option">
           <input type="radio" name="shipping" value="0">
-          <span data-i18n="ship_pickup">🏬 Személyes átvétel – INGYENES</span>
+          <span data-i18n="ship_pickup">đźŹ¬ SzemĂ©lyes ĂˇtvĂ©tel â€“ INGYENES</span>
         </label>
+      </div>
+      <div id="shippingFreeNotice" class="shipping-free-note" data-i18n="shipping_free_over_300k">
+        300 000 Ft felett a szĂˇllĂ­tĂˇs ingyenes.
       </div>
 
       <div id="error-shipping" class="error"></div>
     </section>
 
     <aside class="panel side-panel">
-      <h2 data-i18n="card_title">Kártyaadatok</h2>
+      <h2 data-i18n="card_title">KĂˇrtyaadatok</h2>
 
       <div class="card-container">
         <div class="credit-card" id="credit-card">
           <div class="front">
             <div class="chip"></div>
             <div class="card-number" id="preview-number">#### #### #### ####</div>
-            <div class="card-name" id="preview-name" data-i18n="name_label">Név</div>
+            <div class="card-name" id="preview-name" data-i18n="name_label">NĂ©v</div>
             <div class="card-expiry" id="preview-expiry">MM/YY</div>
           </div>
 
@@ -107,54 +110,54 @@
 
       <div class="field-grid">
         <div class="field full">
-          <label for="card" data-i18n="card_number_label">Kártyaszám</label>
-          <input type="text" id="card" placeholder="Kártyaszám (16 számjegy)" data-i18n-placeholder="card_number_placeholder">
+          <label for="card" data-i18n="card_number_label">KĂˇrtyaszĂˇm</label>
+          <input type="text" id="card" placeholder="KĂˇrtyaszĂˇm (16 szĂˇmjegy)" data-i18n-placeholder="card_number_placeholder">
           <div id="error-card" class="error"></div>
         </div>
 
         <div class="field">
-          <label for="expiry" data-i18n="expiry_label">Lejárat</label>
-          <input type="text" id="expiry" placeholder="Lejárat (MM/YY)" data-i18n-placeholder="expiry_placeholder">
+          <label for="expiry" data-i18n="expiry_label">LejĂˇrat</label>
+          <input type="text" id="expiry" placeholder="LejĂˇrat (MM/YY)" data-i18n-placeholder="expiry_placeholder">
           <div id="error-expiry" class="error"></div>
         </div>
 
         <div class="field">
           <label for="cvv" data-i18n="cvv_label">CVV</label>
-          <input type="text" id="cvv" placeholder="CVV (3 számjegy)" data-i18n-placeholder="cvv_placeholder">
+          <input type="text" id="cvv" placeholder="CVV (3 szĂˇmjegy)" data-i18n-placeholder="cvv_placeholder">
           <div id="error-cvv" class="error"></div>
         </div>
       </div>
 
       <button class="super-button" onclick="validateForm()">
-        <span data-i18n="pay_button">Fizetés</span>
+        <span data-i18n="pay_button">FizetĂ©s</span>
         <span class="arrow">&#10095;</span>
       </button>
 
       <div class="summary-box">
-        <h3 data-i18n="summary_title">Fizetési összegzés</h3>
+        <h3 data-i18n="summary_title">FizetĂ©si Ă¶sszegzĂ©s</h3>
 
         <div class="summary-row">
-          <span data-i18n="summary_method_label">Fizetési mód:</span>
-          <span id="sum-method">—</span>
+          <span data-i18n="summary_method_label">FizetĂ©si mĂłd:</span>
+          <span id="sum-method">â€”</span>
         </div>
 
         <div class="summary-row">
-          <span data-i18n="summary_price_label">Termék ára:</span>
+          <span data-i18n="summary_price_label">TermĂ©k Ăˇra:</span>
           <span id="sum-price">0 Ft</span>
         </div>
 
         <div class="summary-row">
-          <span data-i18n="summary_tax_label">Adó (12%):</span>
+          <span data-i18n="summary_tax_label">AdĂł (12%):</span>
           <span id="sum-tax">0 Ft</span>
         </div>
 
         <div class="summary-row">
-          <span data-i18n="summary_fee_label">Kezelési díj:</span>
+          <span data-i18n="summary_fee_label">KezelĂ©si dĂ­j:</span>
           <span id="sum-fee">0 Ft</span>
         </div>
 
         <div class="summary-row total">
-          <span data-i18n="summary_total_label">Fizetendő összesen:</span>
+          <span data-i18n="summary_total_label">FizetendĹ‘ Ă¶sszesen:</span>
           <span id="sum-total">0 Ft</span>
         </div>
 
@@ -164,15 +167,15 @@
   </div>
 
   <section class="panel cart-panel">
-    <h2 data-i18n="purchased_title">Megvásárolt termékek</h2>
+    <h2 data-i18n="purchased_title">MegvĂˇsĂˇrolt termĂ©kek</h2>
     <div id="cart-items" class="summary-box"></div>
   </section>
 </main>
 
 <div id="foxpostModal" class="foxpost-overlay">
   <div class="foxpost-box">
-    <h3 data-i18n="foxpost_title">Válassz Foxpost automatát</h3>
-    <p class="foxpost-sub" data-i18n="foxpost_sub">Keresd meg a legközelebbi automatát, majd erősítsd meg a választást.</p>
+    <h3 data-i18n="foxpost_title">VĂˇlassz Foxpost automatĂˇt</h3>
+    <p class="foxpost-sub" data-i18n="foxpost_sub">Keresd meg a legkĂ¶zelebbi automatĂˇt, majd erĹ‘sĂ­tsd meg a vĂˇlasztĂˇst.</p>
 
     <iframe
       id="foxpostMap"
@@ -184,16 +187,16 @@
       src="https://www.google.com/maps/embed/v1/search?key=AIzaSyBXcYDwBFlwUoznyZW1icez3n8HNfCQldQ&q=Foxpost+automata+Pecs">
     </iframe>
 
-    <input type="text" id="foxpostSearch" placeholder="Keresés... (pl. Árkád)" class="foxpost-search" data-i18n-placeholder="foxpost_search_placeholder">
+    <input type="text" id="foxpostSearch" placeholder="KeresĂ©s... (pl. ĂrkĂˇd)" class="foxpost-search" data-i18n-placeholder="foxpost_search_placeholder">
 
     <div id="foxpostConfirm" class="foxpost-confirm">
-      <p id="foxpostSelectedText" data-i18n="foxpost_selected_prefix">Kiválasztott automata:</p>
-      <button id="foxpostYes" class="super-button" data-i18n="foxpost_yes">Igen, ezt választom</button>
-      <button id="foxpostNo" class="close-btn" data-i18n="foxpost_no">Mégse</button>
+      <p id="foxpostSelectedText" data-i18n="foxpost_selected_prefix">KivĂˇlasztott automata:</p>
+      <button id="foxpostYes" class="super-button" data-i18n="foxpost_yes">Igen, ezt vĂˇlasztom</button>
+      <button id="foxpostNo" class="close-btn" data-i18n="foxpost_no">MĂ©gse</button>
     </div>
 
     <div id="foxpostList" class="foxpost-list"></div>
-    <button id="closeFoxpost" class="close-btn" data-i18n="foxpost_close">Bezárás</button>
+    <button id="closeFoxpost" class="close-btn" data-i18n="foxpost_close">BezĂˇrĂˇs</button>
   </div>
 </div>
 
@@ -202,3 +205,10 @@
   <script src="../assets/js/DarkLight.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+

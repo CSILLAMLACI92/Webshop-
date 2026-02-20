@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../assets/css/LightTheme.css">
   <link rel="stylesheet" href="../assets/css/Mobile.css">
   <link rel="stylesheet" href="../assets/css/hangszer.css">
-  <script src="../assets/js/lang.js"></script>
+  <script src="../assets/js/lang.js?v=20260219-9"></script>
 </head>
 <body>
 <div class="lang-switch" role="group" aria-label="Nyelv">
@@ -19,58 +19,65 @@
 
 <main class="product-page">
   <div class="product-top">
-    <button class="back-btn" id="backBtn" data-i18n="back">← Vissza</button>
+    <button class="back-btn" id="backBtn" data-i18n="back">â† Vissza</button>
     <span class="product-badge" id="productCategory">Hangszer</span>
   </div>
 
   <div class="product-grid">
     <section class="product-media">
-      <img id="productImage" alt="Hangszer kép">
+      <img id="productImage" alt="Hangszer kĂ©p">
       <div class="audio-card" id="audioWrap"></div>
     </section>
 
-    <section class="product-info">
+    <section class="product-info" id="productDetails">
       <h1 id="productName">Hangszer</h1>
-      <div class="product-price" id="productPrice">—</div>
+      <div class="product-price" id="productPrice">â€”</div>
       <p class="product-desc" id="productDesc"></p>
 
       <ul class="product-specs" id="productSpecs"></ul>
 
       <button class="primary-btn" id="addToCartBtn" data-i18n="add_to_cart">
-        <span class="icon">🛒</span> Kosárba
+        <span class="icon">đź›’</span> KosĂˇrba
       </button>
     </section>
   </div>
 
   <section class="product-extra">
     <div class="product-panel">
-      <h2 data-i18n="why_title">Miért ajánljuk?</h2>
+      <h2 data-i18n="why_title">MiĂ©rt ajĂˇnljuk?</h2>
       <p id="productWhy"></p>
     </div>
     <div class="product-panel">
-      <h2 data-i18n="shipping_title">Szállítás</h2>
-      <p data-i18n="shipping_desc1">Raktáron: 1–3 nap · Rendelésre: 5–14 nap</p>
-      <p data-i18n="shipping_desc2">Biztonságos csomagolás, zenészbarát ügyintézés.</p>
+      <h2 data-i18n="shipping_title">SzĂˇllĂ­tĂˇs</h2>
+      <p data-i18n="shipping_desc1">RaktĂˇron: 1â€“3 nap Â· RendelĂ©sre: 5â€“14 nap</p>
+      <p data-i18n="shipping_desc2">BiztonsĂˇgos csomagolĂˇs, zenĂ©szbarĂˇt ĂĽgyintĂ©zĂ©s.</p>
     </div>
   </section>
 
   <section class="product-reviews">
     <div class="product-panel">
-      <h2 data-i18n="reviews_title">Vélemények</h2>
-      <div id="reviews-list" class="review-list">Betöltés...</div>
+      <h2 data-i18n="reviews_title">VĂ©lemĂ©nyek</h2>
+      <div id="reviews-list" class="review-list">BetĂ¶ltĂ©s...</div>
       <div id="review-form" class="review-form d-none">
-        <textarea id="reviewText" style="resize:none;" placeholder="Írj véleményt..." data-i18n-placeholder="write_review"></textarea>
+        <textarea id="reviewText" style="resize:none;" placeholder="ĂŤrj vĂ©lemĂ©nyt..." data-i18n-placeholder="write_review"></textarea>
         <div class="review-stars" id="reviewStars"></div>
-        <button class="primary-btn" id="reviewSend" data-i18n="send">Küldés</button>
+        <button class="primary-btn" id="reviewSend" data-i18n="send">KĂĽldĂ©s</button>
       </div>
-      <p id="reviewLoginNote" class="review-note d-none" data-i18n="must_login_review">Jelentkezz be a vélemény írásához.</p>
+      <p id="reviewLoginNote" class="review-note d-none" data-i18n="must_login_review">Jelentkezz be a vĂ©lemĂ©ny Ă­rĂˇsĂˇhoz.</p>
     </div>
   </section>
 </main>
 
-<script src="../assets/js/review.js"></script>
+<script src="../assets/js/review.js?v=20260218-2"></script>
 <script src="../assets/js/hangszer.js"></script>
 <script src="../assets/js/DarkLight.js"></script>
 
 </body>
 </html>
+
+
+
+
+
+
+

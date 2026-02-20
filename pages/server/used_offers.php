@@ -22,14 +22,14 @@ function read_json() {
     return $_POST;
 }
 
-function get_current_auth_user() {
+function get_current_user() {
     return verify_jwt();
 }
 
 $method = $_SERVER["REQUEST_METHOD"];
 
 if ($method === "GET") {
-    $user = get_current_auth_user();
+    $user = get_current_user();
     $item_id = (int)($_GET["item_id"] ?? 0);
     $mine = trim($_GET["mine"] ?? "");
 

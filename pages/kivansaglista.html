@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
@@ -7,59 +7,173 @@
   <link rel="icon" href="../uploads/favicon-16x16.png">
   <link rel="stylesheet" href="../assets/css/LightTheme.css">
   <link rel="stylesheet" href="../assets/css/Mobile.css">
-  <link rel="stylesheet" href="../assets/css/wishlist.css">
+  <link rel="stylesheet" href="../assets/css/wishlist.css?v=20260220-1">
+  <script src="../assets/js/lang.js?v=20260219-9"></script>
 </head>
 <body>
-  <main class="wishlist-page">
-    <h1>Kívánságlista</h1>
-    <p>Itt látod a szívecskével mentett termékeket.</p>
-    <div class="wishlist-actions" style="margin:12px 0 18px;">
-      <a class="btn btn-outline-info" href="KEBhangszerek.html">← Vissza</a>
-      <button class="btn btn-outline-danger" id="clearWishlistBtn" type="button">Lista ürítése</button>
-    </div>
-    <div id="wishlistEmpty">Még nincs mentett termék.</div>
-    <div id="wishlistGrid" class="wishlist-grid"></div>
+  <main class="wishlist-page wishlist-modern">
+    <header class="wishlist-head">
+      <h1 data-i18n="wishlist_page_title">Kívánságlista</h1>
+      <p data-i18n="wishlist_page_desc">Itt látod a szívecskével mentett termékeket.</p>
+      <div class="wishlist-actions">
+        <a class="btn btn-outline-info" href="KEBhangszerek.html" data-i18n="back">← Vissza</a>
+        <button class="btn btn-outline-danger" id="clearWishlistBtn" type="button" data-i18n="wishlist_clear">Lista ürítése</button>
+      </div>
+    </header>
+
+    <div id="wishlistEmpty" class="wishlist-empty" data-i18n="wishlist_empty">Még nincs mentett termék.</div>
+    <div id="wishlistList" class="wishlist-list"></div>
+
+    <section class="wishlist-summary" id="wishlistSummary">
+      <div class="wishlist-currency" id="wishlistCurrency">
+        <button type="button" class="wishlist-currency-btn" data-currency="HUF">HUF</button>
+        <button type="button" class="wishlist-currency-btn" data-currency="EUR">EUR</button>
+        <button type="button" class="wishlist-currency-btn" data-currency="USD">USD</button>
+      </div>
+      <div class="wishlist-total-label" data-i18n="cart_total">Összesen</div>
+      <div id="wishlistTotal" class="wishlist-total-value">0 Ft</div>
+      <button id="wishlistAddAllBtn" class="wishlist-add-all" type="button" data-i18n="wishlist_add_all_cart">Mindet a kosárba</button>
+    </section>
   </main>
 
-  <script src="../assets/js/wishlist.js"></script>
+  <script src="../assets/js/wishlist.js?v=20260219-3"></script>
   <script>
     function renderWishlist() {
-      const items = (window.Wishlist && window.Wishlist.read) ? window.Wishlist.read() : [];
-      const grid = document.getElementById("wishlistGrid");
+      const tr = (key, fallback) =>
+        window.SH_LANG && window.SH_LANG.t ? window.SH_LANG.t(key) : (fallback || key);
+
+      const rates = { HUF: 1, EUR: 390, USD: 360 };
+      const currentCurrency = localStorage.getItem("currency") || "HUF";
+      const rawItems = (window.Wishlist && window.Wishlist.read) ? window.Wishlist.read() : [];
+      const items = rawItems.filter((it) => {
+        const img = String((it && it.image) || "").toLowerCase();
+        return !img.includes("default.avatar.jpg");
+      });
+
+      const list = document.getElementById("wishlistList");
       const empty = document.getElementById("wishlistEmpty");
-      if (!grid || !empty) return;
-      grid.innerHTML = "";
+      const totalEl = document.getElementById("wishlistTotal");
+      const summary = document.getElementById("wishlistSummary");
+      if (!list || !empty || !totalEl || !summary) return;
+
+      document.querySelectorAll(".wishlist-currency-btn").forEach((btn) => {
+        btn.classList.toggle("active", (btn.getAttribute("data-currency") || "") === currentCurrency);
+      });
+
+      function parsePriceFt(item) {
+        const rp = Number(item && item.raw_price);
+        if (Number.isFinite(rp) && rp > 0) return Math.round(rp);
+        const raw = String((item && item.price) || "").trim();
+        if (!raw) return 0;
+        const upper = raw.toUpperCase();
+        const numeric = raw
+          .replace(/[^\d.,]/g, "")
+          .replace(/\s+/g, "")
+          .replace(/\.(?=\d{3}(\D|$))/g, "")
+          .replace(/,(?=\d{3}(\D|$))/g, "")
+          .replace(",", ".");
+        const num = Number(numeric);
+        if (!Number.isFinite(num)) return 0;
+        if (upper.includes("EUR")) return Math.round(num * rates.EUR);
+        if (upper.includes("USD")) return Math.round(num * rates.USD);
+        return Math.round(num);
+      }
+
+      function formatMoney(amountFt) {
+        if (currentCurrency === "EUR") return `${(amountFt / rates.EUR).toFixed(2)} EUR`;
+        if (currentCurrency === "USD") return `${(amountFt / rates.USD).toFixed(2)} USD`;
+        return `${Math.round(amountFt).toLocaleString("hu-HU")} Ft`;
+      }
+
+      list.innerHTML = "";
       empty.style.display = items.length ? "none" : "block";
+      summary.style.display = items.length ? "flex" : "none";
+
+      let totalFt = 0;
 
       items.forEach((it) => {
-        const card = document.createElement("article");
-        card.className = "wishlist-item";
-        card.innerHTML = `
-          <img src="${it.image || "../uploads/Default.avatar.jpg"}" alt="${it.name || "Termék"}" onerror="this.onerror=null;this.src='../uploads/Default.avatar.jpg'">
-          <div class="wishlist-item-body">
-            <div class="wishlist-item-name">${it.name || "Termék"}</div>
-            <div class="wishlist-item-price">${it.price || ""}</div>
-            <div class="wishlist-actions">
-              <a class="btn btn-outline-info" href="${it.url || "#"}">Megnyitás</a>
-              <button class="btn btn-outline-danger" type="button">Törlés</button>
-            </div>
+        const safeImage = (window.Wishlist && window.Wishlist.normalizeImagePath)
+          ? window.Wishlist.normalizeImagePath(it.image)
+          : (it.image || "../uploads/Default.avatar.jpg");
+
+        const openUrl = (it.url && it.url !== "#") ? it.url : "KEBhangszerek.html";
+        const priceFt = parsePriceFt(it);
+        totalFt += priceFt;
+
+        const row = document.createElement("article");
+        row.className = "wishlist-row";
+        row.innerHTML = `
+          <a class="wishlist-item-link" href="${openUrl}">
+            <img class="wishlist-row-image" src="${safeImage}" alt="${it.name || "Termék"}" onerror="this.onerror=null;this.src='../uploads/Default.avatar.jpg'">
+          </a>
+          <div class="wishlist-row-main">
+            <a class="wishlist-item-link" href="${openUrl}"><div class="wishlist-item-name">${it.name || "Termék"}</div></a>
+            <div class="wishlist-item-price">${formatMoney(priceFt)}</div>
+            <div class="wishlist-item-price-raw">${it.price || ""}</div>
+          </div>
+          <div class="wishlist-row-actions">
+            <a class="btn btn-outline-info" href="${openUrl}">${tr("wishlist_open", "Megnyitás")}</a>
+            <button class="btn btn-outline-danger" type="button">${tr("wishlist_remove", "Törlés")}</button>
           </div>
         `;
-        const del = card.querySelector("button");
+
+        const del = row.querySelector("button");
         if (del) {
           del.addEventListener("click", () => {
-            const next = items.filter((x) => x.id !== it.id);
+            const next = rawItems.filter((x) => x.id !== it.id);
             window.Wishlist.write(next);
             renderWishlist();
           });
         }
-        grid.appendChild(card);
+
+        list.appendChild(row);
       });
+
+      totalEl.textContent = formatMoney(totalFt);
     }
 
     document.getElementById("clearWishlistBtn")?.addEventListener("click", () => {
       window.Wishlist.write([]);
       renderWishlist();
+    });
+
+    document.getElementById("wishlistAddAllBtn")?.addEventListener("click", () => {
+      const items = (window.Wishlist && window.Wishlist.read) ? window.Wishlist.read() : [];
+      const cart = JSON.parse(localStorage.getItem("kosar") || "[]");
+      const parseFt = (it) => {
+        const rp = Number(it && it.raw_price);
+        if (Number.isFinite(rp) && rp > 0) return Math.round(rp);
+        const raw = String((it && it.price) || "");
+        const numeric = raw
+          .replace(/[^\d.,]/g, "")
+          .replace(/\s+/g, "")
+          .replace(/\.(?=\d{3}(\D|$))/g, "")
+          .replace(/,(?=\d{3}(\D|$))/g, "")
+          .replace(",", ".");
+        const num = Number(numeric);
+        if (!Number.isFinite(num)) return 0;
+        if (/EUR/i.test(raw)) return Math.round(num * 390);
+        if (/USD/i.test(raw)) return Math.round(num * 360);
+        return Math.round(num);
+      };
+      items.forEach((it) => {
+        const nev = it.name || "Termék";
+        const ar = parseFt(it);
+        if (!ar) return;
+        const existing = cart.find((x) => x.nev === nev && Number(x.ar) === ar);
+        if (existing) existing.db = Math.min(5, Number(existing.db || 1) + 1);
+        else cart.push({ nev, ar, db: 1 });
+      });
+      localStorage.setItem("kosar", JSON.stringify(cart));
+      window.location.href = "KEB-Kos%C3%A1r.html";
+    });
+
+    document.querySelectorAll(".wishlist-currency-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const code = btn.getAttribute("data-currency") || "HUF";
+        localStorage.setItem("currency", code);
+        renderWishlist();
+      });
     });
 
     window.addEventListener("wishlist:changed", renderWishlist);
@@ -68,3 +182,11 @@
   <script src="../assets/js/DarkLight.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+

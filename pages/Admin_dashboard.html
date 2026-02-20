@@ -5,27 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin Panel</title>
-<script>
-  (function () {
-    const adminGuardToken = localStorage.getItem("token");
-    if (!adminGuardToken) {
-      window.location.replace("profile.html");
-      return;
-    }
-    let payload = null;
-    try {
-      payload = JSON.parse(atob(adminGuardToken.split(".")[1] || ""));
-    } catch (_) {
-      payload = null;
-    }
-    const role = payload && payload.data ? String(payload.data.role || "").toLowerCase() : "";
-    const exp = payload && payload.exp ? Number(payload.exp) : 0;
-    const isExpired = exp > 0 && exp < Math.floor(Date.now() / 1000);
-    if (role !== "admin" || isExpired) {
-      window.location.replace("profile.html");
-    }
-  })();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -517,6 +496,54 @@
     h1 { font-size: clamp(30px, 8vw, 44px); }
     .panel h2 { font-size: clamp(24px, 7vw, 34px); }
     .section-title { font-size: clamp(20px, 6vw, 28px); }
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .topbar-right {
+      width: 100%;
+      justify-content: flex-start;
+      gap: 8px;
+    }
+
+    .theme-switch,
+    .lang-switch {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .lang-pill,
+    .theme-pill,
+    .top-link {
+      flex: 1 1 auto;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .panel {
+      padding: 12px;
+    }
+
+    .preview {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .row,
+    .product-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -1241,3 +1268,7 @@ Promise.all([loadCategories(), loadUsers(), loadProducts()]).catch(e => {
 </script>
 </body>
 </html>
+
+
+
+

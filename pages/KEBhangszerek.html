@@ -8,10 +8,10 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="../assets/css/KEBhangszerbolt.css?v=2" />
+  <link rel="stylesheet" href="../assets/css/KEBhangszerbolt.css?v=4" />
   <link rel="stylesheet" href="../assets/css/LightTheme.css" />
   <link rel="stylesheet" href="../assets/css/Mobile.css" />
-  <link rel="stylesheet" href="../assets/css/wishlist.css" />
+  <link rel="stylesheet" href="../assets/css/wishlist.css?v=20260218-5" />
 
   <style>
     body.home-page {
@@ -72,6 +72,34 @@
       align-items: center;
       gap: 15px;
       z-index: 10;
+    }
+
+    .chat-icon-link {
+      position: relative;
+      overflow: visible;
+    }
+
+    .chat-unread-badge-home {
+      position: absolute;
+      top: -9px;
+      right: -9px;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 205, 205, 0.7);
+      background: linear-gradient(135deg, #d11b1b, #ff4040);
+      color: #ffffff;
+      font-size: 0.64rem;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      box-shadow: 0 8px 18px rgba(160, 4, 4, 0.45);
+      white-space: nowrap;
+      pointer-events: none;
     }
 
     #togglePanelBtn {
@@ -230,9 +258,8 @@
 
     .vibe-chip:hover,
     .vibe-chip.active {
-      transform: translateY(-2px);
       border-color: rgba(170, 236, 255, 0.85);
-      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.34), 0 0 16px rgba(98, 212, 255, 0.2);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.26), 0 0 10px rgba(98, 212, 255, 0.16);
     }
 
     .video-promo {
@@ -283,7 +310,6 @@
       backdrop-filter: blur(2px);
       transition: transform .22s ease, opacity .22s ease, box-shadow .22s ease;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
-      animation: promoChipFloat 2.8s ease-in-out infinite;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -362,6 +388,15 @@
         justify-self: center;
         width: 100%;
         max-width: 560px;
+      }
+
+      .chat-unread-badge-home {
+        right: -8px;
+        top: -8px;
+        font-size: 0.6rem;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
       }
     }
 
@@ -514,7 +549,7 @@
 
     .sp-tabs {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 12px;
     }
@@ -599,6 +634,29 @@
       border-color: #dce6ff;
     }
 
+    .quote-input,
+    #quoteTag {
+      color: #eaf6ff;
+      background: rgba(8, 24, 42, 0.92);
+    }
+
+    #quoteTag option {
+      color: #0f2947;
+      background: #eaf2ff;
+    }
+
+    body.light-theme .quote-input,
+    body.light-theme #quoteTag {
+      color: #1a3350;
+      background: #ffffff;
+      border-color: #c9dafb;
+    }
+
+    body.light-theme #quoteTag option {
+      color: #1a3350;
+      background: #ffffff;
+    }
+
     body.light-theme #toggleThemeBtn {
       background: linear-gradient(135deg, #2f80da, #1662b3);
       color: #ffffff;
@@ -609,7 +667,7 @@
 </head>
 <body class="home-page">
 
-  <button id="togglePanelBtn" class="btn btn-outline-info position-fixed top-0 start-0 m-3 z-3" data-i18n="menu_btn">☰ Men&uuml;</button>
+  <button id="togglePanelBtn" class="btn btn-outline-info position-fixed top-0 start-0 m-3 z-3"><span aria-hidden="true">☰</span> <span data-i18n="menu_btn">Men&uuml;</span></button>
 
   <header>
     <div class="header-title">KEB hangszerbolt</div>
@@ -618,7 +676,7 @@
 
   <div class="header-icons">
     <a href="KEB-Kos%C3%A1r.html" class="icon icon-circle" aria-label="Kosar">&#128722;</a>
-    <a href="chat.html" class="icon icon-circle" aria-label="Chat">&#128172;</a>
+    <a href="chat.html" class="icon icon-circle chat-icon-link" id="chatIconLink" aria-label="Chat">&#128172;<span id="chatUnreadBadge" class="chat-unread-badge-home d-none"></span></a>
     <div class="currency-lang">
       <div class="currency-flags" role="group" aria-label="Valuta">
         <button type="button" class="currency-flag flag-hu" data-currency="HUF" aria-label="HUF"></button>
@@ -644,14 +702,14 @@
 
   <div id="sidePanel">
     <div class="sp-head">
-      <h2 class="sp-title" data-i18n="side_panel">Oldals&oacute; panel</h2>
+      <h2 class="sp-title" data-i18n="side_panel">Men&uuml;</h2>
     </div>
-    <div class="sp-tabs" role="tablist" aria-label="Men&uuml; szekci&oacute;k">
-      <button class="sp-tab-btn active" type="button" data-panel-target="spProducts" data-i18n="tab_products">Term&eacute;kek</button>
-      <button class="sp-tab-btn" type="button" data-panel-target="spServices" data-i18n="tab_services">Szolg&aacute;ltat&aacute;sok</button>
+    <div class="sp-tabs">
+      <button type="button" class="sp-tab-btn active" data-target="spProducts" data-i18n="tab_products">Term&eacute;kek</button>
+      <button type="button" class="sp-tab-btn" data-target="spInfo" data-i18n="tab_about">R&oacute;lunk</button>
+      <button type="button" class="sp-tab-btn" data-target="spOther" data-i18n="tab_other">Egy&eacute;b</button>
     </div>
-
-    <div id="spProducts" class="sp-tab-panel active">
+    <div id="spProducts" class="sp-tab-panel active" style="display:block;">
       <a class="sp-link" href="KEB-Git%C3%A1r.html" data-i18n="cat_gitar">Git&aacute;r</a>
       <a class="sp-link" href="KEB-Basszus.html" data-i18n="cat_bass">Basszus git&aacute;r</a>
       <a class="sp-link" href="KEB-Dobszettek.html" data-i18n="cat_drum">Dobszettek</a>
@@ -659,19 +717,20 @@
       <a class="sp-link" href="KEB-Mikrofon.html" data-i18n="cat_mic">Mikrofon</a>
       <a class="sp-link" href="KEB-Tartoz%C3%A9kok.html" data-i18n="cat_accessories">Tartoz&eacute;kok</a>
       <a class="sp-link" href="KEB-Hangfalak.html" data-i18n="cat_speakers">Hangfalak</a>
+    </div>
+    <div id="spOther" class="sp-tab-panel">
       <a class="sp-link" href="hasznalt.html" data-i18n="used_title">Haszn&aacute;lt elad&oacute; cuccok</a>
       <a class="sp-link" href="kivansaglista.html" data-i18n="wishlist_title">K&iacute;v&aacute;ns&aacute;glista</a>
-    </div>
-
-    <div id="spServices" class="sp-tab-panel">
       <a class="sp-link" href="bandakereso.html" data-i18n="band_title">Bandakeres&#337;</a>
       <a class="sp-link" href="chat.html" data-i18n="chat_title">Chat</a>
-      <a class="sp-link" href="KEB-Account.html" data-i18n="account_title">Fi&oacute;k</a>
+      <a class="sp-link" id="sideAccountLink" href="KEB-Account.html" data-i18n="account_title">Fi&oacute;k</a>
+    </div>
+    <div id="spInfo" class="sp-tab-panel">
       <a class="sp-link" href="szallitas.html" data-i18n="shipping">Sz&aacute;ll&iacute;t&aacute;s</a>
       <a class="sp-link" href="ASZF.html" data-i18n="terms">ASZF</a>
       <a class="sp-link" href="Garancia.html" data-i18n="warranty">Garancia</a>
       <a class="sp-link" href="adatvedelem.html" data-i18n="privacy">Adatv&eacute;delem</a>
-      <a class="sp-link" href="El%C3%A9rhet%C5%91s%C3%A9gek.html" data-i18n="contacts">El&eacute;rhet&#337;s&eacute;geink</a>
+      <a class="sp-link" href="elerhetosegek.html" data-i18n="contacts">El&eacute;rhet&#337;s&eacute;geink</a>
     </div>
 
     <button id="toggleThemeBtn" type="button" data-i18n="theme_toggle">T&eacute;ma v&aacute;lt&aacute;s</button>
@@ -698,7 +757,7 @@
 
       <div class="search-container compact search-inline">
         <div class="search-inner">
-          <input type="text" id="searchInput" placeholder="Keres&eacute;s..." data-i18n-placeholder="search">
+          <input type="text" id="searchInput" placeholder="Keres&eacute;s..." data-i18n-placeholder="search" autocomplete="off" autocapitalize="off" spellcheck="false">
           <button type="button">&#128269;</button>
         </div>
       </div>
@@ -713,17 +772,17 @@
   </div>
 
   <section class="vibe-strip" aria-label="Gyors linkek">
-    <a class="vibe-chip" href="KEB-Git%C3%A1r.html">🎸 Gitár ajánlatok</a>
-    <a class="vibe-chip" href="KEB-Basszus.html">🎼 Basszus újdonságok</a>
-    <a class="vibe-chip" href="hasznalt.html">♻️ Használt piactér</a>
-    <a class="vibe-chip" href="bandakereso.html">🤝 Zenekar kereső</a>
-    <a class="vibe-chip" href="chat.html">💬 Üzenetek</a>
+    <a class="vibe-chip" href="KEB-Git%C3%A1r.html" data-i18n="vibe_guitar_offers">Gitár ajánlatok</a>
+    <a class="vibe-chip" href="KEB-Basszus.html" data-i18n="vibe_bass_news">Basszus újdonságok</a>
+    <a class="vibe-chip" href="hasznalt.html" data-i18n="vibe_used_market">Használt piactér</a>
+    <a class="vibe-chip" href="bandakereso.html" data-i18n="vibe_band_search">Zenekar kereső</a>
+    <a class="vibe-chip" href="chat.html" data-i18n="messages_btn">Üzenetek</a>
   </section>
 
   <div class="carousel">
     <div class="carousel-promo" id="carouselPromo">
       <div class="promo-tag" data-i18n="promo_tag">Vedd meg most!</div>
-      <div class="promo-name" id="promoName">Gitár</div>
+      <div class="promo-name" id="promoName" data-i18n="cat_gitar">Gitár</div>
       <button class="promo-btn" id="promoBtn" type="button" data-i18n="view">Megnézem</button>
     </div>
     <div class="carousel-track" id="carouselTrack"></div>
@@ -735,7 +794,6 @@
         <h2 data-i18n="promo_title_long">Akci&oacute;k</h2>
         <p data-i18n="promo_desc">Friss le&aacute;raz&aacute;sok a h&eacute;ten. Kattints &eacute;s n&eacute;zd meg a r&eacute;szleteket.</p>
       </div>
-      <a class="section-link" href="KEB-Kos%C3%A1r.html" data-i18n="promo_cart">Akci&oacute;s kos&aacute;r</a>
     </div>
 
     <div class="promo-grid">
@@ -878,7 +936,6 @@
       <div class="quote-form-title" data-i18n="quote_title">V&eacute;lem&eacute;ny &iacute;r&aacute;sa</div>
       <textarea id="quoteText" class="quote-input" rows="3" placeholder="&Iacute;rj v&eacute;lem&eacute;nyt..." data-i18n-placeholder="write_review"></textarea>
       <div class="quote-form-row">
-        <input id="quoteName" class="quote-input" type="text" placeholder="N&eacute;v" data-i18n-placeholder="name" readonly>
         <select id="quoteTag" class="quote-input">
           <option value="Az oldal" data-i18n="tag_site">Az oldal</option>
           <option value="Git&aacute;r" data-i18n="tag_gitar">Git&aacute;r</option>
@@ -892,31 +949,50 @@
       </div>
       <button id="quoteSubmit" class="quote-submit" type="button" data-i18n="send">K&uuml;ld&eacute;s</button>
     </div>
-    <p id="quoteLoginNote" class="quote-login-note" data-i18n="must_login_review">Be kell jelentkezned a vélemény írásához!</p>
   </section>
 
-  <script src="../assets/js/lang.js?v=20260204"></script>
+  <script src="../assets/js/lang.js?v=20260219-9"></script>
 
   <script>
     const toggleBtn = document.getElementById("togglePanelBtn");
     const sidePanel = document.getElementById("sidePanel");
-    toggleBtn.addEventListener("click", () => {
-      sidePanel.classList.toggle("active");
-    });
+    if (toggleBtn && sidePanel) {
+      toggleBtn.addEventListener("click", () => {
+        sidePanel.classList.toggle("active");
+      });
+    }
 
     document.querySelectorAll(".sp-tab-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const target = btn.getAttribute("data-panel-target");
-        document.querySelectorAll(".sp-tab-btn").forEach((b) => b.classList.toggle("active", b === btn));
-        document.querySelectorAll(".sp-tab-panel").forEach((panel) => {
-          panel.classList.toggle("active", panel.id === target);
+        const target = btn.getAttribute("data-target");
+        document.querySelectorAll(".sp-tab-btn").forEach((x) => x.classList.remove("active"));
+        document.querySelectorAll(".sp-tab-panel").forEach((p) => {
+          p.classList.remove("active");
+          p.style.display = "none";
         });
+        btn.classList.add("active");
+        const panel = document.getElementById(target);
+        if (panel) {
+          panel.classList.add("active");
+          panel.style.display = "block";
+        }
       });
     });
+
+    // Ensure side-panel links always navigate even if overlay/ui handlers interfere.
+    document.querySelectorAll("#sidePanel .sp-link").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        const href = a.getAttribute("href");
+        if (!href) return;
+        e.preventDefault();
+        window.location.assign(href);
+      });
+    });
+
   </script>
 
   <script src="../assets/js/DarkLight.js"></script>
-  <script src="../assets/js/wishlist.js"></script>
+  <script src="../assets/js/wishlist.js?v=20260219-3"></script>
 
   <script>
     const APP_BASE = (() => {
@@ -954,10 +1030,15 @@
     });
 
     const token = localStorage.getItem("token");
+    const sideAccountLink = document.getElementById("sideAccountLink");
     const profileLink = document.getElementById("profileLink");
 
     if (token) {
       let profileHref = "profile.html";
+      if (sideAccountLink) {
+        sideAccountLink.style.display = "";
+        sideAccountLink.href = profileHref;
+      }
 
       fetch(`../server/get_profile_pic.php?t=${Date.now()}`, {
         method: "GET",
@@ -971,7 +1052,9 @@
         if (data.status === "ok") {
           if (data.username) {
             profileHref = `profile.html?user=${encodeURIComponent(data.username)}`;
+            window.__homeReviewAuthor = data.username;
           }
+          if (sideAccountLink) sideAccountLink.href = profileHref;
           profileLink.href = profileHref;
           const loginIcon = document.getElementById("loginIcon");
           if (loginIcon) loginIcon.classList.add("d-none");
@@ -987,6 +1070,7 @@
 
     } else {
       profileLink.href = "../server/account.php";
+      if (sideAccountLink) sideAccountLink.style.display = "none";
     }
   </script>
 
@@ -997,6 +1081,54 @@
       if (!translated || translated === key) return fallback || key;
       return translated;
     };
+    const chatUnreadBadge = document.getElementById("chatUnreadBadge");
+    let latestUnreadTotal = 0;
+
+    function setChatUnreadBadge(totalUnread) {
+      latestUnreadTotal = Number(totalUnread) || 0;
+      if (!chatUnreadBadge) return;
+      if (latestUnreadTotal <= 0) {
+        chatUnreadBadge.classList.add("d-none");
+        chatUnreadBadge.textContent = "";
+        return;
+      }
+
+      chatUnreadBadge.textContent = latestUnreadTotal > 99 ? "99+" : String(latestUnreadTotal);
+      chatUnreadBadge.classList.remove("d-none");
+    }
+
+    async function refreshChatUnreadBadge() {
+      const authToken = localStorage.getItem("token");
+      if (!authToken) {
+        setChatUnreadBadge(0);
+        return;
+      }
+      try {
+        const res = await fetch("../server/chat.php?threads=1", {
+          headers: { Authorization: `Bearer ${authToken}` },
+          cache: "no-store"
+        });
+        if (!res.ok) {
+          setChatUnreadBadge(0);
+          return;
+        }
+        const threads = await res.json();
+        const totalUnread = Array.isArray(threads)
+          ? threads.reduce((sum, t) => sum + (Number(t && t.unread) || 0), 0)
+          : 0;
+        setChatUnreadBadge(totalUnread);
+      } catch (_) {
+        setChatUnreadBadge(0);
+      }
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".lang-pill")) return;
+      setTimeout(() => setChatUnreadBadge(latestUnreadTotal), 0);
+    });
+    refreshChatUnreadBadge();
+    setInterval(refreshChatUnreadBadge, 15000);
+
     const promoItems = [
       { name: "Yamaha Pacifica 112V", page: "hangszer.html?cat=gitar&id=1" },
       { name: "Fender Stratocaster", page: "hangszer.html?cat=gitar&id=2" },
@@ -1031,15 +1163,15 @@
         const alt = img.alt || "Carousel kep";
         return `<img src="${src}" alt="${alt}" onerror="this.onerror=null; this.src='../uploads/Default.avatar.jpg';">`;
       }).join("");
+      requestAnimationFrame(() => {
+        const loopWidth = carouselTrack.scrollWidth / 2;
+        if (loopWidth > 0) {
+          carouselTrack.style.setProperty("--carousel-loop-width", `${loopWidth}px`);
+        }
+      });
     }
 
-    fetch("../api/site_media.php", { cache: "no-store" })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        const imgs = data && Array.isArray(data.carousel_images) ? data.carousel_images : [];
-        renderCarousel(imgs);
-      })
-      .catch(() => renderCarousel([]));
+    renderCarousel(fallbackCarousel);
 
     function setPromo() {
       if (!promoWrap || !promoName || !promoBtn) return;
@@ -1059,15 +1191,7 @@
     }
 
     const vibeChips = Array.from(document.querySelectorAll(".vibe-chip"));
-    if (vibeChips.length) {
-      let chipIndex = 0;
-      vibeChips[0].classList.add("active");
-      setInterval(() => {
-        vibeChips[chipIndex].classList.remove("active");
-        chipIndex = (chipIndex + 1) % vibeChips.length;
-        vibeChips[chipIndex].classList.add("active");
-      }, 1900);
-    }
+    vibeChips.forEach((chip) => chip.classList.remove("active"));
 
     const searchInput = document.getElementById("searchInput");
     function showToast(message) {
@@ -1140,14 +1264,14 @@
     });
 
     const fallbackProducts = [
-      { nev: "Yamaha Pacifica 112V", ar: 129000, kep: "../uploads/Yamaha.jpg", page: "KEB-Git%C3%A1r.html" },
-      { nev: "Fender Stratocaster", ar: 289000, kep: "../uploads/Fender Stratocaster.jpg", page: "KEB-Git%C3%A1r.html" },
-      { nev: "Ibanez RG421", ar: 179000, kep: "../uploads/Ibanez RG421.jpg", page: "KEB-Git%C3%A1r.html" },
-      { nev: "Yamaha TRBX174", ar: 99000, kep: "../uploads/bass2.jpg", page: "KEB-Basszus.html" },
-      { nev: "Pearl Export Series", ar: 349000, kep: "../uploads/dob2.jpg", page: "KEB-Dobszettek.html" },
-      { nev: "Shure SM58", ar: 48900, kep: "../uploads/mik1.jpg", page: "KEB-Mikrofon.html" },
-      { nev: "Yamaha HS5", ar: 109000, kep: "../uploads/hang1.jpg", page: "KEB-Hangfalak.html" },
-      { nev: "Gitár heveder", ar: 5900, kep: "../uploads/tart1.jpg", page: "KEB-Tartoz%C3%A9kok.html" }
+      { nev: "Yamaha Pacifica 112V", ar: 129000, kep: "../uploads/Yamaha.jpg", page: "KEB-Git%C3%A1r.html", category_slug: "gitar" },
+      { nev: "Fender Stratocaster", ar: 289000, kep: "../uploads/Fender Stratocaster.jpg", page: "KEB-Git%C3%A1r.html", category_slug: "gitar" },
+      { nev: "Ibanez RG421", ar: 179000, kep: "../uploads/Ibanez RG421.jpg", page: "KEB-Git%C3%A1r.html", category_slug: "gitar" },
+      { nev: "Yamaha TRBX174", ar: 99000, kep: "../uploads/bass2.jpg", page: "KEB-Basszus.html", category_slug: "basszus-gitar" },
+      { nev: "Pearl Export Series", ar: 349000, kep: "../uploads/dob2.jpg", page: "KEB-Dobszettek.html", category_slug: "dobszettek" },
+      { nev: "Shure SM58", ar: 48900, kep: "../uploads/mik1.jpg", page: "KEB-Mikrofon.html", category_slug: "mikrofon" },
+      { nev: "Yamaha HS5", ar: 109000, kep: "../uploads/hang1.jpg", page: "KEB-Hangfalak.html", category_slug: "hangfalak" },
+      { nev: "Gitár heveder", ar: 5900, kep: "../uploads/tart1.jpg", page: "KEB-Tartoz%C3%A9kok.html", category_slug: "tartozekok" }
     ];
 
     let products = [...fallbackProducts];
@@ -1161,16 +1285,79 @@
       "hangfalak": "KEB-Hangfalak.html"
     };
 
+    const categoryImageFallback = {
+      "gitar": "../uploads/Yamaha.jpg",
+      "basszus-gitar": "../uploads/bass2.jpg",
+      "dobszettek": "../uploads/dob2.jpg",
+      "billentyu": "../uploads/bill1.jpg",
+      "mikrofon": "../uploads/mik1.jpg",
+      "tartozekok": "../uploads/tart1.jpg",
+      "hangfalak": "../uploads/hang1.jpg"
+    };
+
+    function normalizeProductImagePath(raw, slug) {
+      const p = String(raw || "").trim();
+      if (!p) return categoryImageFallback[slug] || "../uploads/Default.avatar.jpg";
+      if (/^(https?:)?\/\//i.test(p) || p.startsWith("data:")) return p;
+      if (p.startsWith("../") || p.startsWith("./")) return p;
+      if (p.startsWith("/uploads/")) return `..${p}`;
+      if (p.startsWith("uploads/")) return `../${p}`;
+      if (/\/uploads\//i.test(p)) return p;
+      return categoryImageFallback[slug] || "../uploads/Default.avatar.jpg";
+    }
+
+    function repairMojibakeText(value) {
+      let out = String(value || "").trim();
+      if (!out) return out;
+      const looksBroken = /[ÃÂÄÅ�]/.test(out);
+      if (looksBroken) {
+        try {
+          const repaired = decodeURIComponent(escape(out));
+          if (repaired) out = repaired;
+        } catch (_) {}
+      }
+      return out.replace(/\s+/g, " ").trim();
+    }
+
+    function categoryI18nKey(slug) {
+      const map = {
+        "gitar": "cat_gitar",
+        "basszus-gitar": "cat_bass",
+        "dobszettek": "cat_drum",
+        "billentyu": "cat_keys",
+        "mikrofon": "cat_mic",
+        "tartozekok": "cat_accessories",
+        "hangfalak": "cat_speakers"
+      };
+      return map[String(slug || "").trim()] || "";
+    }
+
+    const categoryAliases = {
+      "gitar": ["gitar", "gitar", "guitar", "gitarre"],
+      "basszus-gitar": ["basszus", "basszus gitar", "bass guitar", "bass", "bassgitarre"],
+      "dobszettek": ["dob", "dobszett", "drum", "drums", "schlagzeug"],
+      "billentyu": ["billentyu", "billentyu", "keyboard", "keys", "tasten", "klavier"],
+      "mikrofon": ["mikrofon", "microphone", "mic", "mikro"],
+      "tartozekok": ["tartozek", "tartozekok", "accessory", "accessories", "zubehor", "zubehoer"],
+      "hangfalak": ["hangfal", "hangfalak", "speaker", "speakers", "lautsprecher", "box"]
+    };
+
     fetch("../api/products.php?limit=500", { cache: "no-store" })
       .then(r => r.json())
       .then(list => {
         if (!Array.isArray(list) || !list.length) return;
         products = list.map(p => ({
-          nev: p.nev,
+          nev: repairMojibakeText(p.nev),
           ar: p.ar,
-          kep: p.kep || "../uploads/Default.avatar.jpg",
+          category_slug: p.category_slug || "",
+          kep: normalizeProductImagePath(p.kep, p.category_slug || ""),
           page: categoryPage[p.category_slug] || "KEBhangszerek.html"
-        }));
+        })).filter((p) => {
+          const name = String(p.nev || "").trim();
+          if (!name) return false;
+          const image = String(p.kep || "").toLowerCase();
+          return !image.includes("default.avatar.jpg");
+        });
       })
       .catch(() => {
         products = [...fallbackProducts];
@@ -1181,6 +1368,7 @@
 
     const searchField = searchContainer.querySelector("input");
     if (!searchField) return;
+    searchField.setAttribute("autocomplete", "off");
     const searchButton = searchContainer.querySelector("button");
     const searchInner = searchContainer.querySelector(".search-inner");
 
@@ -1210,14 +1398,25 @@
     function normalizeSearchText(value) {
       return (value || "")
         .toString()
+        .replace(/ß/g, "ss")
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
         .trim();
+    }
+
+    function searchableCategoryText(slug) {
+      const key = categoryI18nKey(slug);
+      const translated = key ? tr(key, "") : "";
+      const aliases = categoryAliases[String(slug || "").trim()] || [];
+      return normalizeSearchText([translated, ...aliases].join(" "));
     }
 
     function renderSearch() {
       const q = normalizeSearchText(searchField.value);
+      const qTokens = q.split(" ").filter(Boolean);
       searchBox.innerHTML = "";
 
       if (!q) {
@@ -1225,7 +1424,19 @@
         return;
       }
 
-      const results = products.filter(p => normalizeSearchText(p.nev).includes(q));
+      const seenResults = new Set();
+      const results = products.filter((p) => {
+        const cleanName = repairMojibakeText(String(p.nev || "").replace(/\s*\([^)]*\)\s*/g, " ").trim());
+        const baseName = normalizeSearchText(cleanName);
+        const catText = searchableCategoryText(p.category_slug);
+        const haystack = `${baseName} ${catText}`.trim();
+        if (!haystack) return false;
+        if (!qTokens.every((token) => haystack.includes(token))) return false;
+        const dedupeKey = `${baseName}|${p.category_slug || ""}`;
+        if (seenResults.has(dedupeKey)) return false;
+        seenResults.add(dedupeKey);
+        return true;
+      });
 
       if (!results.length) {
         const empty = document.createElement("div");
@@ -1245,13 +1456,17 @@
         img.src = item.kep;
         img.alt = item.nev;
         img.className = "search-thumb";
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = categoryImageFallback[item.category_slug] || "../uploads/Default.avatar.jpg";
+        };
 
         const textWrap = document.createElement("div");
         textWrap.className = "search-text";
 
         const name = document.createElement("div");
         name.className = "search-name";
-        name.textContent = item.nev;
+        name.textContent = repairMojibakeText(item.nev);
 
         const price = document.createElement("div");
         price.className = "search-price";
@@ -1265,7 +1480,7 @@
 
         row.addEventListener("click", () => {
           window.location.href =
-            item.page + "?product=" + encodeURIComponent(item.nev);
+            item.page + "?product=" + encodeURIComponent(repairMojibakeText(item.nev));
         });
 
         searchBox.appendChild(row);
@@ -1345,13 +1560,27 @@
     const quotePage = document.getElementById("quotePage");
     const quoteForm = document.getElementById("quoteForm");
     const quoteText = document.getElementById("quoteText");
-    const quoteName = document.getElementById("quoteName");
     const quoteTag = document.getElementById("quoteTag");
     const quoteSubmit = document.getElementById("quoteSubmit");
-    const quoteLoginNote = document.getElementById("quoteLoginNote");
+    let quoteAuthorName = (window.__homeReviewAuthor || "").trim();
+    const authToken = localStorage.getItem("token");
 
-    const storageKey = "home_quotes";
-    const stored = JSON.parse(localStorage.getItem(storageKey) || "null");
+    async function resolveQuoteAuthor() {
+      if (!authToken) return "";
+      if (quoteAuthorName) return quoteAuthorName;
+      try {
+        const res = await fetch("../server/profile_api.php", {
+          headers: { "Authorization": "Bearer " + authToken },
+          cache: "no-store"
+        });
+        const data = res.ok ? await res.json() : null;
+        quoteAuthorName = String(data && data.user && data.user.username ? data.user.username : "").trim();
+        return quoteAuthorName;
+      } catch (_) {
+        return "";
+      }
+    }
+
     const buildDefaultQuotes = () => ([
       { text: tr("quote_1_text"), name: "Toth Erik", tag: "Gitar" },
       { text: tr("quote_2_text"), name: "Dani", tag: "Gitar" },
@@ -1359,11 +1588,20 @@
       { text: tr("quote_4_text"), name: "Mark", tag: "Billentyu" }
     ]);
 
-    let quotes = Array.isArray(stored) && stored.length ? stored : buildDefaultQuotes();
-    let currentUserName = "";
+    let serverQuotes = [];
+    let quotes = buildDefaultQuotes();
 
     let quotePageIndex = 0;
     const perPage = 4;
+
+    function escHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
     function translateTag(tag) {
       const raw = (tag || "").toString().trim().toLowerCase();
@@ -1387,11 +1625,13 @@
       slice.forEach(q => {
         const card = document.createElement("article");
         card.className = "quote-card";
-        const tagLabel = translateTag(q.tag);
+        const text = escHtml(q.text);
+        const name = escHtml(q.name);
+        const tagLabel = escHtml(translateTag(q.tag));
         card.innerHTML = `
-          <p class="quote-text">"${q.text}"</p>
+          <p class="quote-text">"${text}"</p>
           <div class="quote-meta">
-            <span class="quote-name">${q.name}</span>
+            <span class="quote-name">${name}</span>
             <span class="quote-note">${tagLabel}</span>
           </div>
         `;
@@ -1422,47 +1662,64 @@
       });
     }
 
-    if (quoteForm) {
-      const token = localStorage.getItem("token");
-      let payload = null;
-      try {
-        payload = token ? JSON.parse(atob(token.split(".")[1] || "")) : null;
-      } catch (_) {
-        payload = null;
-      }
-      currentUserName = (payload && payload.data && payload.data.username) ? String(payload.data.username).trim() : "";
-
-      const canWrite = !!(token && currentUserName);
-      quoteForm.classList.toggle("d-none", !canWrite);
-      if (quoteLoginNote) quoteLoginNote.classList.toggle("d-none", canWrite);
-      if (quoteName) quoteName.value = currentUserName;
-    }
-
-    if (quoteSubmit) {
-      quoteSubmit.addEventListener("click", () => {
-        if (!currentUserName) return;
-        const text = (quoteText.value || "").trim();
-        const name = currentUserName;
-        const tag = (quoteTag.value || tr("tag_site")).trim();
-        if (!text) return;
-        quotes.unshift({ text, name, tag: tag || "Hangszer" });
-        localStorage.setItem(storageKey, JSON.stringify(quotes));
-        quoteText.value = "";
-        quoteName.value = currentUserName;
-        quoteTag.value = "";
-        quotePageIndex = 0;
-        renderQuotes();
+    if (quoteForm && authToken) {
+      resolveQuoteAuthor().then((name) => {
+        if (name) quoteForm.classList.remove("d-none");
       });
     }
 
-    renderQuotes();
+    async function loadHomeReviews() {
+      try {
+        const res = await fetch("../server/home_reviews.php", { cache: "no-store" });
+        const data = res.ok ? await res.json() : null;
+        const list = Array.isArray(data && data.reviews) ? data.reviews : [];
+        serverQuotes = list
+          .map((q) => ({
+            text: String((q && q.text) || "").trim(),
+            name: String((q && q.name) || "").trim(),
+            tag: String((q && q.tag) || "").trim()
+          }))
+          .filter((q) => q.text && q.name);
+      } catch (_) {
+        serverQuotes = [];
+      }
+      quotes = serverQuotes.length ? serverQuotes : buildDefaultQuotes();
+      quotePageIndex = 0;
+      renderQuotes();
+    }
 
-    window.onLangChange = () => {
-      if (!Array.isArray(stored) || !stored.length) {
+    if (quoteSubmit) {
+      quoteSubmit.addEventListener("click", async () => {
+        const text = (quoteText.value || "").trim();
+        const name = await resolveQuoteAuthor();
+        const tag = (quoteTag.value || tr("tag_site")).trim();
+        if (!text || !name) return;
+        const fd = new FormData();
+        fd.append("text", text);
+        fd.append("tag", tag || tr("tag_site"));
+        const res = await fetch("../server/home_reviews.php", {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + authToken },
+          body: fd
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || (data && data.error)) return;
+        quoteText.value = "";
+        quoteTag.value = "";
+        await loadHomeReviews();
+      });
+    }
+
+    loadHomeReviews();
+
+    window.onLangChange = async () => {
+      if (!serverQuotes.length) {
         quotes = buildDefaultQuotes();
         quotePageIndex = 0;
+        renderQuotes();
+        return;
       }
-      renderQuotes();
+      await loadHomeReviews();
     };
   });
   </script>
@@ -1473,12 +1730,11 @@
     </video>
     <div class="video-overlay"></div>
     <div class="promo-rotator">
-      <a id="promoRotateLink" class="promo-chip" href="hasznalt.html">Használt gitárok</a>
+      <a id="promoRotateLink" class="promo-chip" href="hasznalt.html" data-i18n="video_link_used">Használt piactér</a>
     </div>
     <div class="video-controls">
-      <button id="promoMuteBtn" class="video-control-btn" type="button">Némítva</button>
+      <button id="promoMuteBtn" class="video-control-btn" type="button" data-i18n="video_muted">Némítva</button>
     </div>
-    <p class="video-caption" data-i18n="video_caption">Friss hangulatvideó a közösségről. Fent váltakozva gyors linket kapsz a Használt gitárok és a Bandakereső oldalra.</p>
   </section>
 
   <script>
@@ -1524,6 +1780,10 @@
           promoVideo.muted = !promoVideo.muted;
           if (!promoVideo.paused) promoVideo.play().catch(() => {});
           refreshMute();
+        });
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest(".lang-pill")) return;
+          setTimeout(refreshMute, 0);
         });
       }
 
@@ -1587,7 +1847,7 @@
         <ul>
           <li><a href="szallitas.html" data-i18n="shipping_pay">Sz&aacute;ll&iacute;t&aacute;s &eacute;s fizet&eacute;s</a></li>
           <li><a href="adatvedelem.html" data-i18n="privacy">Adatv&eacute;delem</a></li>
-          <li><a href="garancia.html" data-i18n="warranty">Garancia</a></li>
+          <li><a href="Garancia.html" data-i18n="warranty">Garancia</a></li>
         </ul>
       </div>
     </div>
@@ -1595,9 +1855,9 @@
     <div class="footer-bottom">
       <div class="footer-bottom-inner">
         <div class="footer-links">
-          <a href="aszf.html" data-i18n="terms">ASZF</a>
+          <a href="ASZF.html" data-i18n="terms">ASZF</a>
           <a href="adatvedelem.html" data-i18n="privacy">Adatv&eacute;delem</a>
-          <a href="garancia.html" data-i18n="warranty">Garancia</a>
+          <a href="Garancia.html" data-i18n="warranty">Garancia</a>
         </div>
         <p data-i18n="footer_copyright">&copy; 2025 KEB Hangszerbolt - Minden jog fenntartva. Vizsga oldal.</p>
       </div>
@@ -1606,6 +1866,17 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

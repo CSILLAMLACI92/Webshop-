@@ -62,7 +62,6 @@
       <button id="fizetesBtn" class="btn btn-success w-100">
         <span data-i18n="pay">Fizetés</span>
       </button>
-      <button id="orderBtn" class="btn btn-primary w-100 mt-2" data-i18n="order_btn">Rendelés</button>
     </div>
   </aside>
 </main>
@@ -80,7 +79,7 @@
   </div>
 </div>
 
-<script src="../assets/js/lang.js"></script>
+<script src="../assets/js/lang.js?v=20260219-9"></script>
 
 <script>
 const tr = (key, fallback) =>
@@ -114,7 +113,9 @@ function betoltKosar() {
   let total = 0;
 
   kosar.forEach((item, index) => {
-    const osszeg = item.ar * (item.db || 1);
+    const safeDb = Math.max(1, Math.min(5, Number.parseInt(item.db, 10) || 1));
+    item.db = safeDb;
+    const osszeg = Number(item.ar || 0) * safeDb;
     total += osszeg;
 
     const sor = document.createElement("tr");
@@ -124,15 +125,21 @@ function betoltKosar() {
       <td>
         <input 
           type="number" 
-          min="0" 
-          value="${item.db || 1}" 
+          min="1"
+          max="5"
+          step="1"
+          inputmode="numeric"
+          value="${safeDb}" 
           class="form-control bg-primary-subtle text-light text-center rounded-pill cart-qty"
+          oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,1)"
           onchange="mennyisegValtozas(${index}, this.value)">
       </td>
       <td>${osszeg.toLocaleString()}</td>
     `;
     lista.appendChild(sor);
   });
+
+  localStorage.setItem("kosar", JSON.stringify(kosar));
 
   document.getElementById("osszeg").textContent =
     tr("cart_total") + ": " + total.toLocaleString() + " Ft";
@@ -150,10 +157,10 @@ function betoltKosar() {
 ================================ */
 function mennyisegValtozas(index, uj) {
   let kosar = JSON.parse(localStorage.getItem("kosar")) || [];
-  uj = parseInt(uj);
-
-  if (uj <= 0) kosar.splice(index, 1);
-  else kosar[index].db = uj;
+  const numeric = Number.parseInt(String(uj).replace(/[^0-9]/g, ""), 10);
+  const safeQty = Math.max(1, Math.min(5, Number.isFinite(numeric) ? numeric : 1));
+  if (!kosar[index]) return;
+  kosar[index].db = safeQty;
 
   localStorage.setItem("kosar", JSON.stringify(kosar));
   betoltKosar();
@@ -203,46 +210,17 @@ document.getElementById("fizetesBtn").onclick = () => {
 ================================ */
 betoltKosar();
 
-// ================================
-//   RENDELES GOMB
-// ================================
-document.getElementById("orderBtn").onclick = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    showToast("Bejelentkezés szükséges a rendeléshez!");
-    return;
-  }
-  const kosar = JSON.parse(localStorage.getItem("kosar")) || [];
-  if (kosar.length === 0) {
-    showToast("A kosár üres!");
-    return;
-  }
-
-  const res = await fetch("../server/create_order.php", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({ items: kosar })
-  });
-
-  let data = {};
-  try { data = await res.json(); } catch { data = {}; }
-
-  if (!res.ok) {
-    showToast((data.error || "Rendelés sikertelen") + (data.detail ? (": " + data.detail) : ""));
-    return;
-  }
-
-  localStorage.removeItem("kosar");
-  betoltKosar();
-  showToast("Rendelés r?gz?tve!" );
-};
 </script>
 <script src="../assets/js/DarkLight.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 

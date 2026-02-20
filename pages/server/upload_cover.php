@@ -20,8 +20,15 @@ if ($schemaError) {
     exit;
 }
 
-$payload = verify_jwt();
-if (!$payload || !isset($payload->id)) {
+$headers = function_exists("getallheaders") ? getallheaders() : [];
+$auth = $headers["Authorization"] ?? "";
+if (!$auth) {
+    echo json_encode(["status" => "no_token"]);
+    exit;
+}
+$token = str_replace("Bearer ", "", $auth);
+$payload = verify_jwt($token);
+if (!$payload) {
     echo json_encode(["status" => "invalid_token"]);
     exit;
 }
