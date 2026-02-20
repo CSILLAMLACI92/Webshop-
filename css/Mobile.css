@@ -1,0 +1,320 @@
+/* =========================
+   MOBIL ALAP CSS (GLOBAL)
+   ========================= */
+
+/* 🔹 Mobil: max 768px */
+@media (max-width: 768px) {
+
+  /* BODY */
+  body {
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    font-size: 1.6rem;
+    padding: 16px 10px;
+    margin-bottom: 20px;
+    border-radius: 0;
+  }
+
+  /* FELSŐ IKONOK */
+  .right-icons,
+  .header-icons {
+    top: 8px;
+    right: 8px;
+    gap: 10px;
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+
+  /* MENÜSOR */
+  .menu-row {
+    padding: 6px 0;
+  }
+
+  .menu-row .row {
+    flex-wrap: wrap;              /* 🔑 törjön több sorba */
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  .menu-row .col {
+    flex: 0 0 48%;                /* 🔹 2 gomb / sor */
+  }
+
+  .menu-btn {
+    font-size: 0.95rem;
+    padding: 10px 0;
+  }
+
+  /* KATEGÓRIA FEJLÉC */
+  .category-hero {
+    margin-top: 80px;
+    padding: 0 16px;
+  }
+
+  .category-hero h1 {
+    font-size: 1.8rem;
+  }
+
+  /* TERMÉK GRID */
+  .termek-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    padding: 16px;
+  }
+
+  /* TERMÉK RÉSZLETEK OLDAL */
+  .product-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .quote-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .carousel-promo {
+    right: 12px;
+    left: 12px;
+    top: 12px;
+    align-items: center;
+  }
+
+  /* KERESŐ */
+  .search-container {
+    padding: 10px;
+    margin: 20px auto;
+  }
+
+  .search-inner {
+    width: 100%;
+    padding: 10px 14px;
+  }
+
+  .search-inner input {
+    font-size: 16px;
+  }
+
+  /* LIVE SEARCH */
+  .live-search-box {
+    max-height: 260px;
+    font-size: 14px;
+  }
+
+  /* CAROUSEL */
+  .carousel {
+    height: 200px;
+  }
+
+  .carousel-track img {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* OLDALSÓ PANEL */
+  #sidePanel {
+    width: 100%;
+    right: -100%;
+  }
+
+  #sidePanel.active {
+    right: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 30px 10px;
+  }
+
+  .footer-container {
+    gap: 25px;
+  }
+
+  .footer-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .footer-bottom {
+    font-size: 0.8rem;
+  }
+}
+
+/* 🔹 EXTRA KICSI TELEFONOK (max 480px) */
+@media (max-width: 480px) {
+
+  .menu-row .col {
+    flex: 0 0 100%;   /* 🔹 1 gomb / sor */
+  }
+
+  .menu-btn {
+    font-size: 1rem;
+  }
+
+  .termek-actions {
+    flex-direction: column;
+  }
+
+  .carousel {
+    height: 170px;
+  }
+
+  .carousel-track img {
+    width: 170px;
+    height: 170px;
+  }
+}
+
+/* Nyelv váltó csak a főoldalon */
+body:not(.home-page) .lang-switch {
+  display: none !important;
+}
+
+/* Menü + kereső kompakt elrendezés mobilon */
+@media (max-width: 768px) {
+  .menu-center {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .menu-center-cats {
+    justify-content: center;
+  }
+
+  .search-collapsible {
+    max-width: none;
+  }
+
+  .search-container.compact {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-pill {
+    font-size: 0.9rem;
+  }
+}
+
+/* Language switch */
+.lang-switch{display:flex;gap:8px;justify-content:center;align-items:center;margin:16px 0;}
+.lang-pill{border:1px solid rgba(120,200,255,0.3);background:rgba(255,255,255,0.06);color:#eaf6ff;font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px;cursor:pointer;transition:0.2s ease;}
+.lang-pill.active{background:linear-gradient(135deg,#4db8ff,#1f7fd6);color:#0b1a2a;border:none;}
+body.light-theme .lang-pill{background:#eef3ff;color:#1a3350;border:1px solid #cfdcff;}
+body.light-theme .lang-pill.active{background:linear-gradient(135deg,#4db8ff,#1f7fd6);color:#ffffff;border:none;}
+
+
+@media (max-width: 600px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  * {
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .container,
+  .container-fluid,
+  .row {
+    --bs-gutter-x: 0.75rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .btn,
+  .btn-outline-info,
+  .btn-outline-danger {
+    white-space: normal;
+  }
+}
+
+/* -------------------------
+   GLOBAL PHONE SAFETY FIXES
+   ------------------------- */
+@media (max-width: 768px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  body {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Stop long text from pushing layout wider than viewport */
+  h1, h2, h3, p, a, span, button, label, td, th, li {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Common fixed-width sources of mobile overflow */
+  .live-search-box,
+  #sidePanel,
+  .chat-layout,
+  .chat-thread-list,
+  .chat-main,
+  .wishlist-row,
+  .wishlist-summary,
+  .wishlist-row-actions {
+    max-width: 100% !important;
+  }
+
+  .live-search-box {
+    min-width: 0 !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    max-width: 100%;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+}
+
+@media (max-width: 480px) {
+  .header-icons,
+  .fixed-top-icons {
+    max-width: calc(100vw - 12px);
+    right: 6px !important;
+    top: 6px !important;
+  }
+
+  .carousel-promo {
+    left: 8px !important;
+    right: 8px !important;
+    max-width: calc(100vw - 16px);
+  }
+}
+

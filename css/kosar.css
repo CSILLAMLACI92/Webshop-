@@ -1,0 +1,140 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  --bg-1: #0b1f35;
+  --bg-2: #0f3c5e;
+  --panel: rgba(10, 22, 40, 0.92);
+  --panel-border: rgba(120, 200, 255, 0.18);
+  --accent: #4db8ff;
+  --text: #eaf6ff;
+  --muted: #bcd9ee;
+}
+
+body.cart-page {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  min-height: 100vh;
+}
+
+.cart-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(9, 24, 44, 0.7);
+  border-bottom: 1px solid rgba(120, 200, 255, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.cart-title h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.cart-title p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.cart-toolbar .btn {
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+
+.cart-grid {
+  max-width: 1200px;
+  margin: 24px auto 60px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 20px;
+}
+
+.cart-panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cart-table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: none;
+}
+
+.cart-table thead th {
+  background: rgba(77, 184, 255, 0.2);
+  color: var(--text);
+  border: none;
+  font-weight: 600;
+}
+
+.cart-table tbody td {
+  border-color: rgba(120, 200, 255, 0.12);
+  vertical-align: middle;
+}
+
+.cart-qty {
+  background: rgba(10, 20, 35, 0.85) !important;
+  border: 1px solid rgba(120, 200, 255, 0.35) !important;
+  color: var(--text) !important;
+  border-radius: 999px !important;
+  padding: 6px 12px !important;
+}
+
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-self: start;
+}
+
+#osszeg {
+  margin: 0;
+  text-align: center;
+}
+
+#fizetesBtn {
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
+}
+
+#uresites {
+  border-radius: 12px;
+}
+
+@media (max-width: 980px) {
+  .cart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .cart-toolbar {
+    padding: 14px 16px;
+  }
+
+  .cart-grid {
+    padding: 0 16px;
+  }
+}
