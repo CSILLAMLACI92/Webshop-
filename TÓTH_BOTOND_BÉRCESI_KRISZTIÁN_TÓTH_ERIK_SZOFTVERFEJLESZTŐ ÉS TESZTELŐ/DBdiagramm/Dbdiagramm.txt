@@ -1,0 +1,244 @@
+Table users {
+  id int [pk]
+  username varchar(50)
+  email varchar(100)
+  password_hash varchar(255)
+  role varchar(20)
+  created_at timestamp
+  profile_pic varchar(255)
+  is_active boolean
+  deleted_at datetime
+  email_verified boolean
+  email_verification_token varchar(255)
+  email_verification_expiry datetime
+}
+
+Table profile_meta {
+  id int [pk]
+  user_id int
+  bio text
+  country varchar(100)
+  age int
+  city varchar(100)
+  instrument varchar(100)
+  experience varchar(100)
+  studio boolean
+  tags text
+  custom_tags_json text
+  cover_url varchar(255)
+  background varchar(255)
+  updated_at datetime
+}
+
+Table products {
+  id int [pk]
+  name varchar(255)
+  description text
+  price decimal
+  created_at timestamp
+  hang varchar(255)
+  category_id int
+  image blob
+  image_type varchar(50)
+}
+
+Table product_variants {
+  id int [pk]
+  product_id int
+  variant_name varchar(100)
+  price decimal
+  stock int
+}
+
+Table cart {
+  id int [pk]
+  user_id int
+  product_id int
+  quantity int
+  created_at timestamp
+}
+
+Table orders {
+  id int [pk]
+  user_id int
+  total int
+  status varchar(50)
+  created_at datetime
+}
+
+Table order_items {
+  id int [pk]
+  order_id int
+  product_name varchar(255)
+  unit_price int
+  quantity int
+}
+
+Table reviews {
+  id int [pk]
+  user_id int
+  product_id int
+  rating int
+  comment text
+  created_at timestamp
+}
+
+Table categories {
+  id int [pk]
+  name varchar(100)
+  slug varchar(100)
+}
+
+Table bands {
+  id int [pk]
+  owner_id int
+  name varchar(100)
+  genre varchar(100)
+  city varchar(100)
+  looking_for varchar(255)
+  description text
+  contact varchar(255)
+  image_url varchar(255)
+  created_at datetime
+}
+
+Table user_activity {
+  id int [pk]
+  user_id int
+  action varchar(255)
+  created_at timestamp
+}
+
+Table user_addresses {
+  id int [pk]
+  user_id int
+  address_line1 varchar(255)
+  city varchar(100)
+  zip varchar(20)
+}
+
+Table direct_messages {
+  id int [pk]
+  sender_id int
+  receiver_id int
+  item_id int
+  message text
+  is_read boolean
+  created_at datetime
+}
+
+Table profile_messages {
+  id int [pk]
+  target_user_id int
+  author_user_id int
+  author_name varchar(100)
+  message text
+  created_at datetime
+}
+
+Table profile_ratings {
+  id int [pk]
+  target_user_id int
+  reviewer_id int
+  rating int
+  comment text
+  created_at datetime
+  updated_at datetime
+}
+
+Table used_items {
+  id int [pk]
+  user_id int
+  title varchar(255)
+  description text
+  price decimal
+  category varchar(100)
+  condition_label varchar(50)
+  image_url varchar(255)
+  buyer_id int
+  accepted_offer_id int
+  created_at datetime
+  updated_at datetime
+}
+
+Table used_offers {
+  id int [pk]
+  item_id int
+  buyer_id int
+  offer_price decimal
+  status varchar(50)
+  created_at datetime
+}
+
+Table hang {
+  id int [pk]
+  user_id int
+  cim varchar(255)
+  leiras text
+  file_path varchar(255)
+  mime_type varchar(100)
+  duration_ms int
+  size_bytes int
+  is_public boolean
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table pictures {
+  id int [pk]
+  owner_type varchar(50)
+  owner_id int
+  filename varchar(255)
+  path varchar(255)
+  alt varchar(255)
+  mime_type varchar(100)
+  size_bytes int
+  is_active boolean
+  created_at datetime
+}
+
+Table coupons {
+  id int [pk]
+  code varchar(50)
+  discount_type varchar(50)
+  discount_value decimal
+  min_subtotal decimal
+  starts_at datetime
+  ends_at datetime
+  max_uses int
+  used_count int
+  is_active boolean
+  created_at datetime
+}
+
+Table cart_coupons {
+  user_id int
+  coupon_id int
+  applied_at datetime
+}
+
+Ref: profile_meta.user_id > users.id
+Ref: products.category_id > categories.id
+Ref: product_variants.product_id > products.id
+Ref: cart.user_id > users.id
+Ref: cart.product_id > products.id
+Ref: orders.user_id > users.id
+Ref: order_items.order_id > orders.id
+Ref: reviews.user_id > users.id
+Ref: reviews.product_id > products.id
+Ref: bands.owner_id > users.id
+Ref: user_activity.user_id > users.id
+Ref: user_addresses.user_id > users.id
+Ref: direct_messages.sender_id > users.id
+Ref: direct_messages.receiver_id > users.id
+Ref: profile_messages.target_user_id > users.id
+Ref: profile_messages.author_user_id > users.id
+Ref: profile_ratings.target_user_id > users.id
+Ref: profile_ratings.reviewer_id > users.id
+Ref: used_items.user_id > users.id
+Ref: used_items.buyer_id > users.id
+Ref: used_offers.item_id > used_items.id
+Ref: used_offers.buyer_id > users.id
+Ref: hang.user_id > users.id
+Ref: cart_coupons.user_id > users.id
+Ref: cart_coupons.coupon_id > coupons.id
