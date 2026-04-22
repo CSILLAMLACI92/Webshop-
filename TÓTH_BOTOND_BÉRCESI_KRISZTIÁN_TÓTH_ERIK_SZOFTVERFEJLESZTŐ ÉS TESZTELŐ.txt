@@ -1,1 +1,0 @@
-„Ahhoz, hogy használd a gépeden, egyszerűen telepítsd a MAMP‑ot, majd másold be a teljes projektmappát a htdocs könyvtárba. Indítsd el a MAMP‑ot, és a böngészőben a localhost címen nyisd meg az oldalt. Vagy egyszerűen keresd fel a www.kebshop.hu oldalt.
